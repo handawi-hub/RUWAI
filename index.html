@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGERHUB - Sistem Pemantauan Media & Analisis Berita BPS Provinsi Lampung</title>
+    <title>RUWAI - Sistem Pemantauan Media & Analisis Berita BPS Provinsi Lampung</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -40,7 +40,7 @@
     <script>
         // Terapkan tema tersimpan secepat mungkin sebelum render agar tidak berkedip
         (function() {
-            const saved = localStorage.getItem('sigerhub_theme');
+            const saved = localStorage.getItem('RUWAI_theme');
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (saved === 'dark' || (!saved && prefersDark)) {
                 document.documentElement.classList.add('dark');
@@ -222,7 +222,7 @@
         html.dark input::placeholder { color: #64748B !important; }
 
         /* ============================================================
-           MOBILE UI FIX (< 640px) — SIGERHUB INDEX.HTML
+           MOBILE UI FIX (< 640px) — RUWAI INDEX.HTML
            ============================================================ */
         @media (max-width: 640px) {
             header > div > div,
@@ -302,7 +302,7 @@
                         <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#008FD5]/10 text-bps-blue border border-[#008FD5]/20 mb-1">
                             Akses Internal Terbatas
                         </span>
-                        <h1 class="text-2xl font-extrabold text-bps-navy tracking-tight">SIGERHUB</h1>
+                        <h1 class="text-2xl font-extrabold text-bps-navy tracking-tight">RUWAI</h1>
                         <p class="text-xs text-slate-500 mt-0.5">Sistem Pemantauan Media & Analisis Berita BPS Provinsi Lampung</p>
                     </div>
                 </div>
@@ -337,7 +337,7 @@
                     <button type="submit" id="loginSubmitBtn"
                         class="w-full py-2.5 px-4 bg-bps-navy hover:bg-bps-dark text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
                         <i data-lucide="log-in" class="w-4 h-4 text-[#67D4FF]"></i>
-                        <span>Masuk ke Portal SIGERHUB</span>
+                        <span>Masuk ke Portal RUWAI</span>
                     </button>
                 </form>
 
@@ -368,7 +368,7 @@
                         <div class="min-w-0">
                             <div class="flex items-center gap-2.5 flex-wrap">
                                 <h1 class="font-extrabold text-2xl sm:text-[28px] leading-none tracking-tight text-bps-navy">
-                                    SIGERHUB
+                                    RUWAI
                                 </h1>
                                 <span class="hidden sm:inline-block h-4 w-[1.5px] bg-slate-300/90 dark:bg-slate-700 rounded-full"></span>
                                 <span class="text-xs sm:text-[13px] font-semibold text-bps-blue tracking-tight">
@@ -908,7 +908,7 @@
         function toggleTheme() {
             const willBeDark = !isDarkModeActive();
             document.documentElement.classList.toggle('dark', willBeDark);
-            localStorage.setItem('sigerhub_theme', willBeDark ? 'dark' : 'light');
+            localStorage.setItem('RUWAI_theme', willBeDark ? 'dark' : 'light');
             updateThemeToggleIcons();
             syncChartsTheme();
         }
@@ -933,7 +933,7 @@
         // =========================================================================
         // SISTEM AUTENTIKASI & ROLE AKSES (SHA-256)
         // =========================================================================
-        const SESSION_AUTH_KEY = 'sigerhub_bps_lampung_session';
+        const SESSION_AUTH_KEY = 'RUWAI_bps_lampung_session';
         const AUTH_USERS = {
             humas: {
                 hash: '6b8a093c2670709487790e26f904c2459829094466c405796e217e5b88c0f0e3', // bps1800
@@ -941,7 +941,7 @@
                 isAdmin: false
             },
             bima: {
-                hash: '3f59907d57b9a43f91b86d6a68d76e95b45c7d2f2b788e1d962235d9f4898061', // sigerhub2026
+                hash: '3f59907d57b9a43f91b86d6a68d76e95b45c7d2f2b788e1d962235d9f4898061', // RUWAI2026
                 role: 'Admin Utama',
                 isAdmin: true
             }
@@ -978,13 +978,13 @@
 
             const userRecord = AUTH_USERS[username];
             if (!userRecord) {
-                errorText.innerText = 'Username tidak terdaftar di sistem SIGERHUB.';
+                errorText.innerText = 'Username tidak terdaftar di sistem RUWAI.';
                 errorBox.classList.remove('hidden');
                 return;
             }
 
             const inputHash = await sha256Hex(password);
-            const fallbackValid = (username === 'humas' && password === 'bps1800') || (username === 'bima' && password === 'sigerhub2026');
+            const fallbackValid = (username === 'humas' && password === 'bps1800') || (username === 'bima' && password === 'RUWAI2026');
 
             if (inputHash === userRecord.hash || fallbackValid) {
                 const sessionPayload = {
@@ -1000,7 +1000,7 @@
                     localStorage.removeItem('bps_lampung_admin_mode');
                 }
                 unlockPortal(sessionPayload);
-                showToast(`Selamat datang di SIGERHUB!`);
+                showToast(`Selamat datang di RUWAI!`);
             } else {
                 errorText.innerText = 'Kata sandi salah. Silakan periksa kembali.';
                 errorBox.classList.remove('hidden');
