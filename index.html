@@ -61,6 +61,47 @@
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
         /* ============================================================
+           NEW LOGIN GATE — GLASS OVERLAY & BPS AMBIENT AURA
+           ============================================================ */
+        .ruwai-login-gate {
+            background:
+                radial-gradient(110% 85% at 80% 10%, rgba(45, 149, 202, 0.24) 0%, rgba(45, 149, 202, 0) 58%),
+                radial-gradient(95% 75% at 15% 92%, rgba(226, 137, 57, 0.18) 0%, rgba(226, 137, 57, 0) 60%),
+                radial-gradient(85% 70% at 50% 100%, rgba(117, 181, 71, 0.14) 0%, rgba(117, 181, 71, 0) 65%),
+                linear-gradient(155deg, #05202F 0%, #04141F 48%, #03101A 100%);
+        }
+        .ruwai-login-grid {
+            background-image:
+                repeating-linear-gradient(90deg, rgba(190, 220, 240, 0.045) 0 1px, transparent 1px 96px),
+                repeating-linear-gradient(0deg, rgba(190, 220, 240, 0.035) 0 1px, transparent 1px 96px);
+            -webkit-mask-image: radial-gradient(80% 75% at 50% 45%, #000 22%, transparent 85%);
+                    mask-image: radial-gradient(80% 75% at 50% 45%, #000 22%, transparent 85%);
+        }
+        .ruwai-login-card {
+            background: linear-gradient(180deg, rgba(9, 29, 45, 0.86), rgba(4, 17, 27, 0.92));
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border: 1px solid rgba(190, 214, 232, 0.16);
+            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+        .ruwai-login-accent {
+            background: linear-gradient(90deg, #2D95CA 0%, #75B547 52%, #E28939 100%);
+        }
+        .ruwai-login-input {
+            background: rgba(3, 16, 26, 0.72) !important;
+            border-color: rgba(190, 214, 232, 0.18) !important;
+            color: #EAF2F8 !important;
+        }
+        .ruwai-login-input::placeholder {
+            color: rgba(214, 231, 242, 0.38) !important;
+        }
+        .ruwai-login-input:focus {
+            background: rgba(6, 24, 40, 0.92) !important;
+            border-color: #2D95CA !important;
+            box-shadow: 0 0 0 2px rgba(45, 149, 202, 0.35) !important;
+        }
+
+        /* ============================================================
            LIQUID GLASS HEADER — MODERN INTERACTIVE REFRACTION
            ============================================================ */
         .liquid-glass-header {
@@ -79,7 +120,6 @@
             transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
-        /* Lapisan Bias Cahaya & Aura Halus Identitas BPS */
         .liquid-glass-header::before {
             content: '';
             position: absolute;
@@ -92,7 +132,6 @@
             z-index: 0;
         }
 
-        /* Spotlight Interaktif Mengikuti Kursor */
         .liquid-glass-spotlight {
             position: absolute;
             inset: 0;
@@ -112,7 +151,6 @@
             opacity: 1;
         }
 
-        /* Kapsul Kaca untuk Logo & Tombol Sekunder */
         .glass-logo-pill {
             background: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.95);
@@ -213,13 +251,13 @@
         html.dark .border-slate-300 { border-color: #1E293B !important; }
         html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: #1E293B !important; }
 
-        html.dark input,
+        html.dark input:not(.ruwai-login-input),
         html.dark select {
             background-color: #0F172A !important;
             border-color: #334155 !important;
             color: #F1F5F9 !important;
         }
-        html.dark input::placeholder { color: #64748B !important; }
+        html.dark input:not(.ruwai-login-input)::placeholder { color: #64748B !important; }
 
         /* ============================================================
            MOBILE UI FIX (< 640px) — RUWAI INDEX.HTML
@@ -282,68 +320,84 @@
 <body class="bg-[#F4F7FB] dark:bg-[#0B1120] text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col">
 
     <!-- ===================================================================== -->
-    <!-- LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)       -->
+    <!-- NEW LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)   -->
     <!-- ===================================================================== -->
-    <div id="loginGate" class="fixed inset-0 z-50 bg-bps-navy flex items-center justify-center p-4 overflow-y-auto">
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-bps-blue/15 blur-3xl"></div>
-            <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-bps-orange/15 blur-3xl"></div>
-        </div>
+    <div id="loginGate" class="ruwai-login-gate fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div class="ruwai-login-grid absolute inset-0 pointer-events-none"></div>
+        <div class="absolute -top-28 -left-24 w-96 h-96 rounded-full bg-[#2D95CA]/15 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-28 -right-24 w-96 h-96 rounded-full bg-[#E28939]/15 blur-3xl pointer-events-none"></div>
 
-        <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
-            <div class="h-1.5 w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
+        <div class="ruwai-login-card relative w-full max-w-md rounded-2xl overflow-hidden text-[#EAF2F8]">
+            <div class="ruwai-login-accent h-[3px] w-full"></div>
 
             <div class="p-6 sm:p-8 space-y-6">
-                <div class="text-center space-y-2">
-                    <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 p-2.5 flex items-center justify-center mx-auto shadow-xs">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-2 h-2 rounded-full bg-[#75B547] shadow-[0_0_10px_rgba(117,181,71,0.85)]"></span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D6E7F2]/60">
+                            Portal Internal Humas
+                        </span>
+                    </div>
+                    <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6E7F2]/45">
+                        BPS Lampung
+                    </span>
+                </div>
+
+                <div class="text-center space-y-3">
+                    <div class="w-16 h-16 rounded-2xl bg-[#072133]/90 border border-[#BED6E8]/15 p-2.5 flex items-center justify-center mx-auto shadow-lg">
                         <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
                     </div>
                     <div>
-                        <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#008FD5]/10 text-bps-blue border border-[#008FD5]/20 mb-1">
-                            Akses Internal Terbatas
-                        </span>
-                        <h1 class="text-2xl font-extrabold text-bps-navy tracking-tight">RUWAI</h1>
-                        <p class="text-xs text-slate-500 mt-0.5">Ruang Pemantauan Media & Analisis Berita BPS Provinsi Lampung</p>
+                        <h1 class="text-2xl font-extrabold text-[#F4F8FB] tracking-tight">Masuk ke RUWAI</h1>
+                        <p class="text-xs text-[#E2EEF6]/65 mt-1 leading-relaxed">
+                            Ruang Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung
+                        </p>
                     </div>
                 </div>
 
-                <div id="loginErrorBox" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-medium flex items-center gap-2">
-                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-600"></i>
+                <div id="loginErrorBox" role="alert" aria-live="polite"
+                    class="hidden bg-rose-950/70 border border-rose-400/35 text-rose-200 px-3.5 py-2.5 rounded-xl text-xs font-medium flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-400"></i>
                     <span id="loginErrorText">Username atau kata sandi tidak sesuai.</span>
                 </div>
 
                 <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
                     <div>
-                        <label for="loginUsername" class="block text-xs font-bold text-slate-700 mb-1.5">Username Pengguna</label>
+                        <label for="loginUsername" class="block text-[11px] font-bold uppercase tracking-wider text-[#D6E7F2]/80 mb-1.5">
+                            Username Pengguna
+                        </label>
                         <div class="relative">
-                            <i data-lucide="user" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            <input type="text" id="loginUsername" required autocomplete="username" placeholder="Masukkan username (misal: humas)"
-                                class="w-full pl-10 pr-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:bg-white focus:ring-2 focus:ring-bps-blue focus:border-bps-blue transition">
+                            <i data-lucide="user" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#D6E7F2]/45"></i>
+                            <input type="text" id="loginUsername" required autocomplete="username" placeholder="Masukkan username"
+                                class="ruwai-login-input w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border focus:outline-none transition">
                         </div>
                     </div>
 
                     <div>
-                        <label for="loginPassword" class="block text-xs font-bold text-slate-700 mb-1.5">Kata Sandi</label>
+                        <label for="loginPassword" class="block text-[11px] font-bold uppercase tracking-wider text-[#D6E7F2]/80 mb-1.5">
+                            Kata Sandi
+                        </label>
                         <div class="relative">
-                            <i data-lucide="lock" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <i data-lucide="lock" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#D6E7F2]/45"></i>
                             <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="Masukkan kata sandi"
-                                class="w-full pl-10 pr-10 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:bg-white focus:ring-2 focus:ring-bps-blue focus:border-bps-blue transition">
-                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                class="ruwai-login-input w-full pl-10 pr-10 py-2.5 text-xs rounded-xl border focus:outline-none transition">
+                            <button type="button" onclick="togglePasswordVisibility()" aria-label="Tampilkan atau sembunyikan kata sandi"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-[#D6E7F2]/50 hover:text-[#F4F8FB] transition">
                                 <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
 
                     <button type="submit" id="loginSubmitBtn"
-                        class="w-full py-2.5 px-4 bg-bps-navy hover:bg-bps-dark text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
-                        <i data-lucide="log-in" class="w-4 h-4 text-[#67D4FF]"></i>
+                        class="w-full py-2.5 px-4 bg-[#2D95CA] hover:bg-[#0073AD] text-white font-bold text-xs rounded-xl shadow-lg shadow-[#2D95CA]/25 transition flex items-center justify-center gap-2">
+                        <i data-lucide="log-in" class="w-4 h-4"></i>
                         <span>Masuk ke Portal RUWAI</span>
                     </button>
                 </form>
 
-                <div class="pt-3 border-t border-slate-100 text-center">
-                    <p class="text-[11px] text-slate-400">
-                        &copy; 2026 BPS Provinsi Lampung
+                <div class="pt-3 border-t border-[#BED6E8]/10 text-center">
+                    <p class="text-[11px] text-[#D6E7F2]/45">
+                        &copy; 2026 BPS Provinsi Lampung &bull; Akses Terbatas
                     </p>
                 </div>
             </div>
@@ -908,7 +962,7 @@
         function toggleTheme() {
             const willBeDark = !isDarkModeActive();
             document.documentElement.classList.toggle('dark', willBeDark);
-            localStorage.setItem('Virtual Office_theme', willBeDark ? 'dark' : 'light');
+            localStorage.setItem('RUWAI_theme', willBeDark ? 'dark' : 'light');
             updateThemeToggleIcons();
             syncChartsTheme();
         }
@@ -931,9 +985,9 @@
         })();
 
         // =========================================================================
-        // SISTEM AUTENTIKASI & ROLE AKSES (SHA-256)
+        // SISTEM AUTENTIKASI & ROLE AKSES (SHA-256 — DIPERTAHANKAN SAMA)
         // =========================================================================
-        const SESSION_AUTH_KEY = 'Virtual OfficeI_bps_lampung_session';
+        const SESSION_AUTH_KEY = 'RUWAI_bps_lampung_session';
         const AUTH_USERS = {
             humas: {
                 hash: '6b8a093c2670709487790e26f904c2459829094466c405796e217e5b88c0f0e3', // bps1800
@@ -973,37 +1027,43 @@
             const password = document.getElementById('loginPassword').value;
             const errorBox = document.getElementById('loginErrorBox');
             const errorText = document.getElementById('loginErrorText');
+            const submitBtn = document.getElementById('loginSubmitBtn');
 
             errorBox.classList.add('hidden');
+            if (submitBtn) submitBtn.disabled = true;
 
-            const userRecord = AUTH_USERS[username];
-            if (!userRecord) {
-                errorText.innerText = 'Username tidak terdaftar di sistem RUWAI.';
-                errorBox.classList.remove('hidden');
-                return;
-            }
-
-            const inputHash = await sha256Hex(password);
-            const fallbackValid = (username === 'humas' && password === 'bps1800') || (username === 'bima' && password === 'RUWAI2026');
-
-            if (inputHash === userRecord.hash || fallbackValid) {
-                const sessionPayload = {
-                    username: username,
-                    role: userRecord.role,
-                    isAdmin: userRecord.isAdmin,
-                    loginAt: Date.now()
-                };
-                sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(sessionPayload));
-                if (userRecord.isAdmin) {
-                    localStorage.setItem('bps_lampung_admin_mode', 'true');
-                } else {
-                    localStorage.removeItem('bps_lampung_admin_mode');
+            try {
+                const userRecord = AUTH_USERS[username];
+                if (!userRecord) {
+                    errorText.innerText = 'Username tidak terdaftar di sistem RUWAI.';
+                    errorBox.classList.remove('hidden');
+                    return;
                 }
-                unlockPortal(sessionPayload);
-                showToast(`Selamat datang di RUWAI!`);
-            } else {
-                errorText.innerText = 'Kata sandi salah. Silakan periksa kembali.';
-                errorBox.classList.remove('hidden');
+
+                const inputHash = await sha256Hex(password);
+                const fallbackValid = (username === 'humas' && password === 'bps1800') || (username === 'bima' && password === 'RUWAI2026');
+
+                if (inputHash === userRecord.hash || fallbackValid) {
+                    const sessionPayload = {
+                        username: username,
+                        role: userRecord.role,
+                        isAdmin: userRecord.isAdmin,
+                        loginAt: Date.now()
+                    };
+                    sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(sessionPayload));
+                    if (userRecord.isAdmin) {
+                        localStorage.setItem('bps_lampung_admin_mode', 'true');
+                    } else {
+                        localStorage.removeItem('bps_lampung_admin_mode');
+                    }
+                    unlockPortal(sessionPayload);
+                    showToast('Selamat datang di RUWAI!');
+                } else {
+                    errorText.innerText = 'Kata sandi salah. Silakan periksa kembali.';
+                    errorBox.classList.remove('hidden');
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
             }
         }
 
