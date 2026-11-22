@@ -61,195 +61,45 @@
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
         /* ============================================================
-           LOGIN GATE — PERSIS SEPERTI INDEX (3)_2.HTML (FROSTED + SAND)
+           NEW LOGIN GATE — GLASS OVERLAY & BPS AMBIENT AURA
            ============================================================ */
-        #loginGate {
-            position: fixed;
-            inset: 0;
-            z-index: 9000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow: hidden;
-            background: linear-gradient(155deg, #e3edf7 0%, #eef3f8 52%, #e5eef5 100%);
-            color: #0f172a;
-            transition: opacity .45s ease, visibility .45s ease;
+        .ruwai-login-gate {
+            background:
+                radial-gradient(110% 85% at 80% 10%, rgba(45, 149, 202, 0.24) 0%, rgba(45, 149, 202, 0) 58%),
+                radial-gradient(95% 75% at 15% 92%, rgba(226, 137, 57, 0.18) 0%, rgba(226, 137, 57, 0) 60%),
+                radial-gradient(85% 70% at 50% 100%, rgba(117, 181, 71, 0.14) 0%, rgba(117, 181, 71, 0) 65%),
+                linear-gradient(155deg, #05202F 0%, #04141F 48%, #03101A 100%);
         }
-        #loginGate.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            display: flex !important;
+        .ruwai-login-grid {
+            background-image:
+                repeating-linear-gradient(90deg, rgba(190, 220, 240, 0.045) 0 1px, transparent 1px 96px),
+                repeating-linear-gradient(0deg, rgba(190, 220, 240, 0.035) 0 1px, transparent 1px 96px);
+            -webkit-mask-image: radial-gradient(80% 75% at 50% 45%, #000 22%, transparent 85%);
+                    mask-image: radial-gradient(80% 75% at 50% 45%, #000 22%, transparent 85%);
         }
-
-        .aurora {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(90px);
-            pointer-events: none;
-            opacity: .55;
+        .ruwai-login-card {
+            background: linear-gradient(180deg, rgba(9, 29, 45, 0.86), rgba(4, 17, 27, 0.92));
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border: 1px solid rgba(190, 214, 232, 0.16);
+            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.06);
         }
-        .a1 { width: 520px; height: 520px; background: #8ec5fc; top: -140px; left: -120px; }
-        .a2 { width: 460px; height: 460px; background: #ffd6a5; bottom: -150px; right: -110px; }
-        .a3 { width: 360px; height: 360px; background: #b8f2e6; top: 45%; left: 55%; }
-        #sand {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        .ruwai-login-accent {
+            background: linear-gradient(90deg, #2D95CA 0%, #75B547 52%, #E28939 100%);
         }
-
-        .login-card-gate {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 390px;
-            background: rgba(255, 255, 255, .78);
-            backdrop-filter: blur(26px) saturate(160%);
-            -webkit-backdrop-filter: blur(26px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, .9);
-            border-radius: 24px;
-            padding: 34px 30px 28px;
-            box-shadow: 0 24px 60px -15px rgba(15, 23, 42, .12),
-                        0 2px 6px rgba(15, 23, 42, .04),
-                        inset 0 1px 0 rgba(255, 255, 255, .9);
+        .ruwai-login-input {
+            background: rgba(3, 16, 26, 0.72) !important;
+            border-color: rgba(190, 214, 232, 0.18) !important;
+            color: #EAF2F8 !important;
         }
-
-        .login-brand {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 26px;
+        .ruwai-login-input::placeholder {
+            color: rgba(214, 231, 242, 0.38) !important;
         }
-        .login-brand-name {
-            margin-top: 12px;
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: .18em;
-            color: #0f172a !important;
+        .ruwai-login-input:focus {
+            background: rgba(6, 24, 40, 0.92) !important;
+            border-color: #2D95CA !important;
+            box-shadow: 0 0 0 2px rgba(45, 149, 202, 0.35) !important;
         }
-        .login-brand-sub {
-            margin-top: 4px;
-            font-size: 12px;
-            color: #64748b !important;
-            font-weight: 500;
-        }
-
-        .login-field {
-            position: relative;
-            margin-bottom: 14px;
-        }
-        .login-field input {
-            width: 100%;
-            height: 46px;
-            padding: 0 14px;
-            font-family: inherit;
-            font-size: 14px;
-            color: #0f172a !important;
-            background: rgba(255, 255, 255, .9) !important;
-            border: 1px solid #cbd5e1 !important;
-            border-radius: 12px;
-            outline: none;
-            transition: border-color .2s, box-shadow .2s, background .2s;
-        }
-        .login-field input::placeholder {
-            color: #94a3b8 !important;
-        }
-        .login-field input:focus {
-            background: #fff !important;
-            border-color: #0077b6 !important;
-            box-shadow: 0 0 0 3px rgba(0, 119, 182, .14) !important;
-        }
-        .login-field input:disabled {
-            background: #f1f5f9 !important;
-            color: #64748b !important;
-        }
-        .login-field.has-toggle input {
-            padding-right: 42px;
-        }
-        .login-eye-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: 0;
-            padding: 4px;
-            color: #64748b;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color .2s;
-        }
-        .login-eye-btn:hover {
-            color: #0f172a;
-        }
-
-        .login-btn {
-            width: 100%;
-            height: 46px;
-            border: 0;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-            background: linear-gradient(135deg, #0077b6 0%, #005b8e 100%);
-            cursor: pointer;
-            box-shadow: 0 8px 20px -6px rgba(0, 119, 182, .45);
-            transition: transform .15s, box-shadow .2s, filter .2s;
-        }
-        .login-btn:hover:not(:disabled) {
-            filter: brightness(1.05);
-            box-shadow: 0 10px 24px -6px rgba(0, 119, 182, .55);
-        }
-        .login-btn:active:not(:disabled) {
-            transform: scale(.985);
-        }
-        .login-btn:disabled {
-            opacity: .55;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .login-msg {
-            margin-top: 12px;
-            font-size: 12.5px;
-            line-height: 1.45;
-            text-align: center;
-            min-height: 18px;
-            color: #475569;
-        }
-        .login-msg.err {
-            color: #dc2626;
-            font-weight: 500;
-        }
-        .login-msg.ok {
-            color: #15803d;
-            font-weight: 500;
-        }
-
-        .login-foot {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(15, 23, 42, .07);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11.5px;
-            color: #64748b;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px); }
-            75% { transform: translateX(6px); }
-        }
-        .shake { animation: shake .32s ease; }
 
         /* ============================================================
            LIQUID GLASS HEADER — MODERN INTERACTIVE REFRACTION
@@ -401,13 +251,13 @@
         html.dark .border-slate-300 { border-color: #1E293B !important; }
         html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: #1E293B !important; }
 
-        html.dark input:not(.ruwai-gate-input),
+        html.dark input:not(.ruwai-login-input),
         html.dark select {
             background-color: #0F172A !important;
             border-color: #334155 !important;
             color: #F1F5F9 !important;
         }
-        html.dark input:not(.ruwai-gate-input)::placeholder { color: #64748B !important; }
+        html.dark input:not(.ruwai-login-input)::placeholder { color: #64748B !important; }
 
         /* ============================================================
            MOBILE UI FIX (< 640px) — RUWAI INDEX.HTML
@@ -461,7 +311,7 @@
                 font-size: 12px !important;
                 padding: 7px 12px !important;
             }
-            canvas:not(#sand) {
+            canvas {
                 max-height: 270px !important;
             }
         }
@@ -470,49 +320,88 @@
 <body class="bg-[#F4F7FB] dark:bg-[#0B1120] text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col">
 
     <!-- ===================================================================== -->
-    <!-- LOGIN GATE OVERLAY (TAMPILAN PERSIS INDEX (3)_2.HTML)                 -->
+    <!-- NEW LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)   -->
     <!-- ===================================================================== -->
-    <div id="loginGate" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-        <div class="aurora a1"></div>
-        <div class="aurora a2"></div>
-        <div class="aurora a3"></div>
-        <canvas id="sand"></canvas>
+    <div id="loginGate" class="ruwai-login-gate fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div class="ruwai-login-grid absolute inset-0 pointer-events-none"></div>
+        <div class="absolute -top-28 -left-24 w-96 h-96 rounded-full bg-[#2D95CA]/15 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-28 -right-24 w-96 h-96 rounded-full bg-[#E28939]/15 blur-3xl pointer-events-none"></div>
 
-        <main class="login-card-gate" id="loginCard">
-            <div class="login-brand">
-                <!-- Logo BPS dengan 6 target komponen partikel pasir -->
-                <svg id="bpsLogo" width="76" height="58" viewBox="0 0 120 92" aria-hidden="true">
-                    <rect x="6" y="54" width="20" height="32" rx="3" fill="#0077b6"/>
-                    <rect x="33" y="34" width="20" height="52" rx="3" fill="#8ac926"/>
-                    <rect x="60" y="12" width="20" height="74" rx="3" fill="#f77f00"/>
-                    <circle cx="96" cy="24" r="10" fill="#0077b6"/>
-                    <path d="M84 46c0-6.6 5.4-12 12-12s12 5.4 12 12v14H84V46z" fill="#0077b6"/>
-                    <path d="M82 65h28l-5 19H87l-5-19z" fill="#f77f00"/>
-                </svg>
-                <div class="login-brand-name" id="loginTitle">RUWAI</div>
-                <div class="login-brand-sub">Portal Humas &bull; BPS Provinsi Lampung</div>
-            </div>
+        <div class="ruwai-login-card relative w-full max-w-md rounded-2xl overflow-hidden text-[#EAF2F8]">
+            <div class="ruwai-login-accent h-[3px] w-full"></div>
 
-            <form id="loginForm" onsubmit="handleLoginSubmit(event)">
-                <div class="login-field">
-                    <input id="loginUsername" class="ruwai-gate-input" type="text" required autocomplete="username" placeholder="Username pengguna" autofocus />
+            <div class="p-6 sm:p-8 space-y-6">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-2 h-2 rounded-full bg-[#75B547] shadow-[0_0_10px_rgba(117,181,71,0.85)]"></span>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D6E7F2]/60">
+                            Portal Internal Humas
+                        </span>
+                    </div>
+                    <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6E7F2]/45">
+                        BPS Lampung
+                    </span>
                 </div>
-                <div class="login-field has-toggle">
-                    <input id="loginPassword" class="ruwai-gate-input" type="password" required autocomplete="current-password" placeholder="Kata sandi" />
-                    <button type="button" onclick="togglePasswordVisibility()" aria-label="Tampilkan atau sembunyikan kata sandi" class="login-eye-btn">
-                        <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
+
+                <div class="text-center space-y-3">
+                    <div class="w-16 h-16 rounded-2xl bg-[#072133]/90 border border-[#BED6E8]/15 p-2.5 flex items-center justify-center mx-auto shadow-lg">
+                        <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-extrabold text-[#F4F8FB] tracking-tight">Masuk ke RUWAI</h1>
+                        <p class="text-xs text-[#E2EEF6]/65 mt-1 leading-relaxed">
+                            Ruang Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung
+                        </p>
+                    </div>
+                </div>
+
+                <div id="loginErrorBox" role="alert" aria-live="polite"
+                    class="hidden bg-rose-950/70 border border-rose-400/35 text-rose-200 px-3.5 py-2.5 rounded-xl text-xs font-medium flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-400"></i>
+                    <span id="loginErrorText">Username atau kata sandi tidak sesuai.</span>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                    <div>
+                        <label for="loginUsername" class="block text-[11px] font-bold uppercase tracking-wider text-[#D6E7F2]/80 mb-1.5">
+                            Username Pengguna
+                        </label>
+                        <div class="relative">
+                            <i data-lucide="user" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#D6E7F2]/45"></i>
+                            <input type="text" id="loginUsername" required autocomplete="username" placeholder="Masukkan username"
+                                class="ruwai-login-input w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border focus:outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="loginPassword" class="block text-[11px] font-bold uppercase tracking-wider text-[#D6E7F2]/80 mb-1.5">
+                            Kata Sandi
+                        </label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#D6E7F2]/45"></i>
+                            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="Masukkan kata sandi"
+                                class="ruwai-login-input w-full pl-10 pr-10 py-2.5 text-xs rounded-xl border focus:outline-none transition">
+                            <button type="button" onclick="togglePasswordVisibility()" aria-label="Tampilkan atau sembunyikan kata sandi"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-[#D6E7F2]/50 hover:text-[#F4F8FB] transition">
+                                <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="loginSubmitBtn"
+                        class="w-full py-2.5 px-4 bg-[#2D95CA] hover:bg-[#0073AD] text-white font-bold text-xs rounded-xl shadow-lg shadow-[#2D95CA]/25 transition flex items-center justify-center gap-2">
+                        <i data-lucide="log-in" class="w-4 h-4"></i>
+                        <span>Masuk ke Portal RUWAI</span>
                     </button>
+                </form>
+
+                <div class="pt-3 border-t border-[#BED6E8]/10 text-center">
+                    <p class="text-[11px] text-[#D6E7F2]/45">
+                        &copy; 2026 BPS Provinsi Lampung &bull; Akses Terbatas
+                    </p>
                 </div>
-                <button id="loginSubmitBtn" class="login-btn" type="submit">Masuk</button>
-            </form>
-
-            <div id="loginErrorText" class="login-msg" role="status" aria-live="polite"></div>
-
-            <div class="login-foot">
-                <span>bps.go.id</span>
-                <span>Akses Terbatas</span>
             </div>
-        </main>
+        </div>
     </div>
 
     <!-- ===================================================================== -->
@@ -1020,192 +909,6 @@
         lucide.createIcons();
 
         // =========================================================================
-        // SAND PARTICLE LOGO & INTERACTIVE CANVAS (PERSIS INDEX (3)_2.HTML)
-        // =========================================================================
-        (function initSandParticles() {
-            const canvas = document.getElementById('sand');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const loginCard = document.getElementById('loginCard');
-            const bpsLogo = document.getElementById('bpsLogo');
-
-            let W = 0, H = 0, DPR = 1, particles = [], rafId = null;
-            const mouse = { x: -9999, y: -9999, active: false };
-
-            function buildTargets() {
-                const svgRect = bpsLogo.getBoundingClientRect();
-                const sx = svgRect.width / 120;
-                const sy = svgRect.height / 92;
-                const ox = svgRect.left;
-                const oy = svgRect.top;
-
-                const shapes = [
-                    { type: 'rect', x: 6, y: 54, w: 20, h: 32, c: '#0077b6', n: 55 },
-                    { type: 'rect', x: 33, y: 34, w: 20, h: 52, c: '#8ac926', n: 85 },
-                    { type: 'rect', x: 60, y: 12, w: 20, h: 74, c: '#f77f00', n: 115 },
-                    { type: 'circle', cx: 96, cy: 24, r: 10, c: '#0077b6', n: 35 },
-                    { type: 'rect', x: 84, y: 36, w: 24, h: 24, c: '#0077b6', n: 45 },
-                    { type: 'rect', x: 83, y: 65, w: 26, h: 19, c: '#f77f00', n: 40 }
-                ];
-
-                const pts = [];
-                shapes.forEach(s => {
-                    for (let i = 0; i < s.n; i++) {
-                        let lx, ly;
-                        if (s.type === 'rect') {
-                            lx = s.x + Math.random() * s.w;
-                            ly = s.y + Math.random() * s.h;
-                        } else {
-                            const a = Math.random() * Math.PI * 2;
-                            const r = Math.sqrt(Math.random()) * s.r;
-                            lx = s.cx + Math.cos(a) * r;
-                            ly = s.cy + Math.sin(a) * r;
-                        }
-                        pts.push({ tx: ox + lx * sx, ty: oy + ly * sy, color: s.c });
-                    }
-                });
-                return pts;
-            }
-
-            function initParticles() {
-                DPR = Math.min(window.devicePixelRatio || 1, 2);
-                W = canvas.width = Math.floor(window.innerWidth * DPR);
-                H = canvas.height = Math.floor(window.innerHeight * DPR);
-                canvas.style.width = window.innerWidth + 'px';
-                canvas.style.height = window.innerHeight + 'px';
-                ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-
-                const targets = buildTargets();
-                const palette = ['#0077b6', '#8ac926', '#f77f00', '#38bdf8'];
-
-                particles = targets.map(t => {
-                    const edge = Math.floor(Math.random() * 4);
-                    let x, y;
-                    if (edge === 0) { x = Math.random() * window.innerWidth; y = -20; }
-                    else if (edge === 1) { x = window.innerWidth + 20; y = Math.random() * window.innerHeight; }
-                    else if (edge === 2) { x = Math.random() * window.innerWidth; y = window.innerHeight + 20; }
-                    else { x = -20; y = Math.random() * window.innerHeight; }
-
-                    return {
-                        x, y,
-                        vx: (Math.random() - .5) * 4,
-                        vy: (Math.random() - .5) * 4,
-                        tx: t.tx, ty: t.ty,
-                        color: t.color,
-                        r: 1.3 + Math.random() * 1.4,
-                        phase: Math.random() * Math.PI * 2,
-                        ambient: false
-                    };
-                });
-
-                for (let i = 0; i < 65; i++) {
-                    particles.push({
-                        x: Math.random() * window.innerWidth,
-                        y: Math.random() * window.innerHeight,
-                        vx: (Math.random() - .5) * .35,
-                        vy: -.15 - Math.random() * .35,
-                        tx: 0, ty: 0,
-                        color: palette[i % palette.length],
-                        r: 1 + Math.random() * 1.5,
-                        phase: Math.random() * Math.PI * 2,
-                        ambient: true
-                    });
-                }
-            }
-
-            let t0 = 0;
-            function step(now) {
-                if (document.getElementById('loginGate').classList.contains('hidden')) {
-                    rafId = null;
-                    return;
-                }
-                const dt = Math.min((now - (t0 || now)) / 1000, 0.05);
-                t0 = now;
-
-                ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-                const cardRect = loginCard.getBoundingClientRect();
-                const repelRadius = 85;
-
-                for (let i = 0; i < particles.length; i++) {
-                    const p = particles[i];
-                    p.phase += dt * 1.8;
-
-                    if (p.ambient) {
-                        p.x += p.vx + Math.sin(p.phase) * .18;
-                        p.y += p.vy;
-                        if (p.y < -10) { p.y = window.innerHeight + 10; p.x = Math.random() * window.innerWidth; }
-                        if (p.x < -10) p.x = window.innerWidth + 10;
-                        if (p.x > window.innerWidth + 10) p.x = -10;
-
-                        ctx.globalAlpha = 0.28;
-                        ctx.fillStyle = p.color;
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                        ctx.fill();
-                        continue;
-                    }
-
-                    const jitterX = Math.cos(p.phase) * 0.7;
-                    const jitterY = Math.sin(p.phase * 1.1) * 0.7;
-                    const ax = (p.tx + jitterX - p.x) * 0.045;
-                    const ay = (p.ty + jitterY - p.y) * 0.045;
-                    p.vx = (p.vx + ax) * 0.84;
-                    p.vy = (p.vy + ay) * 0.84;
-
-                    if (mouse.active) {
-                        const dx = p.x - mouse.x;
-                        const dy = p.y - mouse.y;
-                        const dist = Math.hypot(dx, dy);
-                        if (dist < repelRadius && dist > 0.1) {
-                            const force = (1 - dist / repelRadius) * 5.5;
-                            p.vx += (dx / dist) * force;
-                            p.vy += (dy / dist) * force;
-                        }
-                    }
-
-                    p.x += p.vx;
-                    p.y += p.vy;
-
-                    const insideCard =
-                        p.x > cardRect.left + 8 && p.x < cardRect.right - 8 &&
-                        p.y > cardRect.top + 8 && p.y < cardRect.bottom - 8;
-
-                    ctx.globalAlpha = insideCard ? 0.14 : 0.75;
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                ctx.globalAlpha = 1;
-                rafId = requestAnimationFrame(step);
-            }
-
-            window.addEventListener('pointermove', e => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-                mouse.active = true;
-            }, { passive: true });
-            window.addEventListener('pointerleave', () => { mouse.active = false; });
-
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    if (!document.getElementById('loginGate').classList.contains('hidden')) {
-                        initParticles();
-                    }
-                }, 150);
-            });
-
-            window.startSandAnimation = function() {
-                initParticles();
-                if (!rafId) rafId = requestAnimationFrame(step);
-            };
-        })();
-
-        // =========================================================================
         // DARK / LIGHT THEME ENGINE (SINKRON DENGAN CHART.JS & LOCALSTORAGE)
         // =========================================================================
         function isDarkModeActive() {
@@ -1305,21 +1008,6 @@
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        function setLoginMessage(text, type = '') {
-            const msgEl = document.getElementById('loginErrorText');
-            if (!msgEl) return;
-            msgEl.textContent = text;
-            msgEl.className = 'login-msg' + (type ? ' ' + type : '');
-        }
-
-        function shakeLoginCard() {
-            const card = document.getElementById('loginCard');
-            if (!card) return;
-            card.classList.remove('shake');
-            void card.offsetWidth;
-            card.classList.add('shake');
-        }
-
         function togglePasswordVisibility() {
             const pwdInput = document.getElementById('loginPassword');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -1337,16 +1025,18 @@
             e.preventDefault();
             const username = document.getElementById('loginUsername').value.trim().toLowerCase();
             const password = document.getElementById('loginPassword').value;
+            const errorBox = document.getElementById('loginErrorBox');
+            const errorText = document.getElementById('loginErrorText');
             const submitBtn = document.getElementById('loginSubmitBtn');
 
-            setLoginMessage('');
+            errorBox.classList.add('hidden');
             if (submitBtn) submitBtn.disabled = true;
 
             try {
                 const userRecord = AUTH_USERS[username];
                 if (!userRecord) {
-                    setLoginMessage('Username tidak terdaftar di sistem RUWAI.', 'err');
-                    shakeLoginCard();
+                    errorText.innerText = 'Username tidak terdaftar di sistem RUWAI.';
+                    errorBox.classList.remove('hidden');
                     return;
                 }
 
@@ -1366,12 +1056,11 @@
                     } else {
                         localStorage.removeItem('bps_lampung_admin_mode');
                     }
-                    setLoginMessage('Berhasil masuk...', 'ok');
                     unlockPortal(sessionPayload);
                     showToast('Selamat datang di RUWAI!');
                 } else {
-                    setLoginMessage('Kata sandi salah. Silakan periksa kembali.', 'err');
-                    shakeLoginCard();
+                    errorText.innerText = 'Kata sandi salah. Silakan periksa kembali.';
+                    errorBox.classList.remove('hidden');
                 }
             } finally {
                 if (submitBtn) submitBtn.disabled = false;
@@ -1431,9 +1120,6 @@
                 } catch (e) {
                     sessionStorage.removeItem(SESSION_AUTH_KEY);
                 }
-            }
-            if (typeof window.startSandAnimation === 'function') {
-                window.startSandAnimation();
             }
             const userInput = document.getElementById('loginUsername');
             if (userInput) userInput.focus();
