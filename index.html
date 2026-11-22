@@ -61,21 +61,23 @@
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
         /* ============================================================
-           GERBANG LOGIN EDITORIAL RUWAI + PARTIKEL PASIR LOGO BPS
+           GERBANG LOGIN RUWAI — PRESISI REFERENSI + PARTIKEL BPS.WEBP
            ============================================================ */
         #loginGate {
             position: fixed;
             inset: 0;
             z-index: 99999;
-            background: radial-gradient(120% 100% at 62% 38%, #0a202d 0%, #050f16 55%, #03090e 100%);
+            background:
+                radial-gradient(68% 72% at 50% 48%, rgba(13, 47, 68, 0.62) 0%, rgba(5, 19, 28, 0.92) 56%, #030b11 100%),
+                #030b11;
             color: #edf2f5;
-            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             overflow-x: hidden;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.45s;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
         }
         #loginGate.hidden {
             opacity: 0;
@@ -92,15 +94,17 @@
             pointer-events: auto;
         }
 
+        /* Top Bar */
         .rg-topbar {
             position: relative;
             z-index: 2;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 24px 40px;
-            font-size: 11px;
-            letter-spacing: 0.14em;
+            padding: 22px 44px;
+            font-size: 10.5px;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             pointer-events: none;
         }
@@ -110,6 +114,7 @@
             gap: 8px;
             font-weight: 800;
             font-size: 13px;
+            letter-spacing: 0.14em;
             color: #f8fafc;
             pointer-events: auto;
         }
@@ -122,8 +127,9 @@
         }
         .rg-nav-links {
             display: flex;
-            gap: 32px;
-            color: #7c919e;
+            align-items: center;
+            gap: 34px;
+            color: #6b8190;
             font-weight: 600;
             pointer-events: auto;
         }
@@ -142,7 +148,7 @@
             pointer-events: auto;
         }
         .rg-clock {
-            color: #7c919e;
+            color: #6b8190;
             font-weight: 600;
             font-variant-numeric: tabular-nums;
         }
@@ -152,12 +158,12 @@
             gap: 8px;
             padding: 6px 14px;
             border-radius: 999px;
-            background: rgba(13, 33, 45, 0.72);
-            border: 1px solid rgba(148, 184, 204, 0.18);
+            background: rgba(11, 30, 42, 0.72);
+            border: 1px solid rgba(148, 184, 204, 0.16);
             color: #cbd5e1;
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.13em;
             backdrop-filter: blur(10px);
         }
         .rg-pill-dot {
@@ -165,91 +171,43 @@
             height: 6px;
             border-radius: 50%;
             background: #22c55e;
-            box-shadow: 0 0 8px #22c55e;
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
         }
 
+        /* Vertical Left Edge Rail */
         .rg-side-rail {
             position: fixed;
-            left: 16px;
-            top: 50%;
+            left: 14px;
+            top: 52%;
             transform: translateY(-50%) rotate(-90deg);
             transform-origin: left center;
-            font-size: 9px;
+            font-size: 8.5px;
             font-weight: 700;
-            letter-spacing: 0.22em;
+            letter-spacing: 0.24em;
             text-transform: uppercase;
-            color: rgba(148, 163, 184, 0.32);
+            color: rgba(148, 163, 184, 0.28);
             z-index: 2;
             pointer-events: none;
             white-space: nowrap;
         }
 
-        .rg-main {
-            position: relative;
-            z-index: 2;
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
-            align-items: center;
-            max-width: 1440px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 16px 56px;
-            pointer-events: none;
-        }
-
-        .rg-hero-copy {
-            max-width: 440px;
-            pointer-events: auto;
-        }
-        .rg-hero-title {
-            font-size: clamp(2.6rem, 4.4vw, 3.85rem);
-            font-weight: 700;
-            line-height: 1.04;
-            letter-spacing: -0.03em;
-            color: #f8fafc;
-            margin: 0 0 20px;
-        }
-        .rg-hero-desc {
-            font-size: 14px;
-            line-height: 1.65;
-            color: #94a7b5;
-            margin: 0 0 28px;
-            max-width: 340px;
-        }
-        .rg-kicker {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: #647b8a;
-        }
-        .rg-kicker::before {
-            content: "";
-            width: 28px;
-            height: 1px;
-            background: #d97706;
-        }
-
+        /* Floating HUD Callouts (01 & 02) */
         .rg-float-tag {
-            position: absolute;
+            position: fixed;
             z-index: 2;
             pointer-events: none;
-            font-size: 10px;
+            font-size: 9.5px;
             line-height: 1.45;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.13em;
             text-transform: uppercase;
-        }
-        .rg-float-tag.tag-01 {
-            left: 19%;
-            bottom: 24%;
         }
         .rg-float-tag.tag-02 {
             left: 48%;
-            top: 10%;
+            top: 9.5%;
+        }
+        .rg-float-tag.tag-01 {
+            left: 16.5%;
+            bottom: 31%;
         }
         .rg-float-title {
             display: flex;
@@ -260,7 +218,7 @@
         }
         .rg-float-sub {
             padding-left: 14px;
-            color: #647b8a;
+            color: #5b7282;
             font-weight: 600;
         }
         .sq-orange {
@@ -268,46 +226,100 @@
             height: 7px;
             background: #f97316;
             display: inline-block;
+            shrink: 0;
         }
         .sq-green {
             width: 7px;
             height: 7px;
             background: #22c55e;
             display: inline-block;
+            shrink: 0;
         }
 
+        /* Center Sand Hint */
         .rg-sand-hint {
             position: fixed;
-            bottom: 52px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            font-size: 10px;
+            gap: 7px;
+            font-size: 9.5px;
             font-weight: 600;
-            letter-spacing: 0.16em;
+            letter-spacing: 0.17em;
             text-transform: uppercase;
-            color: rgba(148, 163, 184, 0.55);
+            color: rgba(148, 163, 184, 0.48);
             pointer-events: none;
             white-space: nowrap;
         }
 
-        .rg-card-wrap {
-            display: flex;
-            justify-content: flex-end;
+        /* Main Two-Column Grid */
+        .rg-main {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 32px;
+            width: 100%;
+            padding: 8px 52px;
+            pointer-events: none;
+        }
+
+        /* Left Hero Copy */
+        .rg-hero-copy {
+            max-width: 340px;
             pointer-events: auto;
+            transform: translateY(-28px);
+        }
+        .rg-hero-title {
+            font-size: clamp(2.5rem, 3.8vw, 3.65rem);
+            font-weight: 700;
+            line-height: 1.04;
+            letter-spacing: -0.03em;
+            color: #f8fafc;
+            margin: 0 0 18px;
+        }
+        .rg-hero-desc {
+            font-size: 13px;
+            line-height: 1.65;
+            color: #8fa3b1;
+            margin: 0 0 24px;
+        }
+        .rg-kicker {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0.19em;
+            text-transform: uppercase;
+            color: #5b7282;
+        }
+        .rg-kicker::before {
+            content: "";
+            width: 28px;
+            height: 1px;
+            background: #d97706;
+        }
+
+        /* Right Login Card */
+        .rg-card-wrap {
+            pointer-events: auto;
+            padding-right: 12px;
         }
         .rg-login-card {
             position: relative;
-            width: 100%;
-            max-width: 396px;
-            padding: 28px 28px 22px;
-            border-radius: 20px;
-            background: linear-gradient(165deg, rgba(16, 37, 52, 0.78) 0%, rgba(8, 20, 30, 0.88) 100%);
+            width: 368px;
+            max-width: 100%;
+            padding: 24px 24px 18px;
+            border-radius: 18px;
+            background: linear-gradient(168deg, rgba(14, 34, 48, 0.80) 0%, rgba(7, 19, 29, 0.90) 100%);
             border: 1px solid rgba(148, 184, 204, 0.16);
-            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(22px);
             -webkit-backdrop-filter: blur(22px);
             overflow: hidden;
@@ -319,18 +331,25 @@
             left: 0;
             right: 0;
             height: 2.5px;
-            background: linear-gradient(90deg, #0072bc 0%, #68b92e 50%, #f7941d 100%);
+            background: linear-gradient(90deg, #008FD5 0%, #68B92E 52%, #EB891B 100%);
         }
 
         .rg-card-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+        }
+        .rg-card-logo-box {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .rg-card-logo {
-            height: 28px;
-            width: auto;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
         }
         .rg-card-brand {
@@ -339,64 +358,66 @@
         }
         .rg-card-brand strong {
             display: block;
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 800;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.13em;
             color: #f8fafc;
         }
         .rg-card-brand span {
-            font-size: 9px;
+            font-size: 8.5px;
             font-weight: 600;
-            letter-spacing: 0.14em;
-            color: #647b8a;
+            letter-spacing: 0.15em;
+            color: #5b7282;
         }
 
         .rg-card-pill {
             display: inline-block;
-            padding: 5px 11px;
+            padding: 4px 11px;
             border-radius: 999px;
             background: rgba(14, 116, 144, 0.18);
             border: 1px solid rgba(56, 189, 248, 0.22);
             color: #7dd3fc;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            margin-bottom: 11px;
+        }
+        .rg-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #f8fafc;
+            margin: 0 0 5px;
+        }
+        .rg-card-sub {
+            font-size: 11.5px;
+            line-height: 1.5;
+            color: #8499a8;
+            margin: 0 0 18px;
+        }
+
+        .rg-field {
+            margin-bottom: 13px;
+        }
+        .rg-label {
+            display: block;
             font-size: 9.5px;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-        .rg-card-title {
-            font-size: 21px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: #f8fafc;
-            margin: 0 0 6px;
-        }
-        .rg-card-sub {
-            font-size: 12.5px;
-            line-height: 1.5;
-            color: #8ea3b2;
-            margin: 0 0 22px;
-        }
-
-        .rg-field {
-            margin-bottom: 15px;
-        }
-        .rg-label {
-            display: block;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: #8ea3b2;
-            margin-bottom: 7px;
+            color: #8499a8;
+            margin-bottom: 6px;
         }
         .rg-input-box {
             position: relative;
             display: flex;
             align-items: center;
-            background: rgba(6, 16, 24, 0.68);
+            width: 100%;
+            background: rgba(5, 15, 23, 0.78);
             border: 1px solid rgba(148, 184, 204, 0.18);
             border-radius: 10px;
+            overflow: hidden;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         .rg-input-box:focus-within {
@@ -408,33 +429,44 @@
             box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.14);
         }
         .rg-input-icon {
-            padding-left: 13px;
-            color: #647b8a;
+            padding-left: 12px;
+            color: #5b7282;
             display: flex;
             align-items: center;
+            flex-shrink: 0;
             pointer-events: none;
         }
         .rg-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #f8fafc;
-            font-size: 13.5px;
-            padding: 11px 12px;
+            flex: 1;
+            min-width: 0;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            color: #f8fafc !important;
+            font-size: 13px;
+            padding: 10px 10px;
             font-family: inherit;
         }
         .rg-input::placeholder {
-            color: #526877;
+            color: #4f6675 !important;
+        }
+        /* Anti-Autofill White Box */
+        .rg-input:-webkit-autofill,
+        .rg-input:-webkit-autofill:hover,
+        .rg-input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #f8fafc !important;
+            -webkit-box-shadow: 0 0 0 1000px #06121b inset !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
         .rg-eye-btn {
             background: transparent;
             border: none;
-            color: #647b8a;
-            padding: 0 13px;
+            color: #5b7282;
+            padding: 0 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
+            flex-shrink: 0;
             transition: color 0.2s;
         }
         .rg-eye-btn:hover {
@@ -442,9 +474,9 @@
         }
         .rg-field-err {
             display: none;
-            font-size: 11px;
+            font-size: 10.5px;
             color: #fb923c;
-            margin-top: 5px;
+            margin-top: 4px;
         }
         .rg-field-err.show {
             display: block;
@@ -454,9 +486,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: 14px 0 18px;
-            font-size: 12px;
-            color: #8ea3b2;
+            margin: 12px 0 16px;
+            font-size: 11.5px;
+            color: #8499a8;
         }
         .rg-remember {
             display: inline-flex;
@@ -472,13 +504,13 @@
             border-radius: 4px;
         }
         .rg-forgot {
-            color: #8ea3b2;
+            color: #8499a8;
             text-decoration: none;
-            font-size: 11.5px;
+            font-size: 11px;
             transition: color 0.2s;
         }
         .rg-forgot:hover {
-            color: #e2e8f0;
+            color: #f8fafc;
         }
 
         .rg-submit-btn {
@@ -486,13 +518,13 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 9px;
-            padding: 12px 18px;
+            gap: 8px;
+            padding: 11px 16px;
             border-radius: 10px;
             border: none;
             background: #f1f5f9;
             color: #091520;
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
@@ -507,12 +539,12 @@
         }
 
         .rg-status-bar {
-            margin-top: 14px;
-            padding: 9px 12px;
+            margin-top: 12px;
+            padding: 8px 11px;
             border-left: 2.5px solid #f97316;
-            background: rgba(249, 115, 22, 0.08);
+            background: rgba(249, 115, 22, 0.09);
             color: #cbd5e1;
-            font-size: 11.5px;
+            font-size: 11px;
             line-height: 1.45;
             border-radius: 0 6px 6px 0;
         }
@@ -521,61 +553,64 @@
         }
         .rg-status-bar.is-info {
             border-left-color: #38bdf8;
-            background: rgba(56, 189, 248, 0.08);
+            background: rgba(56, 189, 248, 0.09);
         }
 
         .rg-card-foot {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 20px;
-            padding-top: 14px;
+            margin-top: 16px;
+            padding-top: 12px;
             border-top: 1px solid rgba(148, 184, 204, 0.1);
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 600;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.13em;
             text-transform: uppercase;
-            color: #5b7282;
+            color: #536a79;
         }
         .rg-card-foot a {
-            color: #8ea3b2;
+            color: #8499a8;
             text-decoration: none;
         }
         .rg-card-foot a:hover {
             color: #f8fafc;
         }
 
+        /* Bottom Bar */
         .rg-bottombar {
             position: relative;
             z-index: 2;
+            width: 100%;
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
-            padding: 20px 40px 26px;
+            padding: 14px 44px 20px;
             pointer-events: none;
         }
         .rg-foot-desc strong {
             display: block;
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 800;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.13em;
             color: #e2e8f0;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
         .rg-foot-desc span {
             display: block;
-            font-size: 11.5px;
-            color: #647b8a;
+            font-size: 11px;
+            color: #5b7282;
             line-height: 1.45;
         }
         .rg-foot-copy {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 600;
-            letter-spacing: 0.14em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: #526877;
+            color: #4f6675;
         }
 
+        /* Responsive Mobile Layout — Sesuai mobile_3.jpg */
         @media (max-width: 960px) {
             .rg-topbar {
                 padding: 20px 22px;
@@ -588,33 +623,40 @@
             }
             .rg-main {
                 grid-template-columns: 1fr;
-                padding: 12px 22px 24px;
+                padding: 10px 22px 12px;
                 gap: 280px;
             }
+            .rg-hero-copy {
+                transform: none;
+                max-width: 100%;
+            }
             .rg-hero-title {
-                font-size: 2.55rem;
+                font-size: 2.65rem;
             }
             .rg-sand-hint {
                 position: static;
                 transform: none;
+                display: flex;
                 justify-content: center;
                 text-align: center;
                 white-space: normal;
-                max-width: 220px;
-                margin: 0 auto 16px;
-                line-height: 1.5;
+                max-width: 210px;
+                margin: 0 auto 18px;
+                line-height: 1.55;
             }
             .rg-card-wrap {
+                padding-right: 0;
+                display: flex;
                 justify-content: center;
             }
             .rg-login-card {
-                max-width: 100%;
+                width: 100%;
             }
             .rg-bottombar {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 14px;
-                padding: 16px 22px 28px;
+                padding: 18px 22px 28px;
             }
         }
 
@@ -777,7 +819,7 @@
         html.dark input:not(.rg-input)::placeholder { color: #64748B !important; }
 
         /* ============================================================
-           MOBILE UI FIX (< 640px) — RUWAI INDEX.HTML
+           MOBILE UI FIX (< 640px) — PORTAL UTAMA
            ============================================================ */
         @media (max-width: 640px) {
             #protectedAppWrapper header > div > div,
@@ -837,7 +879,7 @@
 <body class="bg-[#F4F7FB] dark:bg-[#0B1120] text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col">
 
     <!-- ===================================================================== -->
-    <!-- NEW LOGIN GATE OVERLAY (DESAIN EDITORIAL + PARTIKEL PASIR LOGO BPS)   -->
+    <!-- GERBANG LOGIN RUWAI (SAMA PERSIS REFERENSI + PARTIKEL LOGO BPS ASLI)  -->
     <!-- ===================================================================== -->
     <div id="loginGate">
         <canvas id="bpsSandCanvas"></canvas>
@@ -886,7 +928,9 @@
             <section class="rg-card-wrap">
                 <div class="rg-login-card">
                     <div class="rg-card-head">
-                        <img src="BPS.webp" alt="Logo BPS" class="rg-card-logo">
+                        <div class="rg-card-logo-box">
+                            <img src="BPS.webp" alt="Logo BPS" class="rg-card-logo">
+                        </div>
                         <div class="rg-card-brand">
                             <strong>RUWAI</strong>
                             <span>PORTAL HUMAS</span>
@@ -1488,7 +1532,7 @@
         lucide.createIcons();
 
         // =========================================================================
-        // JAM REAL-TIME BANDAR LAMPUNG & EFEK PARTIKEL PASIR LOGO BPS
+        // JAM REAL-TIME BANDAR LAMPUNG & EFEK PARTIKEL PASIR LOGO BPS ASLI
         // =========================================================================
         (function initRuwaiClock() {
             function tick() {
@@ -1500,7 +1544,7 @@
                     minute: '2-digit',
                     hour12: false
                 }).format(new Date()).replace(':', '.');
-                el.textContent = `BANDAR LAMPUNG \u00B7 ${t} WIB`;
+                el.textContent = `BANDAR LAMPUNG · ${t} WIB`;
             }
             tick();
             setInterval(tick, 15000);
@@ -1560,64 +1604,51 @@
 
             const hintEl = document.getElementById('sandHintText');
             if (hintEl && isTouch) {
-                hintEl.textContent = 'GESER LOGO \u2014 IA LURUH MENJADI PASIR';
+                hintEl.textContent = 'GESER LOGO — IA LURUH MENJADI PASIR';
             }
 
             let width = 0, height = 0, particles = [];
             const pointer = { x: -9999, y: -9999, radius: 95 };
 
-            function sampleLogoPoints(w, h) {
+            const logoImg = new Image();
+            logoImg.src = 'BPS.webp';
+
+            function buildParticlesFromImage(img, w, h) {
                 const off = document.createElement('canvas');
                 off.width = w;
                 off.height = h;
                 const octx = off.getContext('2d');
 
                 const isMobile = w <= 960;
-                const size = isMobile ? Math.min(w * 0.72, 290) : Math.min(h * 0.78, w * 0.44);
-                const cx = isMobile ? w * 0.5 : w * 0.52;
-                const cy = isMobile ? h * 0.39 : h * 0.5;
+                const ratio = (img.naturalWidth && img.naturalHeight)
+                    ? (img.naturalWidth / img.naturalHeight)
+                    : 1.25;
 
-                octx.save();
-                octx.translate(cx - size * 0.5, cy - size * 0.5);
-                const s = size / 100;
-                octx.scale(s, s);
-                octx.fillStyle = '#ffffff';
-                octx.strokeStyle = '#ffffff';
+                const targetH = isMobile ? Math.min(w * 0.52, 210) : Math.min(h * 0.68, 490);
+                const targetW = targetH * ratio;
+                const cx = isMobile ? w * 0.5 : w * 0.5;
+                const cy = isMobile ? h * 0.36 : h * 0.49;
 
-                octx.lineWidth = 5.5;
-                octx.beginPath();
-                octx.ellipse(50, 52, 42, 31, -0.35, 0.35, Math.PI * 1.82);
-                octx.stroke();
+                octx.drawImage(img, cx - targetW * 0.5, cy - targetH * 0.5, targetW, targetH);
 
-                octx.beginPath();
-                octx.moveTo(31, 14); octx.lineTo(44, 14); octx.lineTo(44, 42);
-                octx.lineTo(64, 34); octx.lineTo(64, 54); octx.lineTo(31, 66);
-                octx.closePath(); octx.fill();
-
-                octx.beginPath();
-                octx.moveTo(64, 12); octx.lineTo(77, 12); octx.lineTo(77, 68);
-                octx.lineTo(48, 79); octx.lineTo(48, 63); octx.lineTo(64, 57);
-                octx.closePath(); octx.fill();
-
-                octx.beginPath();
-                octx.moveTo(31, 70); octx.lineTo(58, 60); octx.lineTo(58, 72);
-                octx.lineTo(44, 77); octx.lineTo(44, 92); octx.lineTo(31, 92);
-                octx.closePath(); octx.fill();
-                octx.restore();
-
-                const imgData = octx.getImageData(0, 0, w, h).data;
-                const step = isMobile ? 4 : 5;
+                const data = octx.getImageData(0, 0, w, h).data;
+                const step = isMobile ? 3 : 4;
                 const pts = [];
 
                 for (let y = 0; y < h; y += step) {
                     for (let x = 0; x < w; x += step) {
-                        if (imgData[(y * w + x) * 4 + 3] > 128) {
-                            const jx = x + (Math.random() - 0.5) * 3;
-                            const jy = y + (Math.random() - 0.5) * 3;
+                        const i = (y * w + x) * 4;
+                        const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+                        if (a > 85) {
+                            const jx = x + (Math.random() - 0.5) * 2.4;
+                            const jy = y + (Math.random() - 0.5) * 2.4;
+                            // Siluet pasir monokrom silver-putih bergradasi sesuai luminance logo BPS asli
+                            const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                            const alpha = Math.min(0.95, (0.38 + lum * 0.55) * (a / 255));
                             pts.push({
                                 x: jx, y: jy, ox: jx, oy: jy, vx: 0, vy: 0,
-                                r: Math.random() * 1.35 + 0.85,
-                                a: Math.random() * 0.45 + 0.42
+                                r: Math.random() * 1.45 + 1.0,
+                                color: `rgba(218, 232, 240, ${alpha.toFixed(3)})`
                             });
                         }
                     }
@@ -1628,9 +1659,12 @@
             function resize() {
                 width = canvas.width = window.innerWidth;
                 height = canvas.height = window.innerHeight;
-                particles = sampleLogoPoints(width, height);
+                if (logoImg.complete && logoImg.naturalWidth > 0) {
+                    particles = buildParticlesFromImage(logoImg, width, height);
+                }
             }
 
+            logoImg.onload = resize;
             window.addEventListener('resize', resize);
             window.addEventListener('mousemove', (e) => { pointer.x = e.clientX; pointer.y = e.clientY; });
             window.addEventListener('touchmove', (e) => {
@@ -1661,7 +1695,7 @@
                         p.x += p.vx;
                         p.y += p.vy;
                     }
-                    ctx.fillStyle = `rgba(218, 232, 240, ${p.a})`;
+                    ctx.fillStyle = p.color;
                     ctx.fillRect(p.x, p.y, p.r, p.r);
                 }
                 requestAnimationFrame(render);
