@@ -247,7 +247,7 @@ body.ready .login{transform:none}
 /* ===== KONFIGURASI — cukup ubah blok ini (atau timpa dari file lain sebelum skrip utama) =====
    demo:true  -> pratinjau UI: transisi masuk dijalankan lalu halaman disusun ulang (tanpa server)
    demo:false -> kirim POST JSON {username,password} ke endpoint, harapkan 200 {token} */
-window.RUWAI_AUTH=Object.assign({demo:true,endpoint:'/api/auth/login',redirect:'dashboard.html',tokenKey:'ruwai_token',maxTry:5,lockSec:30,revealMs:2000},window.RUWAI_AUTH||{});
+window.RUWAI_AUTH=Object.assign({demo:false,endpoint:'/api/auth/login',redirect:'dashboard.html',tokenKey:'ruwai_token',maxTry:5,lockSec:30,revealMs:2000},window.RUWAI_AUTH||{});
 </script>
 <script>
 (function(){'use strict';
