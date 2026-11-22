@@ -273,9 +273,10 @@ body.ready .login{transform:none}
 <script>
 /* ===== KONFIGURASI BACKEND GOOGLE APPS SCRIPT RUWAI (v6.7.0 / v6.8.0) =====
    Ganti endpoint dengan URL Web App deployment aktif Google Apps Script Anda */
+<script>
 window.RUWAI_AUTH=Object.assign({
   demo:false,
-  endpoint:'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec,
+  endpoint:'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec',
   redirect:'index.html',
   tokenKey:'ruwai_token',
   emailKey:'ruwai_email',
@@ -285,7 +286,6 @@ window.RUWAI_AUTH=Object.assign({
   revealMs:2000
 },window.RUWAI_AUTH||{});
 </script>
-<script>
 (function(){'use strict';
 var AUTH=window.RUWAI_AUTH,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 var $=function(i){return document.getElementById(i)};
