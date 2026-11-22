@@ -61,44 +61,561 @@
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
         /* ============================================================
-           NEW LOGIN GATE — GLASS OVERLAY & BPS AMBIENT AURA
+           GERBANG LOGIN EDITORIAL RUWAI + PARTIKEL PASIR LOGO BPS
            ============================================================ */
-        .ruwai-login-gate {
-            background:
-                radial-gradient(110% 85% at 80% 10%, rgba(45, 149, 202, 0.24) 0%, rgba(45, 149, 202, 0) 58%),
-                radial-gradient(95% 75% at 15% 92%, rgba(226, 137, 57, 0.18) 0%, rgba(226, 137, 57, 0) 60%),
-                radial-gradient(85% 70% at 50% 100%, rgba(117, 181, 71, 0.14) 0%, rgba(117, 181, 71, 0) 65%),
-                linear-gradient(155deg, #05202F 0%, #04141F 48%, #03101A 100%);
+        #loginGate {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: radial-gradient(120% 100% at 62% 38%, #0a202d 0%, #050f16 55%, #03090e 100%);
+            color: #edf2f5;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.45s;
         }
-        .ruwai-login-grid {
-            background-image:
-                repeating-linear-gradient(90deg, rgba(190, 220, 240, 0.045) 0 1px, transparent 1px 96px),
-                repeating-linear-gradient(0deg, rgba(190, 220, 240, 0.035) 0 1px, transparent 1px 96px);
-            -webkit-mask-image: radial-gradient(80% 75% at 50% 45%, #000 22%, transparent 85%);
-                    mask-image: radial-gradient(80% 75% at 50% 45%, #000 22%, transparent 85%);
+        #loginGate.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
-        .ruwai-login-card {
-            background: linear-gradient(180deg, rgba(9, 29, 45, 0.86), rgba(4, 17, 27, 0.92));
-            backdrop-filter: blur(24px) saturate(150%);
-            -webkit-backdrop-filter: blur(24px) saturate(150%);
-            border: 1px solid rgba(190, 214, 232, 0.16);
-            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+        #bpsSandCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: auto;
         }
-        .ruwai-login-accent {
-            background: linear-gradient(90deg, #2D95CA 0%, #75B547 52%, #E28939 100%);
+
+        .rg-topbar {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 40px;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            pointer-events: none;
         }
-        .ruwai-login-input {
-            background: rgba(3, 16, 26, 0.72) !important;
-            border-color: rgba(190, 214, 232, 0.18) !important;
-            color: #EAF2F8 !important;
+        .rg-brand-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            color: #f8fafc;
+            pointer-events: auto;
         }
-        .ruwai-login-input::placeholder {
-            color: rgba(214, 231, 242, 0.38) !important;
+        .rg-brand-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #f59e0b;
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
         }
-        .ruwai-login-input:focus {
-            background: rgba(6, 24, 40, 0.92) !important;
-            border-color: #2D95CA !important;
-            box-shadow: 0 0 0 2px rgba(45, 149, 202, 0.35) !important;
+        .rg-nav-links {
+            display: flex;
+            gap: 32px;
+            color: #7c919e;
+            font-weight: 600;
+            pointer-events: auto;
+        }
+        .rg-nav-links a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .rg-nav-links a:hover {
+            color: #e2e8f0;
+        }
+        .rg-top-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            pointer-events: auto;
+        }
+        .rg-clock {
+            color: #7c919e;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+        .rg-pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(13, 33, 45, 0.72);
+            border: 1px solid rgba(148, 184, 204, 0.18);
+            color: #cbd5e1;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            backdrop-filter: blur(10px);
+        }
+        .rg-pill-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 8px #22c55e;
+        }
+
+        .rg-side-rail {
+            position: fixed;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: left center;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(148, 163, 184, 0.32);
+            z-index: 2;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .rg-main {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            align-items: center;
+            max-width: 1440px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 16px 56px;
+            pointer-events: none;
+        }
+
+        .rg-hero-copy {
+            max-width: 440px;
+            pointer-events: auto;
+        }
+        .rg-hero-title {
+            font-size: clamp(2.6rem, 4.4vw, 3.85rem);
+            font-weight: 700;
+            line-height: 1.04;
+            letter-spacing: -0.03em;
+            color: #f8fafc;
+            margin: 0 0 20px;
+        }
+        .rg-hero-desc {
+            font-size: 14px;
+            line-height: 1.65;
+            color: #94a7b5;
+            margin: 0 0 28px;
+            max-width: 340px;
+        }
+        .rg-kicker {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #647b8a;
+        }
+        .rg-kicker::before {
+            content: "";
+            width: 28px;
+            height: 1px;
+            background: #d97706;
+        }
+
+        .rg-float-tag {
+            position: absolute;
+            z-index: 2;
+            pointer-events: none;
+            font-size: 10px;
+            line-height: 1.45;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .rg-float-tag.tag-01 {
+            left: 19%;
+            bottom: 24%;
+        }
+        .rg-float-tag.tag-02 {
+            left: 48%;
+            top: 10%;
+        }
+        .rg-float-title {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+        .rg-float-sub {
+            padding-left: 14px;
+            color: #647b8a;
+            font-weight: 600;
+        }
+        .sq-orange {
+            width: 7px;
+            height: 7px;
+            background: #f97316;
+            display: inline-block;
+        }
+        .sq-green {
+            width: 7px;
+            height: 7px;
+            background: #22c55e;
+            display: inline-block;
+        }
+
+        .rg-sand-hint {
+            position: fixed;
+            bottom: 52px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(148, 163, 184, 0.55);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .rg-card-wrap {
+            display: flex;
+            justify-content: flex-end;
+            pointer-events: auto;
+        }
+        .rg-login-card {
+            position: relative;
+            width: 100%;
+            max-width: 396px;
+            padding: 28px 28px 22px;
+            border-radius: 20px;
+            background: linear-gradient(165deg, rgba(16, 37, 52, 0.78) 0%, rgba(8, 20, 30, 0.88) 100%);
+            border: 1px solid rgba(148, 184, 204, 0.16);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            overflow: hidden;
+        }
+        .rg-login-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2.5px;
+            background: linear-gradient(90deg, #0072bc 0%, #68b92e 50%, #f7941d 100%);
+        }
+
+        .rg-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .rg-card-logo {
+            height: 28px;
+            width: auto;
+            object-fit: contain;
+        }
+        .rg-card-brand {
+            text-align: right;
+            line-height: 1.25;
+        }
+        .rg-card-brand strong {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            color: #f8fafc;
+        }
+        .rg-card-brand span {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            color: #647b8a;
+        }
+
+        .rg-card-pill {
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 999px;
+            background: rgba(14, 116, 144, 0.18);
+            border: 1px solid rgba(56, 189, 248, 0.22);
+            color: #7dd3fc;
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .rg-card-title {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #f8fafc;
+            margin: 0 0 6px;
+        }
+        .rg-card-sub {
+            font-size: 12.5px;
+            line-height: 1.5;
+            color: #8ea3b2;
+            margin: 0 0 22px;
+        }
+
+        .rg-field {
+            margin-bottom: 15px;
+        }
+        .rg-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #8ea3b2;
+            margin-bottom: 7px;
+        }
+        .rg-input-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(6, 16, 24, 0.68);
+            border: 1px solid rgba(148, 184, 204, 0.18);
+            border-radius: 10px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .rg-input-box:focus-within {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14);
+        }
+        .rg-input-box.is-invalid {
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.14);
+        }
+        .rg-input-icon {
+            padding-left: 13px;
+            color: #647b8a;
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+        }
+        .rg-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #f8fafc;
+            font-size: 13.5px;
+            padding: 11px 12px;
+            font-family: inherit;
+        }
+        .rg-input::placeholder {
+            color: #526877;
+        }
+        .rg-eye-btn {
+            background: transparent;
+            border: none;
+            color: #647b8a;
+            padding: 0 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+        .rg-eye-btn:hover {
+            color: #cbd5e1;
+        }
+        .rg-field-err {
+            display: none;
+            font-size: 11px;
+            color: #fb923c;
+            margin-top: 5px;
+        }
+        .rg-field-err.show {
+            display: block;
+        }
+
+        .rg-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 14px 0 18px;
+            font-size: 12px;
+            color: #8ea3b2;
+        }
+        .rg-remember {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .rg-remember input {
+            accent-color: #38bdf8;
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+        .rg-forgot {
+            color: #8ea3b2;
+            text-decoration: none;
+            font-size: 11.5px;
+            transition: color 0.2s;
+        }
+        .rg-forgot:hover {
+            color: #e2e8f0;
+        }
+
+        .rg-submit-btn {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            background: #f1f5f9;
+            color: #091520;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+        }
+        .rg-submit-btn:hover {
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(248, 250, 252, 0.18);
+            transform: translateY(-1px);
+        }
+        .rg-submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .rg-status-bar {
+            margin-top: 14px;
+            padding: 9px 12px;
+            border-left: 2.5px solid #f97316;
+            background: rgba(249, 115, 22, 0.08);
+            color: #cbd5e1;
+            font-size: 11.5px;
+            line-height: 1.45;
+            border-radius: 0 6px 6px 0;
+        }
+        .rg-status-bar.hidden {
+            display: none;
+        }
+        .rg-status-bar.is-info {
+            border-left-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        .rg-card-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(148, 184, 204, 0.1);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #5b7282;
+        }
+        .rg-card-foot a {
+            color: #8ea3b2;
+            text-decoration: none;
+        }
+        .rg-card-foot a:hover {
+            color: #f8fafc;
+        }
+
+        .rg-bottombar {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 20px 40px 26px;
+            pointer-events: none;
+        }
+        .rg-foot-desc strong {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            color: #e2e8f0;
+            margin-bottom: 3px;
+        }
+        .rg-foot-desc span {
+            display: block;
+            font-size: 11.5px;
+            color: #647b8a;
+            line-height: 1.45;
+        }
+        .rg-foot-copy {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #526877;
+        }
+
+        @media (max-width: 960px) {
+            .rg-topbar {
+                padding: 20px 22px;
+            }
+            .rg-nav-links,
+            .rg-clock,
+            .rg-side-rail,
+            .rg-float-tag {
+                display: none;
+            }
+            .rg-main {
+                grid-template-columns: 1fr;
+                padding: 12px 22px 24px;
+                gap: 280px;
+            }
+            .rg-hero-title {
+                font-size: 2.55rem;
+            }
+            .rg-sand-hint {
+                position: static;
+                transform: none;
+                justify-content: center;
+                text-align: center;
+                white-space: normal;
+                max-width: 220px;
+                margin: 0 auto 16px;
+                line-height: 1.5;
+            }
+            .rg-card-wrap {
+                justify-content: center;
+            }
+            .rg-login-card {
+                max-width: 100%;
+            }
+            .rg-bottombar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+                padding: 16px 22px 28px;
+            }
         }
 
         /* ============================================================
@@ -251,33 +768,33 @@
         html.dark .border-slate-300 { border-color: #1E293B !important; }
         html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: #1E293B !important; }
 
-        html.dark input:not(.ruwai-login-input),
+        html.dark input:not(.rg-input),
         html.dark select {
             background-color: #0F172A !important;
             border-color: #334155 !important;
             color: #F1F5F9 !important;
         }
-        html.dark input:not(.ruwai-login-input)::placeholder { color: #64748B !important; }
+        html.dark input:not(.rg-input)::placeholder { color: #64748B !important; }
 
         /* ============================================================
            MOBILE UI FIX (< 640px) — RUWAI INDEX.HTML
            ============================================================ */
         @media (max-width: 640px) {
-            header > div > div,
-            nav > div {
+            #protectedAppWrapper header > div > div,
+            #protectedAppWrapper nav > div {
                 flex-wrap: wrap !important;
                 gap: 10px !important;
                 padding-top: 12px !important;
                 padding-bottom: 12px !important;
             }
-            header h1,
-            header p,
-            header span {
+            #protectedAppWrapper header h1,
+            #protectedAppWrapper header p,
+            #protectedAppWrapper header span {
                 white-space: normal !important;
                 overflow: visible !important;
                 text-overflow: unset !important;
             }
-            header > div > div > div:last-child {
+            #protectedAppWrapper header > div > div > div:last-child {
                 width: 100% !important;
                 display: flex !important;
                 justify-content: space-between !important;
@@ -286,8 +803,8 @@
                 padding-top: 8px !important;
                 border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
             }
-            header > div > div > div:last-child a,
-            header > div > div > div:last-child button#syncBtn {
+            #protectedAppWrapper header > div > div > div:last-child a,
+            #protectedAppWrapper header > div > div > div:last-child button#syncBtn {
                 flex: 1 !important;
                 justify-content: center !important;
             }
@@ -311,7 +828,7 @@
                 font-size: 12px !important;
                 padding: 7px 12px !important;
             }
-            canvas {
+            #protectedAppWrapper canvas {
                 max-height: 270px !important;
             }
         }
@@ -320,88 +837,151 @@
 <body class="bg-[#F4F7FB] dark:bg-[#0B1120] text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col">
 
     <!-- ===================================================================== -->
-    <!-- NEW LOGIN GATE OVERLAY (MUNCUL PERTAMA KALI SEBELUM PORTAL TERBUKA)   -->
+    <!-- NEW LOGIN GATE OVERLAY (DESAIN EDITORIAL + PARTIKEL PASIR LOGO BPS)   -->
     <!-- ===================================================================== -->
-    <div id="loginGate" class="ruwai-login-gate fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-        <div class="ruwai-login-grid absolute inset-0 pointer-events-none"></div>
-        <div class="absolute -top-28 -left-24 w-96 h-96 rounded-full bg-[#2D95CA]/15 blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-28 -right-24 w-96 h-96 rounded-full bg-[#E28939]/15 blur-3xl pointer-events-none"></div>
+    <div id="loginGate">
+        <canvas id="bpsSandCanvas"></canvas>
+        <div class="rg-side-rail">BPS PROVINSI LAMPUNG &middot; EDISI 2026</div>
 
-        <div class="ruwai-login-card relative w-full max-w-md rounded-2xl overflow-hidden text-[#EAF2F8]">
-            <div class="ruwai-login-accent h-[3px] w-full"></div>
-
-            <div class="p-6 sm:p-8 space-y-6">
-                <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-2.5">
-                        <span class="w-2 h-2 rounded-full bg-[#75B547] shadow-[0_0_10px_rgba(117,181,71,0.85)]"></span>
-                        <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D6E7F2]/60">
-                            Portal Internal Humas
-                        </span>
-                    </div>
-                    <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6E7F2]/45">
-                        BPS Lampung
-                    </span>
-                </div>
-
-                <div class="text-center space-y-3">
-                    <div class="w-16 h-16 rounded-2xl bg-[#072133]/90 border border-[#BED6E8]/15 p-2.5 flex items-center justify-center mx-auto shadow-lg">
-                        <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-extrabold text-[#F4F8FB] tracking-tight">Masuk ke RUWAI</h1>
-                        <p class="text-xs text-[#E2EEF6]/65 mt-1 leading-relaxed">
-                            Ruang Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung
-                        </p>
-                    </div>
-                </div>
-
-                <div id="loginErrorBox" role="alert" aria-live="polite"
-                    class="hidden bg-rose-950/70 border border-rose-400/35 text-rose-200 px-3.5 py-2.5 rounded-xl text-xs font-medium flex items-center gap-2">
-                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-400"></i>
-                    <span id="loginErrorText">Username atau kata sandi tidak sesuai.</span>
-                </div>
-
-                <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
-                    <div>
-                        <label for="loginUsername" class="block text-[11px] font-bold uppercase tracking-wider text-[#D6E7F2]/80 mb-1.5">
-                            Username Pengguna
-                        </label>
-                        <div class="relative">
-                            <i data-lucide="user" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#D6E7F2]/45"></i>
-                            <input type="text" id="loginUsername" required autocomplete="username" placeholder="Masukkan username"
-                                class="ruwai-login-input w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border focus:outline-none transition">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="loginPassword" class="block text-[11px] font-bold uppercase tracking-wider text-[#D6E7F2]/80 mb-1.5">
-                            Kata Sandi
-                        </label>
-                        <div class="relative">
-                            <i data-lucide="lock" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#D6E7F2]/45"></i>
-                            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="Masukkan kata sandi"
-                                class="ruwai-login-input w-full pl-10 pr-10 py-2.5 text-xs rounded-xl border focus:outline-none transition">
-                            <button type="button" onclick="togglePasswordVisibility()" aria-label="Tampilkan atau sembunyikan kata sandi"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-[#D6E7F2]/50 hover:text-[#F4F8FB] transition">
-                                <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="loginSubmitBtn"
-                        class="w-full py-2.5 px-4 bg-[#2D95CA] hover:bg-[#0073AD] text-white font-bold text-xs rounded-xl shadow-lg shadow-[#2D95CA]/25 transition flex items-center justify-center gap-2">
-                        <i data-lucide="log-in" class="w-4 h-4"></i>
-                        <span>Masuk ke Portal RUWAI</span>
-                    </button>
-                </form>
-
-                <div class="pt-3 border-t border-[#BED6E8]/10 text-center">
-                    <p class="text-[11px] text-[#D6E7F2]/45">
-                        &copy; 2026 BPS Provinsi Lampung &bull; Akses Terbatas
-                    </p>
-                </div>
+        <header class="rg-topbar">
+            <div class="rg-brand-top">
+                <span>RUWAI</span>
+                <span class="rg-brand-dot"></span>
             </div>
+
+            <nav class="rg-nav-links" aria-label="Informasi Portal">
+                <a href="#tentang" onclick="showRuwaiHint('RUWAI mengintegrasikan pemantauan media dan analitik narasi BPS Provinsi Lampung.', false); return false;">TENTANG</a>
+                <a href="#panduan" onclick="showRuwaiHint('Gunakan kredensial resmi Humas BPS Provinsi Lampung untuk membuka dashboard.', false); return false;">PANDUAN AKSES</a>
+                <a href="#bantuan" onclick="showRuwaiHint('Hubungi Tim Humas BPS Provinsi Lampung jika mengalami kendala login.', false); return false;">BANTUAN</a>
+            </nav>
+
+            <div class="rg-top-right">
+                <span class="rg-clock" id="rgLiveClock">BANDAR LAMPUNG &middot; --.-- WIB</span>
+                <span class="rg-pill-badge">
+                    <span class="rg-pill-dot"></span>
+                    AKSES INTERNAL TERBATAS
+                </span>
+            </div>
+        </header>
+
+        <div class="rg-float-tag tag-02">
+            <div class="rg-float-title"><span class="sq-green"></span> 02 / ANALITIK</div>
+            <div class="rg-float-sub">SENTIMEN &amp;<br>TREN ISU</div>
         </div>
+        <div class="rg-float-tag tag-01">
+            <div class="rg-float-title"><span class="sq-orange"></span> 01 / PEMANTAUAN</div>
+            <div class="rg-float-sub">MEDIA HARIAN<br>TERINDEKS</div>
+        </div>
+
+        <main class="rg-main">
+            <section class="rg-hero-copy">
+                <h1 class="rg-hero-title">Narasi<br>yang terjaga.</h1>
+                <p class="rg-hero-desc">
+                    Cara baru membaca pemberitaan.<br>
+                    Tempat arsip bertemu analitik, dan angka bertemu narasi.
+                </p>
+                <div class="rg-kicker">RUANG PEMANTAUAN MEDIA</div>
+            </section>
+
+            <section class="rg-card-wrap">
+                <div class="rg-login-card">
+                    <div class="rg-card-head">
+                        <img src="BPS.webp" alt="Logo BPS" class="rg-card-logo">
+                        <div class="rg-card-brand">
+                            <strong>RUWAI</strong>
+                            <span>PORTAL HUMAS</span>
+                        </div>
+                    </div>
+
+                    <span class="rg-card-pill">AKSES INTERNAL TERBATAS</span>
+                    <h2 class="rg-card-title">Masuk ke RUWAI</h2>
+                    <p class="rg-card-sub">
+                        Gunakan kredensial Humas BPS Provinsi Lampung untuk membuka dashboard pemantauan.
+                    </p>
+
+                    <form id="loginForm" onsubmit="validateAndSubmitRuwai(event)" novalidate>
+                        <div class="rg-field">
+                            <label class="rg-label" for="loginUsername">USERNAME PENGGUNA</label>
+                            <div class="rg-input-box" id="boxUsername">
+                                <span class="rg-input-icon">
+                                    <i data-lucide="user" class="w-4 h-4"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    id="loginUsername"
+                                    class="rg-input"
+                                    placeholder="mis. humas"
+                                    autocomplete="username"
+                                    required
+                                />
+                            </div>
+                            <div class="rg-field-err" id="errUsername">Username wajib diisi.</div>
+                        </div>
+
+                        <div class="rg-field">
+                            <label class="rg-label" for="loginPassword">KATA SANDI</label>
+                            <div class="rg-input-box" id="boxPassword">
+                                <span class="rg-input-icon">
+                                    <i data-lucide="lock" class="w-4 h-4"></i>
+                                </span>
+                                <input
+                                    type="password"
+                                    id="loginPassword"
+                                    class="rg-input"
+                                    placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                                    autocomplete="current-password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onclick="togglePasswordVisibility()"
+                                    aria-label="Tampilkan atau sembunyikan kata sandi"
+                                    class="rg-eye-btn"
+                                >
+                                    <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            <div class="rg-field-err" id="errPassword">Kata sandi wajib diisi.</div>
+                        </div>
+
+                        <div class="rg-meta-row">
+                            <label class="rg-remember">
+                                <input type="checkbox" id="rememberDevice" />
+                                <span>Ingat perangkat</span>
+                            </label>
+                            <a href="#lupa-sandi" class="rg-forgot" onclick="showRuwaiHint('Hubungi Admin Humas BPS Provinsi Lampung untuk pengaturan ulang kata sandi.', false); return false;">Lupa sandi?</a>
+                        </div>
+
+                        <button type="submit" id="loginSubmitBtn" class="rg-submit-btn">
+                            <i data-lucide="log-in" class="w-4 h-4"></i>
+                            <span>Masuk ke Portal RUWAI</span>
+                        </button>
+
+                        <div id="loginErrorBox" role="alert" aria-live="polite" class="rg-status-bar hidden">
+                            <span id="loginErrorText">Username atau kata sandi tidak sesuai.</span>
+                        </div>
+                    </form>
+
+                    <div class="rg-card-foot">
+                        <span>V1.0 &middot; INTERNAL</span>
+                        <a href="mailto:bps1800@bps.go.id">HUBUNGI ADMIN</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div class="rg-sand-hint">
+            <span>&#9759;</span>
+            <span id="sandHintText">ARAHKAN KURSOR KE LOGO &mdash; IA LURUH MENJADI PASIR</span>
+        </div>
+
+        <footer class="rg-bottombar">
+            <div class="rg-foot-desc">
+                <strong>RUWAI</strong>
+                <span>Sistem Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung.</span>
+            </div>
+            <div class="rg-foot-copy">&copy; 2026 HUMAS BPS PROVINSI LAMPUNG</div>
+        </footer>
     </div>
 
     <!-- ===================================================================== -->
@@ -414,7 +994,7 @@
             <div class="liquid-glass-spotlight"></div>
             <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between py-3.5 gap-4">
-                   <!-- Brand & Logo -->
+                    <!-- Brand & Logo -->
                     <div class="flex items-center gap-3.5 min-w-0">
                         <div class="glass-logo-pill w-12 h-12 sm:w-14 sm:h-14 rounded-2xl p-2 flex items-center justify-center shrink-0">
                             <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
@@ -454,8 +1034,7 @@
 
                         <a href="virtual-office.html" class="glass-btn-action inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold whitespace-nowrap shadow-sm shadow-bps-orange/25">
                             <i data-lucide="monitor" class="w-3.5 h-3.5 shrink-0"></i>
-                            <span class="hidden sm:inline">Virtual Office</span>
-                            <span class="sm:hidden">Virtual Office</span>
+                            <span>Virtual Office</span>
                         </a>
 
                         <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="glass-btn-action inline-flex items-center gap-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3.5 py-2 rounded-xl whitespace-nowrap shadow-sm shadow-bps-blue/25">
@@ -817,7 +1396,7 @@
         <!-- Footer & Virtual Office AI Agents Status -->
         <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-2.5">
-              <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
+                <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
                     <div>&copy; 2026 <strong>Humas BPS Provinsi Lampung</strong></div>
                     <div class="flex items-center space-x-3">
                         <span>Sumber Data: Database Pemantauan Media</span><span>•</span>
@@ -909,6 +1488,190 @@
         lucide.createIcons();
 
         // =========================================================================
+        // JAM REAL-TIME BANDAR LAMPUNG & EFEK PARTIKEL PASIR LOGO BPS
+        // =========================================================================
+        (function initRuwaiClock() {
+            function tick() {
+                const el = document.getElementById('rgLiveClock');
+                if (!el) return;
+                const t = new Intl.DateTimeFormat('id-ID', {
+                    timeZone: 'Asia/Jakarta',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                }).format(new Date()).replace(':', '.');
+                el.textContent = `BANDAR LAMPUNG \u00B7 ${t} WIB`;
+            }
+            tick();
+            setInterval(tick, 15000);
+        })();
+
+        function showRuwaiHint(msg, isError) {
+            const box = document.getElementById('loginErrorBox');
+            const txt = document.getElementById('loginErrorText');
+            if (!box || !txt) return;
+            txt.textContent = msg;
+            box.classList.remove('hidden');
+            box.classList.toggle('is-info', !isError);
+        }
+
+        function validateAndSubmitRuwai(e) {
+            e.preventDefault();
+            const u = document.getElementById('loginUsername');
+            const p = document.getElementById('loginPassword');
+            const bu = document.getElementById('boxUsername');
+            const bp = document.getElementById('boxPassword');
+            const eu = document.getElementById('errUsername');
+            const ep = document.getElementById('errPassword');
+
+            let ok = true;
+            if (!u.value.trim()) {
+                bu.classList.add('is-invalid');
+                eu.classList.add('show');
+                ok = false;
+            } else {
+                bu.classList.remove('is-invalid');
+                eu.classList.remove('show');
+            }
+
+            if (!p.value.trim()) {
+                bp.classList.add('is-invalid');
+                ep.classList.add('show');
+                ok = false;
+            } else {
+                bp.classList.remove('is-invalid');
+                ep.classList.remove('show');
+            }
+
+            if (!ok) {
+                showRuwaiHint('Lengkapi kredensial terlebih dahulu.', true);
+                return;
+            }
+
+            handleLoginSubmit(e);
+        }
+
+        (function initBpsSandParticles() {
+            const canvas = document.getElementById('bpsSandCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+            const hintEl = document.getElementById('sandHintText');
+            if (hintEl && isTouch) {
+                hintEl.textContent = 'GESER LOGO \u2014 IA LURUH MENJADI PASIR';
+            }
+
+            let width = 0, height = 0, particles = [];
+            const pointer = { x: -9999, y: -9999, radius: 95 };
+
+            function sampleLogoPoints(w, h) {
+                const off = document.createElement('canvas');
+                off.width = w;
+                off.height = h;
+                const octx = off.getContext('2d');
+
+                const isMobile = w <= 960;
+                const size = isMobile ? Math.min(w * 0.72, 290) : Math.min(h * 0.78, w * 0.44);
+                const cx = isMobile ? w * 0.5 : w * 0.52;
+                const cy = isMobile ? h * 0.39 : h * 0.5;
+
+                octx.save();
+                octx.translate(cx - size * 0.5, cy - size * 0.5);
+                const s = size / 100;
+                octx.scale(s, s);
+                octx.fillStyle = '#ffffff';
+                octx.strokeStyle = '#ffffff';
+
+                octx.lineWidth = 5.5;
+                octx.beginPath();
+                octx.ellipse(50, 52, 42, 31, -0.35, 0.35, Math.PI * 1.82);
+                octx.stroke();
+
+                octx.beginPath();
+                octx.moveTo(31, 14); octx.lineTo(44, 14); octx.lineTo(44, 42);
+                octx.lineTo(64, 34); octx.lineTo(64, 54); octx.lineTo(31, 66);
+                octx.closePath(); octx.fill();
+
+                octx.beginPath();
+                octx.moveTo(64, 12); octx.lineTo(77, 12); octx.lineTo(77, 68);
+                octx.lineTo(48, 79); octx.lineTo(48, 63); octx.lineTo(64, 57);
+                octx.closePath(); octx.fill();
+
+                octx.beginPath();
+                octx.moveTo(31, 70); octx.lineTo(58, 60); octx.lineTo(58, 72);
+                octx.lineTo(44, 77); octx.lineTo(44, 92); octx.lineTo(31, 92);
+                octx.closePath(); octx.fill();
+                octx.restore();
+
+                const imgData = octx.getImageData(0, 0, w, h).data;
+                const step = isMobile ? 4 : 5;
+                const pts = [];
+
+                for (let y = 0; y < h; y += step) {
+                    for (let x = 0; x < w; x += step) {
+                        if (imgData[(y * w + x) * 4 + 3] > 128) {
+                            const jx = x + (Math.random() - 0.5) * 3;
+                            const jy = y + (Math.random() - 0.5) * 3;
+                            pts.push({
+                                x: jx, y: jy, ox: jx, oy: jy, vx: 0, vy: 0,
+                                r: Math.random() * 1.35 + 0.85,
+                                a: Math.random() * 0.45 + 0.42
+                            });
+                        }
+                    }
+                }
+                return pts;
+            }
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                particles = sampleLogoPoints(width, height);
+            }
+
+            window.addEventListener('resize', resize);
+            window.addEventListener('mousemove', (e) => { pointer.x = e.clientX; pointer.y = e.clientY; });
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches && e.touches[0]) {
+                    pointer.x = e.touches[0].clientX;
+                    pointer.y = e.touches[0].clientY;
+                }
+            }, { passive: true });
+            window.addEventListener('touchend', () => { pointer.x = -9999; pointer.y = -9999; });
+
+            function render() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    if (!prefersReduced) {
+                        const dx = p.x - pointer.x;
+                        const dy = p.y - pointer.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < pointer.radius && dist > 0) {
+                            const force = (pointer.radius - dist) / pointer.radius;
+                            p.vx += (dx / dist) * force * 3.4;
+                            p.vy += (dy / dist) * force * 3.4 + force * 0.9;
+                        }
+                        p.vx += (p.ox - p.x) * 0.045;
+                        p.vy += (p.oy - p.y) * 0.045;
+                        p.vx *= 0.86;
+                        p.vy *= 0.86;
+                        p.x += p.vx;
+                        p.y += p.vy;
+                    }
+                    ctx.fillStyle = `rgba(218, 232, 240, ${p.a})`;
+                    ctx.fillRect(p.x, p.y, p.r, p.r);
+                }
+                requestAnimationFrame(render);
+            }
+
+            resize();
+            render();
+        })();
+
+        // =========================================================================
         // DARK / LIGHT THEME ENGINE (SINKRON DENGAN CHART.JS & LOCALSTORAGE)
         // =========================================================================
         function isDarkModeActive() {
@@ -985,7 +1748,7 @@
         })();
 
         // =========================================================================
-        // SISTEM AUTENTIKASI & ROLE AKSES (SHA-256 — DIPERTAHANKAN SAMA)
+        // SISTEM AUTENTIKASI & ROLE AKSES (SHA-256 + INGAT PERANGKAT)
         // =========================================================================
         const SESSION_AUTH_KEY = 'RUWAI_bps_lampung_session';
         const AUTH_USERS = {
@@ -1000,6 +1763,10 @@
                 isAdmin: true
             }
         };
+
+        function getActiveSession() {
+            return sessionStorage.getItem(SESSION_AUTH_KEY) || localStorage.getItem(SESSION_AUTH_KEY);
+        }
 
         async function sha256Hex(message) {
             const msgBuffer = new TextEncoder().encode(message);
@@ -1025,18 +1792,19 @@
             e.preventDefault();
             const username = document.getElementById('loginUsername').value.trim().toLowerCase();
             const password = document.getElementById('loginPassword').value;
+            const rememberDevice = document.getElementById('rememberDevice')?.checked;
             const errorBox = document.getElementById('loginErrorBox');
-            const errorText = document.getElementById('loginErrorText');
             const submitBtn = document.getElementById('loginSubmitBtn');
 
             errorBox.classList.add('hidden');
+            errorBox.classList.remove('is-info');
             if (submitBtn) submitBtn.disabled = true;
 
             try {
                 const userRecord = AUTH_USERS[username];
                 if (!userRecord) {
-                    errorText.innerText = 'Username tidak terdaftar di sistem RUWAI.';
-                    errorBox.classList.remove('hidden');
+                    document.getElementById('boxUsername').classList.add('is-invalid');
+                    showRuwaiHint('Username tidak terdaftar di sistem RUWAI.', true);
                     return;
                 }
 
@@ -1051,6 +1819,12 @@
                         loginAt: Date.now()
                     };
                     sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(sessionPayload));
+                    if (rememberDevice) {
+                        localStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(sessionPayload));
+                    } else {
+                        localStorage.removeItem(SESSION_AUTH_KEY);
+                    }
+
                     if (userRecord.isAdmin) {
                         localStorage.setItem('bps_lampung_admin_mode', 'true');
                     } else {
@@ -1059,8 +1833,8 @@
                     unlockPortal(sessionPayload);
                     showToast('Selamat datang di RUWAI!');
                 } else {
-                    errorText.innerText = 'Kata sandi salah. Silakan periksa kembali.';
-                    errorBox.classList.remove('hidden');
+                    document.getElementById('boxPassword').classList.add('is-invalid');
+                    showRuwaiHint('Kata sandi salah. Silakan periksa kembali.', true);
                 }
             } finally {
                 if (submitBtn) submitBtn.disabled = false;
@@ -1086,6 +1860,7 @@
 
         function logoutSession() {
             sessionStorage.removeItem(SESSION_AUTH_KEY);
+            localStorage.removeItem(SESSION_AUTH_KEY);
             localStorage.removeItem('bps_lampung_admin_mode');
             window.location.reload();
         }
@@ -1109,16 +1884,18 @@
         let intervalsStarted = false;
 
         window.onload = function() {
-            const rawSession = sessionStorage.getItem(SESSION_AUTH_KEY);
+            const rawSession = getActiveSession();
             if (rawSession) {
                 try {
                     const parsed = JSON.parse(rawSession);
                     if (parsed && parsed.username) {
+                        sessionStorage.setItem(SESSION_AUTH_KEY, rawSession);
                         unlockPortal(parsed);
                         return;
                     }
                 } catch (e) {
                     sessionStorage.removeItem(SESSION_AUTH_KEY);
+                    localStorage.removeItem(SESSION_AUTH_KEY);
                 }
             }
             const userInput = document.getElementById('loginUsername');
@@ -1404,7 +2181,7 @@
 
         let isFetchingMonitoring = false;
         async function fetchLiveMonitoringData(isManual = false) {
-            if (!sessionStorage.getItem(SESSION_AUTH_KEY)) return;
+            if (!getActiveSession()) return;
             if (isFetchingMonitoring) return;
             isFetchingMonitoring = true;
 
@@ -1473,7 +2250,7 @@
 
         let isFetchingAgents = false;
         async function fetchAgentStates() {
-            if (!sessionStorage.getItem(SESSION_AUTH_KEY)) return;
+            if (!getActiveSession()) return;
             if (isFetchingAgents) return;
             isFetchingAgents = true;
 
