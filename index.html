@@ -274,6 +274,8 @@ body.ready .login{transform:none}
 /* ===== KONFIGURASI BACKEND GOOGLE APPS SCRIPT RUWAI (v6.7.0 / v6.8.0) =====
    Ganti endpoint dengan URL Web App deployment aktif Google Apps Script Anda */
 <script>
+/* ===== KONFIGURASI BACKEND GOOGLE APPS SCRIPT RUWAI (v6.7.0 / v6.8.0) =====
+   Ganti endpoint dengan URL Web App deployment aktif Google Apps Script Anda */
 window.RUWAI_AUTH=Object.assign({
   demo:false,
   endpoint:'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec',
@@ -286,6 +288,7 @@ window.RUWAI_AUTH=Object.assign({
   revealMs:2000
 },window.RUWAI_AUTH||{});
 </script>
+<script>
 (function(){'use strict';
 var AUTH=window.RUWAI_AUTH,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 var $=function(i){return document.getElementById(i)};
@@ -454,7 +457,7 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(
 /* urutan tampil: logo sendiri dulu, lalu UI dan kartu login */
 setTimeout(function(){
   body.classList.add('ready');
-  if(innerWidth>960)setTimeout(function(){try{user.focus({preventScroll:true})}catch(e){}},1200);
+if(innerWidth>960)setTimeout(function(){try{emailInput.focus({preventScroll:true})}catch(e){}},1200);
 },reduce?0:AUTH.revealMs);
 
 /* ---------- pointer ---------- */
