@@ -1,1035 +1,1743 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>RUWAI — Sistem Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung</title>
-<meta name="description" content="Portal internal Humas BPS Provinsi Lampung.">
-<meta name="theme-color" content="#04141f">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23061c2b'/%3E%3Cpath d='M9 8h4l-2 7h5l-2 9h-4l2-7H7z' fill='%232D95CA'/%3E%3Cpath d='M19 8h4l-2 7h5l-2 9h-4l2-7h-5z' fill='%23E28939'/%3E%3C/svg%3E">
-<style>
-:root{
-  --blue:#2D95CA;--orange:#E28939;--green:#75B547;--ink:#04141f;
-  --s1:#f4f8fb;--s2:#dde6ee;--s3:#b9c6d2;--s4:#8fa0ae;
-  --tx:#eaf2f8;--dim:rgba(226,238,246,.62);--faint:rgba(214,231,242,.42);
-  --hair:rgba(190,214,232,.14);--hair2:rgba(190,214,232,.08);
-  --disp:'Hanken Grotesk','Segoe UI',system-ui,sans-serif;
-  --ui:'Inter','Segoe UI',system-ui,sans-serif;
-  --pad:clamp(20px,3.2vw,54px);--cw:clamp(316px,24vw,356px);
-  --ease:cubic-bezier(.2,.7,.2,1);
-}
-*,*::before,*::after{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;background:var(--ink);color:var(--tx);
-  font:15px/1.5 var(--ui);-webkit-font-smoothing:antialiased;overflow:hidden;
-}
-::selection{background:rgba(45,149,202,.35);color:#fff}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUWAI - Ruang Pemantauan Media & Analisis Berita BPS Provinsi Lampung</title>
 
-.bg{
-  position:fixed;inset:0;z-index:0;overflow:hidden;
-  background:
-    radial-gradient(120% 90% at 78% 8%,#0b3550,rgba(11,53,80,0) 58%),
-    radial-gradient(100% 80% at 12% 96%,#07293c,rgba(7,41,60,0) 62%),
-    linear-gradient(158deg,#05202f,#04141f 42%,#03101a 72%,#061c2b);
-}
-.au{position:absolute;border-radius:50%;opacity:.62;will-change:transform}
-.a1{width:70vw;height:70vw;left:-18vw;top:-24vw;background:radial-gradient(closest-side,rgba(45,149,202,.5),rgba(45,149,202,.2) 46%,transparent 78%);animation:d1 34s ease-in-out infinite alternate}
-.a2{width:60vw;height:60vw;right:-12vw;bottom:-18vw;background:radial-gradient(closest-side,rgba(226,137,57,.38),rgba(226,137,57,.15) 48%,transparent 78%);animation:d2 42s ease-in-out infinite alternate}
-.a3{width:50vw;height:50vw;left:16vw;bottom:-20vw;background:radial-gradient(closest-side,rgba(117,181,71,.3),rgba(117,181,71,.11) 48%,transparent 78%);animation:d3 38s ease-in-out infinite alternate}
-@keyframes d1{to{transform:translate3d(8vw,6vh,0) scale(1.12)}}
-@keyframes d2{to{transform:translate3d(-7vw,-5vh,0) scale(1.08)}}
-@keyframes d3{to{transform:translate3d(5vw,-7vh,0) scale(1.15)}}
-.grid{
-  position:absolute;inset:0;opacity:.5;
-  background-image:
-    repeating-linear-gradient(90deg,rgba(190,220,240,.045) 0 1px,transparent 1px 96px),
-    repeating-linear-gradient(0deg,rgba(190,220,240,.035) 0 1px,transparent 1px 96px);
-  -webkit-mask-image:radial-gradient(80% 70% at 50% 45%,#000 20%,transparent 82%);
-  mask-image:radial-gradient(80% 70% at 50% 45%,#000 20%,transparent 82%);
-}
-.vig{position:absolute;inset:0;background:radial-gradient(110% 90% at 50% 45%,transparent 42%,rgba(2,8,14,.72) 100%)}
-#glow{
-  position:fixed;z-index:1;pointer-events:none;border-radius:50%;
-  background:radial-gradient(circle,rgba(120,180,220,.2),rgba(45,149,202,.09) 45%,transparent 70%);
-  filter:blur(30px);opacity:0;transition:opacity 1.4s ease .3s;
-}
-#sand{position:fixed;inset:0;z-index:2;display:block;width:100%;height:100%}
-.scrim{
-  position:fixed;inset:0;z-index:3;pointer-events:none;
-  background:
-    linear-gradient(90deg,rgba(3,15,25,.9),rgba(3,15,25,.52) 20%,transparent 44%),
-    linear-gradient(0deg,rgba(3,15,25,.86),transparent 26%),
-    linear-gradient(180deg,rgba(3,15,25,.66),transparent 22%);
-  opacity:0;transition:opacity 1.4s ease;
-}
-#plight{
-  position:fixed;z-index:4;width:520px;height:520px;margin:-260px 0 0 -260px;
-  border-radius:50%;pointer-events:none;opacity:0;transition:opacity .6s;
-  mix-blend-mode:screen;
-  background:radial-gradient(circle,rgba(150,200,235,.1),rgba(45,149,202,.05) 42%,transparent 68%);
-}
+    <!-- ===================================================================== -->
+    <!-- GUARD TOKEN AWAL (PRE-RENDER AUTH GATE — CEK TOKEN OTP @bps.go.id)    -->
+    <!-- ===================================================================== -->
+    <script>
+        (function earlyRuwaiAuthGuard() {
+            const LOGIN_PAGE = 'index.html';
+            const TOKEN_KEY = 'ruwai_token';
+            const EMAIL_KEY = 'ruwai_email';
 
-.rv{opacity:0;transform:translateY(16px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease);transition-delay:calc(var(--i,0)*110ms)}
-.fd{opacity:0;transition:opacity 1.3s ease calc(var(--i,0)*110ms)}
-body.ready .rv,body.ready .fd,body.ready .scrim{opacity:1;transform:none}
-body.ready .hint.gone{opacity:0}
-body.leaving .rv,body.leaving .fd,body.leaving .login,body.leaving .scrim{
-  opacity:0!important;transition:opacity .6s ease!important;transition-delay:0s!important;
-}
-
-.stage{position:relative;z-index:5;height:100%;pointer-events:none}
-.stage>*{pointer-events:auto}
-.topbar{
-  position:fixed;top:clamp(18px,2.9vh,32px);left:var(--pad);right:var(--pad);
-  display:flex;align-items:center;justify-content:space-between;gap:20px;z-index:7;
-}
-.brand{display:flex;align-items:baseline;gap:9px;font:700 17px var(--disp);letter-spacing:-.02em;color:var(--s1)}
-.brand i{width:5px;height:5px;border-radius:50%;background:var(--orange);transform:translateY(-3px);box-shadow:0 0 12px rgba(226,137,57,.9)}
-.nav{display:flex;gap:clamp(14px,2vw,30px);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
-.nav a{color:inherit;text-decoration:none;position:relative;padding:6px 0;transition:color .25s}
-.nav a::after{content:'';position:absolute;left:0;right:100%;bottom:2px;height:1px;background:var(--s3);transition:right .3s}
-.nav a:hover{color:var(--s1)}.nav a:hover::after{right:0}
-.tr{display:flex;align-items:center;gap:14px}
-.clock{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-variant-numeric:tabular-nums}
-.chip{
-  display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;
-  border:1px solid var(--hair);background:rgba(8,28,44,.5);backdrop-filter:blur(8px);
-  font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--s2);white-space:nowrap;
-}
-.pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pl 2.6s infinite}
-@keyframes pl{0%{box-shadow:0 0 0 0 rgba(117,181,71,.6)}70%,100%{box-shadow:0 0 0 7px rgba(117,181,71,0)}}
-
-.lede{position:fixed;left:var(--pad);top:clamp(96px,17vh,190px);max-width:min(42vw,470px)}
-.lede h1{margin:0;font:600 clamp(38px,4.35vw,64px)/.94 var(--disp);letter-spacing:-.045em;color:var(--s1);text-shadow:0 6px 40px rgba(2,10,18,.85)}
-.lede h1 span,.lede h1 em{display:block}
-.lede h1 em{font-style:normal;color:transparent;background:linear-gradient(96deg,#fff,#c6d3de 46%,#8fa2b1);-webkit-background-clip:text;background-clip:text}
-.lede p{margin:20px 0 0;max-width:31ch;font-size:13px;line-height:1.62;color:var(--dim);text-shadow:0 2px 18px rgba(2,10,18,.9)}
-.rule{display:flex;align-items:center;gap:10px;margin-top:22px}
-.rule i{width:44px;height:1px;background:linear-gradient(90deg,var(--orange),transparent)}
-.rule span{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
-.note{position:fixed;display:flex;gap:9px;font-size:9px;line-height:1.55;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);text-shadow:0 2px 14px rgba(2,10,18,.95)}
-.note b{display:block;color:var(--s2);font-weight:600}
-.note .sq{width:7px;height:7px;margin-top:3px;flex:none}
-.n1{left:27vw;top:69vh}.n1 .sq{background:var(--orange);box-shadow:0 0 10px rgba(226,137,57,.7)}
-.n2{left:56vw;top:15vh}.n2 .sq{background:var(--green);box-shadow:0 0 10px rgba(117,181,71,.7)}
-.edge{position:fixed;left:calc(var(--pad) - 26px);bottom:24vh;transform-origin:left bottom;transform:rotate(-90deg);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(214,231,242,.28);white-space:nowrap}
-.hint{position:fixed;left:0;right:0;bottom:clamp(74px,11vh,120px);display:flex;justify-content:center;align-items:center;gap:9px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(214,231,242,.45);transition:opacity .7s;pointer-events:none}
-.hint-t{display:none}.logo-slot{display:none}
-.foot-l{position:fixed;left:var(--pad);bottom:clamp(20px,3.4vh,36px);max-width:34ch;font-size:12px;line-height:1.55;color:var(--dim)}
-.foot-r{position:fixed;right:var(--pad);bottom:clamp(20px,3.4vh,36px);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);text-align:right}
-
-.login{
-  position:fixed;z-index:8;right:clamp(20px,6vw,110px);top:50%;width:var(--cw);
-  border-radius:20px;border:1px solid var(--hair);padding:20px 22px;overflow:hidden;
-  background:linear-gradient(180deg,rgba(9,29,45,.72),rgba(4,17,27,.78));
-  backdrop-filter:blur(26px) saturate(150%);-webkit-backdrop-filter:blur(26px) saturate(150%);
-  box-shadow:0 34px 90px rgba(0,0,0,.6),0 2px 0 rgba(255,255,255,.04) inset;
-  opacity:0;pointer-events:none;transform:translateY(calc(-50% + 28px)) scale(.985);
-  filter:blur(8px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease),filter 1.1s var(--ease);
-}
-body.ready .login{opacity:1;pointer-events:auto;transform:translateY(-50%);filter:none}
-.login::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--green) 52%,var(--orange))}
-.login::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(240px circle at var(--mx,85%) var(--my,0%),rgba(130,195,238,.13),transparent 70%)}
-.login>*{position:relative;z-index:1}
-
-.card-head{
-  position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;
-  margin:2px -2px 16px;padding:9px 14px;border-radius:16px;overflow:hidden;
-  background:linear-gradient(135deg,rgba(255,255,255,.17),rgba(255,255,255,.04) 55%,rgba(255,255,255,.1));
-  border:1px solid rgba(255,255,255,.16);
-  -webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(255,255,255,.05),0 10px 26px rgba(0,0,0,.28);
-}
-.mark{
-  width:34px;height:27px;
-  background:linear-gradient(140deg,#fff,#cfd9e3 38%,#8b9aa8 62%,#eef4f9);
-  -webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat;
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
-}
-.cid{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);text-align:right;line-height:1.7}
-.cid b{display:block;color:var(--s2);font-weight:600}
-.badge{
-  display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;
-  background:rgba(45,149,202,.12);border:1px solid rgba(45,149,202,.32);
-  font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:#9fd4ef;
-}
-.login h2{margin:12px 0 5px;font:600 23px var(--disp);letter-spacing:-.03em;color:var(--s1)}
-.sub{margin:0 0 18px;font-size:11.5px;line-height:1.6;color:var(--faint)}
-.field{margin-bottom:13px}
-.field label{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:7px;font-weight:500}
-.control{position:relative;display:flex;align-items:center}
-.control>svg.lead{position:absolute;left:12px;width:15px;height:15px;stroke:var(--s4);pointer-events:none;transition:stroke .25s}
-.control input{
-  width:100%;padding:12px 12px 12px 36px;border-radius:11px;color:var(--tx);
-  background:rgba(255,255,255,.045);border:1px solid var(--hair);
-  font:13.5px var(--ui);outline:none;transition:border-color .25s,background .25s,box-shadow .25s;
-}
-.control input::placeholder{color:rgba(214,231,242,.28)}
-.control input:hover{background:rgba(255,255,255,.06)}
-.control input:focus{border-color:rgba(45,149,202,.75);background:rgba(45,149,202,.08);box-shadow:0 0 0 3px rgba(45,149,202,.16)}
-.control:focus-within>svg.lead{stroke:#9fd4ef}
-.control input.otp-input{letter-spacing:.42em;font-weight:700;font-size:17px;text-align:center;padding-left:36px;padding-right:24px;font-variant-numeric:tabular-nums}
-.step-panel[hidden]{display:none}
-.otp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;font-size:10.5px;color:var(--dim)}
-.btn-ghost{background:none;border:0;padding:0;color:#9fd4ef;font:500 10.5px var(--ui);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.btn-ghost[disabled]{color:var(--faint);text-decoration:none;cursor:not-allowed}
-.email-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(45,149,202,.12);border:1px solid rgba(45,149,202,.28);color:#cbe8f7;font-size:11px;margin-bottom:12px;max-width:100%}
-.email-pill span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.field.invalid input{border-color:rgba(226,105,80,.8);box-shadow:0 0 0 3px rgba(226,105,80,.14)}
-.err{display:none;margin-top:6px;font-size:10.5px;color:#f0a08c}.field.invalid .err{display:block}
-.row{display:flex;align-items:center;justify-content:space-between;margin:4px 0 16px;font-size:11px}
-.check{display:inline-flex;align-items:center;gap:8px;color:var(--dim);cursor:pointer;user-select:none}
-.check input{position:absolute;opacity:0;width:0;height:0}
-.box{width:15px;height:15px;border-radius:5px;border:1px solid var(--hair);background:rgba(255,255,255,.04);display:grid;place-items:center;transition:.2s}
-.box svg{width:10px;height:10px;stroke:#04141f;stroke-width:3;fill:none;opacity:0;transition:.2s}
-.check input:checked+.box{background:linear-gradient(140deg,#e8f1f7,#b9c6d2);border-color:transparent}
-.check input:checked+.box svg{opacity:1}
-.link{color:var(--dim);text-decoration:none;border-bottom:1px solid transparent;transition:.2s}
-.link:hover{color:#9fd4ef;border-bottom-color:rgba(159,212,239,.5)}
-.submit{
-  position:relative;width:100%;padding:13px 16px;border:0;border-radius:12px;cursor:pointer;
-  font:600 13px var(--ui);color:#06202f;
-  background:linear-gradient(140deg,#fff,#dfe8ef 42%,#b6c4d1);
-  display:flex;align-items:center;justify-content:center;gap:9px;overflow:hidden;
-  box-shadow:0 10px 26px rgba(0,0,0,.4);transition:transform .18s,box-shadow .25s,filter .25s;
-}
-.submit svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9}
-.submit[disabled]{cursor:not-allowed;filter:saturate(.6) brightness(.9)}
-.submit.loading{cursor:progress}
-.spin{display:none;width:15px;height:15px;border-radius:50%;border:2px solid rgba(6,32,47,.25);border-top-color:#06202f;animation:sp .7s linear infinite}
-.submit.loading .spin{display:block}.submit.loading svg{display:none}
-@keyframes sp{to{transform:rotate(360deg)}}
-.status{margin:0;font-size:11px;line-height:1.55;color:var(--dim);border-left:2px solid transparent;padding-left:0;max-height:0;overflow:hidden;transition:.3s}
-.status.show{max-height:90px;margin-top:13px;padding-left:10px;border-left-color:var(--blue)}
-.status.ok{border-left-color:var(--green)}.status.bad{border-left-color:#e26950}
-#form.shake{animation:shk .45s}
-@keyframes shk{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
-.card-foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--hair2);display:flex;justify-content:space-between;gap:10px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(214,231,242,.32)}
-.card-foot a{color:rgba(214,231,242,.5);text-decoration:none}
-
-@media(max-width:1180px){.n1,.n2,.edge{display:none}.lede{max-width:min(52vw,420px)}.nav{display:none}}
-@media(max-width:960px){
-  body{overflow:auto}
-  .stage{height:auto;min-height:100%;display:flex;flex-direction:column;padding:0 var(--pad) 30px}
-  .topbar,.lede,.foot-l,.foot-r,.hint,.login{position:static;inset:auto}
-  .topbar{margin:20px 0 0;padding:0}.lede{margin:34px 0 0;max-width:none}
-  .lede h1{font-size:clamp(36px,9vw,54px)}
-  .login{width:100%;max-width:420px;margin:30px auto 0;transform:translateY(24px);max-height:none}
-  body.ready .login{transform:none}
-  .logo-slot{display:block;width:100%;height:min(36vh,290px);margin-top:10px}
-  #sand{touch-action:pan-y}
-  .hint{margin:8px auto 0;max-width:26ch;text-align:center;line-height:1.8}
-  .hint-d{display:none}.hint-t{display:inline}
-  .foot-l{margin:34px 0 0;max-width:none}.foot-r{margin:12px 0 0;text-align:left}.clock{display:none}
-}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-</style>
-</head>
-<body>
-<img id="logo-src" alt="" hidden src="data:image/png;base64,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">
-<div class="bg" aria-hidden="true">
-  <div class="au a1"></div><div class="au a2"></div><div class="au a3"></div>
-  <div class="grid"></div><div class="vig"></div>
-</div>
-<div id="glow" aria-hidden="true"></div>
-<canvas id="sand" aria-hidden="true"></canvas>
-<div class="scrim" aria-hidden="true"></div>
-<div id="plight" aria-hidden="true"></div>
-
-<div class="stage">
-  <header class="topbar">
-    <div class="brand rv">RUWAI<i></i></div>
-    <nav class="nav rv" style="--i:1" aria-label="Tautan informasi">
-      <a href="#tentang">Tentang</a>
-      <a href="#panduan">Panduan Akses</a>
-      <a href="#bantuan">Bantuan</a>
-    </nav>
-    <div class="tr rv" style="--i:2">
-      <span class="clock" id="clock"></span>
-      <span class="chip"><span class="pulse"></span>Akses Internal Terbatas</span>
-    </div>
-  </header>
-
-  <section class="lede">
-    <h1><span class="rv" style="--i:1">Narasi</span><em class="rv" style="--i:2">yang terjaga.</em></h1>
-    <p class="rv" style="--i:3">Cara baru membaca pemberitaan. Tempat arsip bertemu analitik, dan angka bertemu narasi.</p>
-    <div class="rule rv" style="--i:4"><i></i><span>Ruang Pemantauan Media</span></div>
-  </section>
-
-  <div class="note n1 fd" style="--i:5"><span class="sq"></span><span><b>01 / Pemantauan</b>Media harian<br>terindeks</span></div>
-  <div class="note n2 fd" style="--i:6"><span class="sq"></span><span><b>02 / Analitik</b>Sentimen &amp;<br>tren isu</span></div>
-  <div class="edge fd" style="--i:7">BPS Provinsi Lampung · Edisi 2026</div>
-  <div class="logo-slot" id="logo-slot" aria-hidden="true"></div>
-  <div class="hint fd" id="hint" style="--i:8">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4l7 16 2.5-6.5L20 11z"/></svg>
-    <span class="hint-d">Arahkan kursor ke logo — ia luruh menjadi pasir</span>
-    <span class="hint-t">Geser logo — ia luruh menjadi pasir</span>
-  </div>
-
-  <section class="login" id="login" aria-labelledby="login-title">
-    <div class="card-head">
-      <div class="mark" role="img" aria-label="Logo BPS"></div>
-      <div class="cid"><b>RUWAI</b>Portal Humas</div>
-    </div>
-    <span class="badge">Autentikasi Email Pegawai</span>
-    <h2 id="login-title">Masuk ke RUWAI</h2>
-    <p class="sub" id="login-sub">Masukkan email resmi <b>@bps.go.id</b> untuk menerima kode verifikasi sekali pakai (OTP).</p>
-
-    <form id="form" novalidate>
-      <div class="step-panel" id="step-email">
-        <div class="field" id="f-email">
-          <label for="email">Email Resmi Pegawai BPS</label>
-          <div class="control">
-            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="nama.pegawai@bps.go.id" spellcheck="false" required>
-          </div>
-          <div class="err" id="err-email">Wajib menggunakan email resmi @bps.go.id.</div>
-        </div>
-        <div class="row">
-          <label class="check">
-            <input type="checkbox" id="remember" checked>
-            <span class="box"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>
-            Ingat email di perangkat ini
-          </label>
-          <a class="link" href="#bantuan">Butuh akses?</a>
-        </div>
-      </div>
-
-      <div class="step-panel" id="step-otp" hidden>
-        <div class="email-pill">
-          <span id="otp-target-email">pegawai@bps.go.id</span>
-          <button type="button" class="btn-ghost" id="btn-change-email">Ganti</button>
-        </div>
-        <div class="field" id="f-otp">
-          <label for="otp">Kode Verifikasi 6-Digit (OTP)</label>
-          <div class="control">
-            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z"/><path d="M9 12l2 2 4-4"/></svg>
-            <input id="otp" class="otp-input" name="otp" type="text" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" placeholder="••••••">
-          </div>
-          <div class="err" id="err-otp">Masukkan 6 digit angka kode OTP dari email Anda.</div>
-          <div class="otp-meta">
-            <span>Berlaku 10 menit</span>
-            <button type="button" class="btn-ghost" id="btn-resend-otp" disabled>Kirim ulang (60d)</button>
-          </div>
-        </div>
-      </div>
-
-      <button class="submit" type="submit" id="submit">
-        <span class="spin" aria-hidden="true"></span>
-        <svg id="submit-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-        <span id="submit-label">Kirim Kode OTP</span>
-      </button>
-      <p class="status" id="status" role="status" aria-live="polite"></p>
-    </form>
-
-    <div class="card-foot"><span>v6.8.0 · RBAC Internal</span><a href="#bantuan">Hubungi admin</a></div>
-  </section>
-
-  <div class="foot-l rv" style="--i:5">Sistem Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung</div>
-  <div class="foot-r rv" style="--i:6">Copyright © 2026 Humas BPS Provinsi Lampung</div>
-</div>
-
-<script>
-window.RUWAI_AUTH = Object.assign({
-  endpoint: 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec',
-  redirect: 'dashboard.html',
-  tokenKey: 'ruwai_token',
-  emailKey: 'ruwai_email',
-  roleKey: 'ruwai_role',
-  satkerKey: 'ruwai_satker',
-  resendCooldownSec: 60,
-  revealMs: 1200
-}, window.RUWAI_AUTH || {});
-</script>
-
-<script>
-(() => {
-  'use strict';
-  const AUTH = window.RUWAI_AUTH;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const $ = (id) => document.getElementById(id);
-
-  const body = document.body;
-  const cv = $('sand');
-  const ctx = cv ? cv.getContext('2d') : null;
-  const glow = $('glow');
-  const plight = $('plight');
-  const hint = $('hint');
-  const slot = $('logo-slot');
-  const login = $('login');
-  const img = $('logo-src');
-
-  /* 1. MESIN PASIR LOGO BPS */
-  let W = 0, H = 0, DPR = 1;
-  const box = { x: 0, y: 0, w: 0, h: 0 };
-  let P = null, N = 0, ASPECT = 1.29, COV = 0.5;
-  const pointer = { x: -9999, y: -9999, vx: 0, vy: 0, active: false, overCard: false };
-  const parallax = { x: 0, y: 0, tx: 0, ty: 0 };
-  const t0 = performance.now();
-  let bornAt = 0, intro = 0, raf = 0, stride = 1, fa = 0, fc = 0;
-  let leaving = false, leaveAt = 0, leave = 0;
-  let R = 132;
-  const FORCE = 15, DAMP = 0.9, INTRO_MS = 1800, SPRING = 0.018;
-  let FADE = 100;
-
-  const ABUCK = 8;
-  const TONES = [
-    [111,128,144],[125,142,158],[139,156,171],[153,170,185],
-    [167,184,198],[181,197,210],[195,210,222],[209,222,233],
-    [223,234,243],[234,243,250],[245,250,255],[255,255,255]
-  ];
-  const TINTS = [[45,149,202],[226,137,57],[117,181,71]];
-  const NS = TONES.length * ABUCK;
-  const BUCKETS = NS + TINTS.length * ABUCK;
-  const STYLES = [];
-
-  for (const c of TONES) for (let a = 0; a < ABUCK; a++) STYLES.push(`rgba(${c[0]},${c[1]},${c[2]},${((a + 0.9) / ABUCK).toFixed(3)})`);
-  for (const c of TINTS) for (let a = 0; a < ABUCK; a++) STYLES.push(`rgba(${c[0]},${c[1]},${c[2]},${((a + 0.9) / ABUCK).toFixed(3)})`);
-
-  const bStart = new Int32Array(BUCKETS + 1);
-  const bCount = new Int32Array(BUCKETS);
-  const bCursor = new Int32Array(BUCKETS);
-  let buf, packBuf, order;
-
-  function buildParticles(sourceImg) {
-    if (!ctx || !sourceImg.naturalWidth || !sourceImg.naturalHeight) return;
-    const mw = sourceImg.naturalWidth;
-    const mh = sourceImg.naturalHeight;
-    ASPECT = mw / mh;
-
-    const off = document.createElement('canvas');
-    off.width = mw;
-    off.height = mh;
-    const octx = off.getContext('2d');
-    octx.drawImage(sourceImg, 0, 0);
-    const data = octx.getImageData(0, 0, mw, mh).data;
-
-    const idx = [];
-    for (let i = 0; i < mw * mh; i++) {
-      if (data[i * 4 + 3] > 60) idx.push(i);
-    }
-    if (!idx.length) return;
-
-    COV = idx.length / (mw * mh);
-    const small = window.innerWidth < 900;
-    const low = (navigator.hardwareConcurrency || 8) <= 4;
-    const target = small ? 14000 : (low ? 22000 : 34000);
-    const pi = target / idx.length;
-    const cap = target + Math.ceil(Math.sqrt(target) * 8) + 32;
-    const F = () => new Float32Array(cap);
-
-    P = {
-      hx: F(), hy: F(), x: F(), y: F(), vx: F(), vy: F(),
-      sx: F(), sy: F(), sw: F(), a0: F(), sz: F(),
-      ph: F(), fq: F(), k: F(), u: F(), base: F(),
-      cls: new Uint8Array(cap)
-    };
-
-    let n = 0;
-    for (let j = 0; j < idx.length && n < cap; j++) {
-      let m = pi;
-      while (m > 0 && n < cap) {
-        if (Math.random() < m) {
-          const p = idx[j];
-          const px = p % mw;
-          const py = (p / mw) | 0;
-          const r = data[p * 4];
-          const g = data[p * 4 + 1];
-          const b = data[p * 4 + 2];
-          let cls = 3;
-          if (Math.random() < 0.72) {
-            if (b > r && b > g) cls = 0;
-            else if (r > g) cls = 1;
-            else cls = 2;
-          }
-          P.hx[n] = (px + Math.random()) / mw;
-          P.hy[n] = (py + Math.random()) / mh;
-          P.cls[n] = cls;
-          P.a0[n] = Math.min(1, 0.5 + (data[p * 4 + 3] / 255) * 0.3 + Math.random() * 0.2);
-          P.ph[n] = Math.random() * Math.PI * 2;
-          P.fq[n] = 0.00035 + Math.random() * 0.00075;
-          P.k[n] = SPRING * (0.62 + Math.random() * 0.85);
-          P.sw[n] = (Math.random() - 0.5) * 110;
-          P.u[n] = P.hx[n] * 0.62 + P.hy[n] * 0.38;
-          P.base[n] = 0.55 + 0.28 * Math.sin(P.u[n] * 4.2 + 0.6) + (Math.random() - 0.5) * 0.1;
-          n++;
-        }
-        m -= 1;
-      }
-    }
-
-    N = n;
-    buf = new Float32Array(n * 3);
-    packBuf = new Float32Array(n * 3);
-    order = new Int32Array(n);
-  }
-
-  function placeNotes() {
-    const n1 = document.querySelector('.n1');
-    const n2 = document.querySelector('.n2');
-    if (!n1 || !n2 || window.innerWidth < 1180) return;
-    n1.style.left = Math.max(20, box.x - 130) + 'px';
-    n1.style.top = (box.y + box.h * 0.74) + 'px';
-    n2.style.left = (box.x + box.w * 0.4) + 'px';
-    n2.style.top = Math.max(78, box.y - 58) + 'px';
-  }
-
-  function layoutParticles(scatter) {
-    if (!cv || !ctx) return;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = vw;
-    H = vh;
-    cv.width = Math.round(vw * DPR);
-    cv.height = Math.round(vh * DPR);
-    cv.style.width = vw + 'px';
-    cv.style.height = vh + 'px';
-
-    let lh, lw, cx, cy;
-    if (vw < 960 && slot) {
-      const r = slot.getBoundingClientRect();
-      lh = Math.min(r.height * 0.98, (vw * 0.86) / ASPECT);
-      lw = lh * ASPECT;
-      cx = vw * 0.5;
-      cy = r.top + r.height / 2;
-    } else {
-      lh = Math.min(vh * 0.78, (vw * 0.56) / ASPECT);
-      lw = lh * ASPECT;
-      cx = vw * 0.535;
-      cy = vh * 0.5;
-    }
-
-    box.x = cx - lw / 2;
-    box.y = cy - lh / 2;
-    box.w = lw;
-    box.h = lh;
-
-    if (glow) {
-      glow.style.cssText = `left:${box.x - lw * 0.18}px;top:${box.y - lh * 0.18}px;width:${lw * 1.36}px;height:${lh * 1.36}px;opacity:1`;
-    }
-    R = Math.max(88, Math.min(150, lw * 0.17));
-    FADE = R * 0.74;
-    placeNotes();
-
-    if (!P || !N) return;
-    const spacing = Math.sqrt((lw * lh * COV) / N);
-    for (let i = 0; i < N; i++) {
-      const tx = box.x + P.hx[i] * lw;
-      const ty = box.y + P.hy[i] * lh;
-      P.sz[i] = spacing * (0.8 + Math.random() * 0.62);
-      if (scatter) {
-        const a = Math.random() * Math.PI * 2;
-        const rd = 110 + Math.random() * Math.min(vw, vh) * 0.42;
-        P.sx[i] = tx + Math.cos(a) * rd;
-        P.sy[i] = ty + Math.sin(a) * rd * 0.72;
-        P.x[i] = P.sx[i];
-        P.y[i] = P.sy[i];
-      } else {
-        P.sx[i] = tx;
-        P.sy[i] = ty;
-        P.x[i] = tx;
-        P.y[i] = ty;
-      }
-      P.vx[i] = 0;
-      P.vy[i] = 0;
-    }
-  }
-
-  function drawParticles(time) {
-    if (!ctx || !P || !N) return;
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-
-    const lx = box.x, ly = box.y, lw = box.w, lh = box.h;
-    const mx = pointer.x, my = pointer.y;
-    const near = pointer.active && !pointer.overCard && !reduce && intro >= 1;
-    const live = near && !leaving;
-    const R2 = R * R, LR = R * 2.3, LR2 = LR * LR;
-    const px = parallax.x, py = parallax.y;
-    const wvx = Math.max(-60, Math.min(60, pointer.vx));
-    const wvy = Math.max(-60, Math.min(60, pointer.vy));
-    const assembling = intro < 1;
-    const arc = assembling ? Math.sin(intro * Math.PI) : 0;
-    const fadeIn = assembling ? Math.min(1, intro * 2.6) : 1;
-    const sheen = 0.5 + 0.62 * Math.sin(time * 0.00032);
-    const alive = 1 - leave;
-    const damp = leaving ? 0.978 : DAMP;
-
-    for (let b = 0; b < BUCKETS; b++) bCount[b] = 0;
-
-    for (let i = 0; i < N; i += stride) {
-      const wob = Math.sin(time * P.fq[i] + P.ph[i]);
-      const tx = lx + P.hx[i] * lw + wob * 1.35 + px;
-      const ty = ly + P.hy[i] * lh + Math.cos(time * P.fq[i] * 0.86 + P.ph[i]) * 1.35 + py;
-      let x, y, a, f2 = 0, light = 0;
-
-      if (assembling) {
-        x = P.sx[i] + (tx - P.sx[i]) * intro + arc * P.sw[i];
-        y = P.sy[i] + (ty - P.sy[i]) * intro + arc * P.sw[i] * 0.45;
-        P.x[i] = x; P.y[i] = y; P.vx[i] = 0; P.vy[i] = 0;
-        a = P.a0[i] * fadeIn;
-      } else {
-        x = P.x[i]; y = P.y[i];
-        let vx = P.vx[i], vy = P.vy[i];
-        if (near) {
-          const dx = x - mx, dy = y - my, d2 = dx * dx + dy * dy;
-          if (d2 < LR2) {
-            const dd = Math.sqrt(d2) + 0.0001;
-            light = 1 - dd / LR;
-            light *= light;
-            if (live && d2 < R2) {
-              const f = 1 - dd / R;
-              const push = (f * f * FORCE) / dd;
-              vx += dx * push + wvx * f * 0.09 + (Math.random() - 0.5) * f * 1.6;
-              vy += dy * push + wvy * f * 0.09 + (Math.random() - 0.5) * f * 1.6 - f * 0.4;
+            function redirectToLogin() {
+                try {
+                    const currentFile = window.location.pathname.split('/').pop() || 'dashboard.html';
+                    window.location.replace(`${LOGIN_PAGE}?next=${encodeURIComponent(currentFile)}`);
+                } catch (_) {
+                    window.location.replace(LOGIN_PAGE);
+                }
             }
-          }
+
+            try {
+                const token = (localStorage.getItem(TOKEN_KEY) || '').trim();
+                const email = (localStorage.getItem(EMAIL_KEY) || '').trim().toLowerCase();
+
+                if (!token || !email || !email.endsWith('@bps.go.id')) {
+                    redirectToLogin();
+                    return;
+                }
+
+                window.__RUWAI_SESSION__ = {
+                    token: token,
+                    email: email,
+                    role: (localStorage.getItem('ruwai_role') || 'viewer').trim().toLowerCase(),
+                    satker: (localStorage.getItem('ruwai_satker') || '1800').trim()
+                };
+            } catch (err) {
+                redirectToLogin();
+            }
+        })();
+    </script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        bps: {
+                            navy: '#06182E',
+                            dark: '#04101F',
+                            blue: '#008FD5',
+                            blueDark: '#0073AD',
+                            green: '#68B92E',
+                            greenDark: '#559B23',
+                            orange: '#EB891B',
+                            orangeDark: '#D17610',
+                            light: '#F8FAFC'
+                        }
+                    }
+                }
+            }
         }
-        if (!leaving) {
-          const k = P.k[i];
-          vx += (tx - x) * k;
-          vy += (ty - y) * k;
+    </script>
+    <script>
+        // Terapkan tema tersimpan secepat mungkin sebelum render agar tidak berkedip
+        (function() {
+            const saved = localStorage.getItem('RUWAI_theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.25s ease, color 0.25s ease; }
+        .clean-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 1px 3px 0 rgba(6, 24, 46, 0.04);
+            transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
-        vx *= damp; vy *= damp;
-        x += vx; y += vy;
-        const ex = x - tx, ey = y - ty;
-        f2 = Math.sqrt(ex * ex + ey * ey) / FADE;
-        if (f2 > 1) f2 = 1;
-        P.x[i] = x; P.y[i] = y; P.vx[i] = vx; P.vy[i] = vy;
-        a = P.a0[i] * (1 - f2 * 0.94) * (0.93 + 0.07 * wob) * alive;
-      }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
-      if (a < 0.025) continue;
-      if (a > 1) a = 1;
-      const s = P.sz[i] * (1 - f2 * 0.42);
-      let ai = (a * ABUCK) | 0;
-      if (ai >= ABUCK) ai = ABUCK - 1;
+        /* ============================================================
+           LIQUID GLASS HEADER — MODERN INTERACTIVE REFRACTION
+           ============================================================ */
+        .liquid-glass-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: rgba(255, 255, 255, 0.68);
+            backdrop-filter: blur(22px) saturate(185%);
+            -webkit-backdrop-filter: blur(22px) saturate(185%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow:
+                0 10px 30px -10px rgba(6, 24, 46, 0.08),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 0 0 rgba(148, 163, 184, 0.22);
+            overflow: hidden;
+            transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
 
-      let bi;
-      if (f2 > 0.2 && P.cls[i] < 3) {
-        bi = NS + P.cls[i] * ABUCK + ai;
-      } else {
-        let du = P.u[i] - sheen;
-        if (du < 0) du = -du;
-        let hl = 1 - du * 6.2;
-        if (hl < 0) hl = 0;
-        let br = P.base[i] + hl * hl * 0.52 + light * 0.42 + (wob > 0.975 ? 0.4 : 0);
-        let ti = (br * 12) | 0;
-        if (ti < 0) ti = 0;
-        else if (ti > 11) ti = 11;
-        bi = ti * ABUCK + ai;
-      }
+        .liquid-glass-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 12% 20%, rgba(0, 143, 213, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 52% 85%, rgba(104, 185, 46, 0.11) 0%, transparent 48%),
+                radial-gradient(circle at 88% 15%, rgba(235, 137, 27, 0.12) 0%, transparent 45%);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-      bCount[bi]++;
-      buf[i * 3] = x;
-      buf[i * 3 + 1] = y;
-      buf[i * 3 + 2] = s;
-      order[i] = bi + 1;
-    }
+        .liquid-glass-spotlight {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                360px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(0, 143, 213, 0.13),
+                rgba(255, 255, 255, 0.35) 45%,
+                transparent 75%
+            );
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    let acc = 0;
-    for (let b = 0; b < BUCKETS; b++) {
-      bStart[b] = acc;
-      bCursor[b] = acc;
-      acc += bCount[b];
-    }
-    for (let i = 0; i < N; i += stride) {
-      const ob = order[i];
-      if (!ob) continue;
-      const sl = bCursor[ob - 1]++;
-      packBuf[sl * 3] = buf[i * 3];
-      packBuf[sl * 3 + 1] = buf[i * 3 + 1];
-      packBuf[sl * 3 + 2] = buf[i * 3 + 2];
-      order[i] = 0;
-    }
-    for (let b = 0; b < BUCKETS; b++) {
-      const n3 = bCount[b];
-      if (!n3) continue;
-      ctx.fillStyle = STYLES[b];
-      const st = bStart[b] * 3;
-      const en = st + n3 * 3;
-      for (let q = st; q < en; q += 3) {
-        ctx.fillRect(packBuf[q], packBuf[q + 1], packBuf[q + 2], packBuf[q + 2]);
-      }
-    }
-  }
+        .liquid-glass-header:hover .liquid-glass-spotlight {
+            opacity: 1;
+        }
 
-  function tickParticles(now) {
-    raf = requestAnimationFrame(tickParticles);
-    if (intro < 1) {
-      const lin = Math.min(1, (now - bornAt) / INTRO_MS);
-      intro = lin >= 1 ? 1 : 1 - Math.pow(1 - lin, 3);
-    }
-    if (leaving) leave = Math.min(1, (now - leaveAt) / 1100);
-    parallax.x += (parallax.tx - parallax.x) * 0.045;
-    parallax.y += (parallax.ty - parallax.y) * 0.045;
-    pointer.vx *= 0.88;
-    pointer.vy *= 0.88;
+        .glass-logo-pill {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 4px 14px rgba(6, 24, 46, 0.06),
+                inset 0 1px 1px rgba(255, 255, 255, 1);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background 0.25s ease;
+        }
+        .glass-logo-pill:hover {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 143, 213, 0.14);
+        }
 
-    const s = performance.now();
-    drawParticles(now - t0);
-    fa += performance.now() - s;
-    fc++;
-    if (fc === 90) {
-      if (fa / 90 > 12 && stride === 1) stride = 2;
-      fa = 0; fc = 0;
-    }
-  }
+        .glass-pill-surface {
+            background: rgba(255, 255, 255, 0.62);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(203, 213, 225, 0.65);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+        }
 
-  function burstParticles() {
-    leaving = true;
-    leaveAt = performance.now();
-    if (!P || !N) return;
-    if (reduce) { leave = 1; drawParticles(0); return; }
-    const cx = box.x + box.w / 2;
-    const cy = box.y + box.h / 2;
-    for (let i = 0; i < N; i++) {
-      const dx = P.x[i] - cx;
-      const dy = P.y[i] - cy;
-      const d = Math.sqrt(dx * dx + dy * dy) + 1;
-      const spd = 4 + Math.random() * 15;
-      P.vx[i] += (dx / d) * spd + (Math.random() - 0.5) * 5;
-      P.vy[i] += (dy / d) * spd + (Math.random() - 0.5) * 5 - 1.5;
-    }
-  }
+        .glass-btn-action {
+            transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .glass-btn-action:hover {
+            transform: translateY(-1px);
+        }
+        .glass-btn-action:active {
+            transform: translateY(0);
+        }
 
-  function initLogo() {
-    if (!img) return;
-    document.documentElement.style.setProperty('--logo', `url("${img.src}")`);
-    buildParticles(img);
-    layoutParticles(!reduce);
-    bornAt = performance.now();
-    if (reduce) { intro = 1; drawParticles(0); }
-    else raf = requestAnimationFrame(tickParticles);
-  }
+        /* ============================================================
+           DARK MODE THEME OVERRIDES (html.dark)
+           ============================================================ */
+        html.dark ::-webkit-scrollbar-track { background: #0B1120; }
+        html.dark ::-webkit-scrollbar-thumb { background: #334155; }
+        html.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-  if (img && img.complete && img.naturalWidth) initLogo();
-  else if (img) img.onload = initLogo;
+        html.dark .liquid-glass-header {
+            background: rgba(11, 17, 32, 0.78);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.65);
+            box-shadow:
+                0 10px 30px -10px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+                inset 0 -1px 0 0 rgba(30, 41, 59, 0.8);
+        }
+        html.dark .liquid-glass-header::before {
+            background:
+                radial-gradient(circle at 12% 20%, rgba(0, 143, 213, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 52% 85%, rgba(104, 185, 46, 0.14) 0%, transparent 48%),
+                radial-gradient(circle at 88% 15%, rgba(235, 137, 27, 0.16) 0%, transparent 45%);
+        }
+        html.dark .liquid-glass-spotlight {
+            background: radial-gradient(
+                360px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(56, 189, 248, 0.16),
+                rgba(15, 23, 42, 0.35) 45%,
+                transparent 75%
+            );
+        }
+        html.dark .glass-logo-pill {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(51, 65, 85, 0.85);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+        }
+        html.dark .glass-pill-surface {
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(51, 65, 85, 0.85);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
 
-  /* 2. FORM LOGIN OTP (@bps.go.id) & RBAC */
-  const form = $('form');
-  const stepEmailPanel = $('step-email');
-  const stepOtpPanel = $('step-otp');
-  const emailInput = $('email');
-  const otpInput = $('otp');
-  const fEmail = $('f-email');
-  const fOtp = $('f-otp');
-  const errEmail = $('err-email');
-  const errOtp = $('err-otp');
-  const targetEmailBadge = $('otp-target-email');
-  const btnChangeEmail = $('btn-change-email');
-  const btnResendOtp = $('btn-resend-otp');
-  const btn = $('submit');
-  const btnIcon = $('submit-icon');
-  const btnLabel = $('submit-label');
-  const loginSub = $('login-sub');
-  const statusEl = $('status');
-  const remember = $('remember');
-  const clockEl = $('clock');
+        html.dark .clean-card {
+            background: #111827;
+            border-color: #1E293B;
+            box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.4);
+        }
 
-  setTimeout(() => {
-    body.classList.add('ready');
-    if (window.innerWidth > 960 && emailInput) {
-      setTimeout(() => {
-        try { emailInput.focus({ preventScroll: true }); } catch (_) {}
-      }, 900);
-    }
-  }, reduce ? 0 : AUTH.revealMs);
+        html.dark .text-bps-navy { color: #F8FAFC !important; }
+        html.dark .text-slate-900 { color: #F8FAFC !important; }
+        html.dark .text-slate-800 { color: #F1F5F9 !important; }
+        html.dark .text-slate-700 { color: #E2E8F0 !important; }
+        html.dark .text-slate-600 { color: #94A3B8 !important; }
+        html.dark .text-slate-500 { color: #94A3B8 !important; }
 
-  let hintGone = false;
-  function onPointerMove(x, y, target) {
-    if (pointer.active) {
-      pointer.vx = pointer.vx * 0.6 + (x - pointer.x) * 0.4;
-      pointer.vy = pointer.vy * 0.6 + (y - pointer.y) * 0.4;
-    }
-    pointer.x = x; pointer.y = y; pointer.active = true;
-    pointer.overCard = !!(target && target.closest && target.closest('.login'));
-    parallax.tx = (x - W / 2) * 0.016;
-    parallax.ty = (y - H / 2) * 0.012;
-    if (plight) {
-      plight.style.transform = `translate3d(${x}px,${y}px,0)`;
-      plight.style.opacity = pointer.overCard ? 0 : 1;
-    }
-    if (pointer.overCard && login) {
-      const r = login.getBoundingClientRect();
-      login.style.setProperty('--mx', (x - r.left) + 'px');
-      login.style.setProperty('--my', (y - r.top) + 'px');
-    }
-    if (!hintGone && hint && !pointer.overCard && x > box.x - R && x < box.x + box.w + R && y > box.y - R && y < box.y + box.h + R) {
-      hintGone = true;
-      setTimeout(() => hint.classList.add('gone'), 1200);
-    }
-  }
+        html.dark .bg-white { background-color: #111827 !important; }
+        html.dark .bg-slate-50,
+        html.dark .bg-slate-50\/70 { background-color: #0F172A !important; }
+        html.dark .bg-slate-100 { background-color: #1E293B !important; }
+        html.dark .hover\:bg-slate-50:hover { background-color: #1E293B !important; }
+        html.dark .hover\:bg-slate-100:hover,
+        html.dark .hover\:bg-slate-200:hover,
+        html.dark .hover\:bg-slate-200\/70:hover { background-color: #334155 !important; }
 
-  window.addEventListener('pointermove', (e) => onPointerMove(e.clientX, e.clientY, e.target), { passive: true });
-  window.addEventListener('pointerdown', (e) => {
-    onPointerMove(e.clientX, e.clientY, e.target);
-    if (pointer.overCard || !P || reduce || leaving || intro < 1) return;
-    for (let i = 0; i < N; i++) {
-      const dx = P.x[i] - e.clientX;
-      const dy = P.y[i] - e.clientY;
-      const d = Math.sqrt(dx * dx + dy * dy) + 0.001;
-      if (d < R * 2.1) {
-        const f = ((1 - d / (R * 2.1)) * 26) / d;
-        P.vx[i] += dx * f;
-        P.vy[i] += dy * f;
-      }
-    }
-  }, { passive: true });
+        html.dark .border-slate-100,
+        html.dark .border-slate-200,
+        html.dark .border-slate-200\/70,
+        html.dark .border-slate-300 { border-color: #1E293B !important; }
+        html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-color: #1E293B !important; }
 
-  const idlePointer = () => { pointer.active = false; if (plight) plight.style.opacity = 0; };
-  window.addEventListener('pointerleave', idlePointer);
-  window.addEventListener('blur', idlePointer);
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
-    else if (!raf && !reduce && P) raf = requestAnimationFrame(tickParticles);
-  });
+        html.dark input,
+        html.dark select {
+            background-color: #0F172A !important;
+            border-color: #334155 !important;
+            color: #F1F5F9 !important;
+        }
+        html.dark input::placeholder { color: #64748B !important; }
 
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { layoutParticles(false); if (reduce) drawParticles(0); }, 150);
-  });
+        /* ============================================================
+           MOBILE UI FIX (< 640px) — RUWAI DASHBOARD.HTML
+           ============================================================ */
+        @media (max-width: 640px) {
+            header > div > div,
+            nav > div {
+                flex-wrap: wrap !important;
+                gap: 10px !important;
+                padding-top: 12px !important;
+                padding-bottom: 12px !important;
+            }
+            header h1,
+            header p,
+            header span {
+                white-space: normal !important;
+                overflow: visible !important;
+                text-overflow: unset !important;
+            }
+            header > div > div > div:last-child {
+                width: 100% !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                gap: 8px !important;
+                padding-top: 8px !important;
+                border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
+            }
+            header > div > div > div:last-child a,
+            header > div > div > div:last-child button#syncBtn {
+                flex: 1 !important;
+                justify-content: center !important;
+            }
+            [role="tablist"],
+            .tab-nav,
+            main > div:first-child {
+                display: flex !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: none !important;
+                gap: 6px !important;
+                padding-bottom: 4px !important;
+            }
+            [role="tablist"]::-webkit-scrollbar,
+            .tab-nav::-webkit-scrollbar {
+                display: none !important;
+            }
+            [role="tablist"] button,
+            .tab-nav button {
+                flex-shrink: 0 !important;
+                font-size: 12px !important;
+                padding: 7px 12px !important;
+            }
+            canvas {
+                max-height: 270px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#F4F7FB] dark:bg-[#0B1120] text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col">
 
-  function tickClock() {
-    if (!clockEl) return;
-    try {
-      const hm = new Intl.DateTimeFormat('id-ID', {
-        hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta', hour12: false
-      }).format(new Date());
-      clockEl.textContent = `Bandar Lampung · ${hm} WIB`;
-    } catch (_) {}
-  }
-  tickClock();
-  setInterval(tickClock, 15000);
+    <!-- ===================================================================== -->
+    <!-- KONTEN PORTAL UTAMA (TERSEMBUNYI HINGGA GUARD TOKEN TERVERIFIKASI)    -->
+    <!-- ===================================================================== -->
+    <div id="protectedAppWrapper" class="hidden flex-1 flex flex-col">
 
-  try {
-    const nx = new URLSearchParams(window.location.search).get('next');
-    if (nx && /^[A-Za-z0-9_\-./]+$/.test(nx) && !nx.includes('..')) AUTH.redirect = nx;
-  } catch (_) {}
+        <!-- Liquid Glass Top Navigation Header -->
+        <header id="mainGlassHeader" class="liquid-glass-header">
+            <div class="liquid-glass-spotlight"></div>
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between py-3.5 gap-4">
+                   <!-- Brand & Logo -->
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <div class="glass-logo-pill w-12 h-12 sm:w-14 sm:h-14 rounded-2xl p-2 flex items-center justify-center shrink-0">
+                            <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2.5 flex-wrap">
+                                <h1 class="font-extrabold text-2xl sm:text-[28px] leading-none tracking-tight text-bps-navy">
+                                    RUWAI
+                                </h1>
+                                <span class="hidden sm:inline-block h-4 w-[1.5px] bg-slate-300/90 dark:bg-slate-700 rounded-full"></span>
+                                <span class="text-xs sm:text-[13px] font-semibold text-bps-blue tracking-tight">
+                                    Portal Humas Terpadu
+                                </span>
+                                <span id="userSessionBadge" class="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                                    -
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-[13px] text-slate-600 font-medium mt-1.5 truncate">
+                                Sistem Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung
+                            </p>
+                        </div>
+                    </div>
 
-  const UKEY = 'ruwai_saved_email';
-  let currentStep = 'email';
-  let activeEmail = '';
-  let resendTimer = null;
+                    <!-- API Gateway Status & Action Controls -->
+                    <div class="flex items-center gap-2.5 shrink-0">
+                        <div id="apiStatusBadge" class="hidden xl:flex glass-pill-surface px-3 py-1.5 rounded-xl items-center gap-2 text-xs whitespace-nowrap">
+                            <span class="relative flex h-2 w-2 shrink-0">
+                                <span id="apiPingDot" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                <span id="apiSolidDot" class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                            </span>
+                            <span class="text-slate-600">Database: <strong id="apiStatusText" class="text-amber-600 font-semibold">Menghubungkan...</strong></span>
+                        </div>
 
-  const ICON_SEND = '<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>';
-  const ICON_VERIFY = '<path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l4 4-4 4"/><path d="M14 12H3.5"/>';
+                        <!-- Tombol Switch Dark / Light Mode -->
+                        <button onclick="toggleTheme()" id="themeToggleBtn" type="button" title="Ganti Tema Gelap / Terang" aria-label="Ganti Tema"
+                            class="glass-btn-action glass-pill-surface inline-flex items-center justify-center w-9 h-9 rounded-xl text-slate-700 hover:text-bps-blue dark:text-amber-400 dark:hover:text-amber-300 shrink-0">
+                            <i data-lucide="moon" id="themeIconMoon" class="w-4 h-4"></i>
+                            <i data-lucide="sun" id="themeIconSun" class="w-4 h-4 hidden"></i>
+                        </button>
 
-  try {
-    const savedEmail = localStorage.getItem(UKEY);
-    if (savedEmail && emailInput && remember) {
-      emailInput.value = savedEmail;
-      remember.checked = true;
-    }
-  } catch (_) {}
+                        <a href="virtual-office.html" class="glass-btn-action inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-bps-orange hover:bg-bps-orangeDark text-white text-xs font-semibold whitespace-nowrap shadow-sm shadow-bps-orange/25">
+                            <i data-lucide="monitor" class="w-3.5 h-3.5 shrink-0"></i>
+                            <span>Virtual Office</span>
+                        </a>
 
-  const isValidBpsEmail = (val) => /^[a-z0-9._%+-]+@bps\.go\.id$/i.test(String(val || '').trim());
+                        <button onclick="fetchLiveMonitoringData(true)" id="syncBtn" class="glass-btn-action inline-flex items-center gap-1.5 bg-bps-blue hover:bg-bps-blueDark text-white text-xs font-semibold px-3.5 py-2 rounded-xl whitespace-nowrap shadow-sm shadow-bps-blue/25">
+                            <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5 shrink-0"></i>
+                            <span class="hidden sm:inline">Sinkron Data</span>
+                        </button>
 
-  function say(msg, kind) {
-    if (!statusEl) return;
-    statusEl.textContent = msg;
-    statusEl.className = 'status show ' + (kind || '');
-  }
-  function clearStatus() {
-    if (!statusEl) return;
-    statusEl.className = 'status';
-    statusEl.textContent = '';
-  }
-  function setLoading(isLoading, text) {
-    btn.disabled = isLoading;
-    btn.classList.toggle('loading', isLoading);
-    if (text) btnLabel.textContent = text;
-  }
-  function shakeForm() {
-    form.classList.remove('shake');
-    void form.offsetWidth;
-    form.classList.add('shake');
-  }
+                        <button onclick="logoutSession()" title="Keluar dari Sesi" class="glass-btn-action glass-pill-surface inline-flex items-center gap-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/50 hover:border-rose-200 text-slate-700 hover:text-rose-600 text-xs font-semibold px-3 py-2 rounded-xl whitespace-nowrap">
+                            <i data-lucide="log-out" class="w-3.5 h-3.5 shrink-0"></i>
+                            <span class="hidden md:inline">Keluar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-  function startResendCooldown(sec) {
-    clearInterval(resendTimer);
-    let left = sec || AUTH.resendCooldownSec || 60;
-    btnResendOtp.disabled = true;
-    btnResendOtp.textContent = `Kirim ulang (${left}d)`;
-    resendTimer = setInterval(() => {
-      left--;
-      if (left <= 0) {
-        clearInterval(resendTimer);
-        btnResendOtp.disabled = false;
-        btnResendOtp.textContent = 'Kirim ulang kode OTP';
-      } else {
-        btnResendOtp.textContent = `Kirim ulang (${left}d)`;
-      }
-    }, 1000);
-  }
+        <!-- Main Workspace Area -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-  function goToStepEmail() {
-    currentStep = 'email';
-    clearInterval(resendTimer);
-    stepOtpPanel.hidden = true;
-    stepEmailPanel.hidden = false;
-    otpInput.value = '';
-    fOtp.classList.remove('invalid');
-    loginSub.innerHTML = 'Masukkan email resmi <b>@bps.go.id</b> untuk menerima kode verifikasi sekali pakai (OTP).';
-    btnIcon.innerHTML = ICON_SEND;
-    setLoading(false, 'Kirim Kode OTP');
-    clearStatus();
-    emailInput.focus();
-  }
+            <!-- Navigation Tabs -->
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3.5">
+                <nav class="flex items-center gap-1.5 overflow-x-auto" id="navTabs">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg bg-bps-blue text-white flex items-center gap-2 transition shrink-0">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                        <span>Ringkasan Eksekutif</span>
+                    </button>
+                    <button onclick="switchTab('news')" id="tab-news" class="tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
+                        <i data-lucide="newspaper" class="w-4 h-4"></i>
+                        <span>Media Monitoring</span>
+                    </button>
+                    <button onclick="switchTab('brs')" id="tab-brs" class="tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <span>Automasi BRS (Pers)</span>
+                    </button>
+                    <button onclick="switchTab('bridge')" id="tab-bridge" class="hidden admin-only tab-btn font-semibold text-xs sm:text-[13px] px-3.5 py-2 rounded-lg text-slate-600 hover:bg-slate-200/70 flex items-center gap-2 transition shrink-0">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                        <span>Arsitektur API Bridge</span>
+                    </button>
+                </nav>
 
-  function goToStepOtp(emailVal) {
-    currentStep = 'otp';
-    activeEmail = emailVal;
-    targetEmailBadge.textContent = emailVal;
-    stepEmailPanel.hidden = true;
-    stepOtpPanel.hidden = false;
-    otpInput.value = '';
-    fOtp.classList.remove('invalid');
-    loginSub.innerHTML = 'Masukkan 6 digit kode OTP yang telah dikirimkan ke kotak masuk email BPS Anda.';
-    btnIcon.innerHTML = ICON_VERIFY;
-    setLoading(false, 'Verifikasi & Masuk');
-    startResendCooldown(AUTH.resendCooldownSec || 60);
-    setTimeout(() => otpInput.focus(), 50);
-  }
+                <div class="text-xs text-slate-500 flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
+                    <i data-lucide="database" class="w-3.5 h-3.5 text-bps-blue"></i>
+                    <span>Periode Data: <strong id="dateRangeText" class="text-slate-800 font-semibold">Memuat...</strong></span>
+                    <span class="text-slate-300 dark:text-slate-700">|</span>
+                    <span>Update: <strong id="lastUpdateText" class="text-slate-800 font-semibold">-</strong></span>
+                </div>
+            </div>
 
-  async function callRuwaiGas(payload) {
-    const res = await fetch(AUTH.endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) throw new Error(`Server Apps Script merespons HTTP ${res.status}.`);
-    return res.json();
-  }
+            <!-- SECTION 1: EXECUTIVE DASHBOARD -->
+            <div id="section-dashboard" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div id="card-total" onclick="filterByCard('total')" class="clean-card p-5 rounded-xl hover:border-bps-blue transition cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-blue transition">Total Liputan Media</p>
+                                <h3 class="text-3xl font-extrabold text-slate-900 mt-1.5" id="kpiTotal">-</h3>
+                            </div>
+                            <div class="p-2.5 bg-[#008FD5]/10 text-bps-blue rounded-lg">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
+                            <span id="kpiMediaCount" class="flex items-center font-medium"><i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1.5 text-bps-blue"></i> Dari 0 media</span>
+                            <span class="text-bps-blue font-semibold opacity-0 group-hover:opacity-100 transition">Semua &rarr;</span>
+                        </div>
+                    </div>
 
-  async function requestOtp(emailVal, isResend) {
-    setLoading(true, isResend ? 'Mengirim ulang…' : 'Mengirim OTP…');
-    say(`Mengirim kode verifikasi ke ${emailVal}…`);
-    try {
-      const d = await callRuwaiGas({ action: 'request_otp', step: 'request_otp', email: emailVal });
-      if (d && (d.status === 'otp_sent' || d.status === 'success' || d.status === 'ok')) {
-        try {
-          if (remember.checked) localStorage.setItem(UKEY, emailVal);
-          else localStorage.removeItem(UKEY);
-        } catch (_) {}
-        if (currentStep !== 'otp') goToStepOtp(emailVal);
-        else { setLoading(false, 'Verifikasi & Masuk'); startResendCooldown(AUTH.resendCooldownSec || 60); }
-        say(d.message || `Kode OTP 6-digit terkirim ke ${emailVal}.`, 'ok');
-      } else {
-        const msg = (d && (d.message || d.error)) || 'Gagal mengirim kode OTP. Pastikan email terdaftar.';
-        setLoading(false, currentStep === 'otp' ? 'Verifikasi & Masuk' : 'Kirim Kode OTP');
-        shakeForm();
-        say(msg, 'bad');
-        if (currentStep === 'email') emailInput.focus();
-      }
-    } catch (er) {
-      setLoading(false, currentStep === 'otp' ? 'Verifikasi & Masuk' : 'Kirim Kode OTP');
-      const m = (er && er.message && er.message !== 'Failed to fetch')
-        ? er.message
-        : 'Gagal terhubung ke endpoint Apps Script RUWAI. Periksa URL deployment /exec dan koneksi HTTPS.';
-      say(m, 'bad');
-    }
-  }
+                    <div id="card-positif" onclick="filterByCard('positif')" class="clean-card p-5 rounded-xl hover:border-bps-green transition cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-greenDark transition">Sentimen Positif</p>
+                                <h3 class="text-3xl font-extrabold text-bps-greenDark mt-1.5" id="kpiPositivePct">-</h3>
+                            </div>
+                            <div class="p-2.5 bg-[#68B92E]/10 text-bps-greenDark rounded-lg">
+                                <i data-lucide="smile" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
+                            <span id="kpiSentimentBreakdown" class="text-slate-600 font-medium">0 Positif • 0 Netral • 0 Negatif</span>
+                            <span class="text-bps-greenDark font-semibold opacity-0 group-hover:opacity-100 transition">Filter &rarr;</span>
+                        </div>
+                    </div>
 
-  function suksesLogin(respData, emailVal) {
-    clearInterval(resendTimer);
-    const token = String((respData && respData.token) || '').trim();
-    const role = String((respData && respData.role) || 'viewer').trim().toLowerCase();
-    const satker = String((respData && respData.satker) || '1800').trim();
-    const verifiedEmail = String((respData && respData.email) || emailVal).trim().toLowerCase();
+                    <div id="card-reputasi" onclick="filterByCard('reputasi')" class="clean-card p-5 rounded-xl hover:border-bps-navy transition cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-navy transition">Indeks Reputasi PR</p>
+                                <h3 class="text-3xl font-extrabold text-bps-navy mt-1.5"><span id="kpiReputationScore">-</span><span class="text-sm text-slate-400 font-normal">/10</span></h3>
+                            </div>
+                            <div class="p-2.5 bg-[#06182E]/10 dark:bg-sky-500/15 text-bps-navy rounded-lg">
+                                <i data-lucide="award" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3.5 flex items-center justify-between text-xs text-bps-greenDark font-semibold pt-3 border-t border-slate-100">
+                            <span id="kpiReputationLabel" class="flex items-center"><i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Menghitung skor...</span>
+                            <span class="text-bps-navy font-semibold opacity-0 group-hover:opacity-100 transition">Detail &rarr;</span>
+                        </div>
+                    </div>
 
-    try {
-      localStorage.setItem(AUTH.tokenKey, token);
-      localStorage.setItem(AUTH.emailKey, verifiedEmail);
-      localStorage.setItem(AUTH.roleKey, role);
-      localStorage.setItem(AUTH.satkerKey, satker);
-      localStorage.setItem('ruwai_session', JSON.stringify({
-        token, email: verifiedEmail, role, satker, loginAt: new Date().toISOString()
-      }));
-    } catch (_) {}
+                    <div id="card-atensi" onclick="filterByCard('atensi')" class="clean-card p-5 rounded-xl hover:border-bps-orange transition cursor-pointer group">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover:text-bps-orangeDark transition">Atensi &amp; Mitigasi Isu</p>
+                                <h3 class="text-3xl font-extrabold text-bps-orange mt-1.5" id="kpiAttentionCount">-</h3>
+                            </div>
+                            <div class="p-2.5 bg-[#EB891B]/10 text-bps-orange rounded-lg">
+                                <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3.5 flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
+                            <span id="kpiAttentionDetail" class="font-medium text-slate-600">Netral / Negatif perlu pantauan</span>
+                            <span class="text-bps-orangeDark font-semibold opacity-0 group-hover:opacity-100 transition">Mitigasi &rarr;</span>
+                        </div>
+                    </div>
+                </div>
 
-    btn.classList.remove('loading');
-    btnLabel.textContent = 'Terverifikasi';
-    say(`Autentikasi berhasil (${role.toUpperCase()}). Membuka dashboard RUWAI…`, 'ok');
-    body.classList.add('leaving');
-    burstParticles();
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <div class="clean-card p-5 rounded-xl lg:col-span-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">Tren Sentimen Pemberitaan Harian</h3>
+                                <p class="text-xs text-slate-500">Pergerakan volume &amp; tone media periode pemantauan aktif (Mulai Jan 2026)</p>
+                            </div>
+                            <span class="text-[11px] bg-[#008FD5]/10 text-bps-blue px-2.5 py-1 rounded-md font-semibold border border-[#008FD5]/20">Live Database</span>
+                        </div>
+                        <div id="sentimentScrollContainer" class="w-full overflow-x-auto pb-1">
+                            <div id="sentimentChartWrapper" class="h-64 relative" style="min-width: 100%;">
+                                <canvas id="sentimentTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
 
-    setTimeout(() => {
-      window.location.assign(AUTH.redirect);
-    }, reduce ? 250 : 1400);
-  }
+                    <div class="clean-card p-5 rounded-xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">Media Partner Teraktif</h3>
+                                <p class="text-xs text-slate-500">Distribusi publikasi berdasarkan media outlet</p>
+                            </div>
+                        </div>
+                        <div class="h-64 relative flex items-center justify-center">
+                            <canvas id="mediaShareChart"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-  async function verifyOtp(emailVal, otpVal) {
-    setLoading(true, 'Memverifikasi OTP…');
-    say('Memvalidasi kode OTP dengan server RUWAI…');
-    try {
-      const d = await callRuwaiGas({ action: 'verify_otp', step: 'verify_otp', email: emailVal, otp: otpVal });
-      if (d && (d.status === 'success' || d.status === 'ok') && d.token) {
-        suksesLogin(d, emailVal);
-      } else {
-        const msg = (d && (d.message || d.error)) || 'Kode OTP tidak valid atau sudah kedaluwarsa.';
-        setLoading(false, 'Verifikasi & Masuk');
-        fOtp.classList.add('invalid');
-        errOtp.textContent = msg;
-        shakeForm();
-        say(msg, 'bad');
-        otpInput.focus();
-        otpInput.select();
-      }
-    } catch (er) {
-      setLoading(false, 'Verifikasi & Masuk');
-      const m = (er && er.message && er.message !== 'Failed to fetch')
-        ? er.message
-        : 'Gagal memverifikasi OTP ke server Apps Script. Periksa koneksi internet Anda.';
-      say(m, 'bad');
-    }
-  }
+                <div class="clean-card p-5 rounded-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">Sebaran Topik Indikator &amp; Isu Strategis</h3>
+                            <p class="text-xs text-slate-500">Klasifikasi otomatis berdasarkan judul dan ringkasan berita di database</p>
+                        </div>
+                    </div>
+                    <div class="h-56 relative">
+                        <canvas id="topicsChart"></canvas>
+                    </div>
+                </div>
+            </div>
 
-  emailInput.addEventListener('input', () => { fEmail.classList.remove('invalid'); clearStatus(); });
-  otpInput.addEventListener('input', function () {
-    this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
-    fOtp.classList.remove('invalid');
-    clearStatus();
-  });
-  btnChangeEmail.addEventListener('click', () => { if (!btn.disabled) goToStepEmail(); });
-  btnResendOtp.addEventListener('click', () => {
-    if (!btnResendOtp.disabled && !btn.disabled && activeEmail) requestOtp(activeEmail, true);
-  });
+            <!-- SECTION 2: NEWS MONITORING TABLE -->
+            <div id="section-news" class="space-y-5 hidden">
+                <div class="clean-card p-5 rounded-xl space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-lg">Direktori &amp; Kliping Media</h3>
+                            <p class="text-xs text-slate-500">Arsip pemberitaan terverifikasi beserta analisis sentimen dan rekomendasi tindak lanjut</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <div class="relative min-w-[210px]">
+                                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="searchInput" onkeyup="filterNewsTable()" placeholder="Cari judul atau media..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bps-blue">
+                            </div>
+                            <select id="sentimentFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue font-medium">
+                                <option value="ALL">Semua Sentimen</option>
+                                <option value="Positif">Positif</option>
+                                <option value="Netral">Netral</option>
+                                <option value="Negatif">Negatif</option>
+                            </select>
+                            <select id="topicFilter" onchange="filterNewsTable()" class="bg-white border border-slate-300 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-bps-blue font-medium">
+                                <option value="ALL">Semua Topik</option>
+                                <option value="Pertumbuhan Ekonomi">Pertumbuhan Ekonomi</option>
+                                <option value="Ketenagakerjaan & Kemiskinan">Ketenagakerjaan &amp; Kemiskinan</option>
+                                <option value="Pertanian & NTP">Pertanian &amp; NTP</option>
+                                <option value="IPM & Pendidikan">IPM &amp; Pendidikan</option>
+                                <option value="Inflasi & Harga">Inflasi &amp; Harga</option>
+                                <option value="Isu Daerah & Umum">Isu Daerah &amp; Umum</option>
+                            </select>
+                            <button onclick="resetNewsFilters()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition inline-flex items-center gap-1" title="Reset semua filter">
+                                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                                <span>Reset</span>
+                            </button>
+                        </div>
+                    </div>
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (btn.disabled) return;
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-xs text-slate-700">
+                            <thead class="bg-slate-50 text-slate-600 uppercase text-[11px] tracking-wider font-bold border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Tanggal</th>
+                                    <th class="px-4 py-3">Judul Artikel Berita</th>
+                                    <th class="px-4 py-3">Media Outlet</th>
+                                    <th class="px-4 py-3">Topik</th>
+                                    <th class="px-4 py-3 text-center">Sentimen</th>
+                                    <th class="px-4 py-3 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="newsTableBody" class="divide-y divide-slate-200 bg-white">
+                                <tr>
+                                    <td colspan="6" class="px-4 py-8 text-center text-slate-400">Memuat data berita dari database...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-    if (currentStep === 'email') {
-      const emailVal = emailInput.value.trim().toLowerCase();
-      if (!isValidBpsEmail(emailVal)) {
-        fEmail.classList.add('invalid');
-        errEmail.textContent = emailVal
-          ? 'Akses ditolak. Wajib menggunakan email resmi @bps.go.id.'
-          : 'Alamat email @bps.go.id wajib diisi.';
-        shakeForm();
-        say('Gunakan alamat email resmi pegawai @bps.go.id.', 'bad');
-        emailInput.focus();
-        return;
-      }
-      requestOtp(emailVal, false);
-    } else {
-      const otpVal = otpInput.value.replace(/[^0-9]/g, '').trim();
-      if (otpVal.length !== 6) {
-        fOtp.classList.add('invalid');
-        errOtp.textContent = 'Kode OTP harus terdiri dari 6 digit angka.';
-        shakeForm();
-        say('Masukkan 6 digit kode OTP yang dikirim ke email Anda.', 'bad');
-        otpInput.focus();
-        return;
-      }
-      verifyOtp(activeEmail, otpVal);
-    }
-  });
-})();
-</script>
+                    <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+                        <span id="showingCount">Menampilkan 0 dari 0 berita</span>
+                        <span class="text-slate-400">Urutan: Terbaru di atas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: AUTOMATED BRS PIPELINE -->
+            <div id="section-brs" class="hidden">
+                <div class="clean-card rounded-xl overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                                <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded bg-[#008FD5]/10 text-bps-blue border border-[#008FD5]/20">
+                                    Layanan Publikasi BRS
+                                </span>
+                                <span class="text-xs text-slate-400">• Standar Tata Naskah BPS Provinsi Lampung</span>
+                            </div>
+                            <h2 class="text-lg sm:text-xl font-bold text-bps-navy tracking-tight">
+                                Penyusunan Draf Siaran Pers Resmi
+                            </h2>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                                Unggah bahan paparan rilis Kepala BPS untuk menghasilkan draf siaran pers terstruktur sesuai format baku instansi.
+                            </p>
+                        </div>
+                        <a href="virtual-office.html" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-bps-navy hover:bg-bps-dark text-white text-xs font-semibold transition shrink-0">
+                            <i data-lucide="monitor" class="w-4 h-4 text-[#67D4FF]"></i>
+                            <span>Pantau di Ruang Kendali</span>
+                        </a>
+                    </div>
+
+                    <div class="p-6 space-y-5">
+                        <div id="dropZoneArea" class="border-2 border-dashed border-slate-300 hover:border-bps-blue rounded-xl py-10 px-6 text-center bg-slate-50/70 hover:bg-[#008FD5]/[0.02] transition relative group">
+                            <input type="file" id="brsFileInput" accept=".pptx,.ppt,.pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handleFileSelected(this)">
+                            <div class="flex flex-col items-center space-y-2.5 pointer-events-none">
+                                <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-bps-blue">
+                                    <i data-lucide="file-up" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-800" id="uploadFileLabel">
+                                        Seret berkas paparan rilis ke area ini, atau <span class="text-bps-blue underline underline-offset-2">klik untuk memilih</span>
+                                    </p>
+                                    <p class="text-xs text-slate-400 mt-1">
+                                        Mendukung format <span class="font-medium text-slate-600">.PPTX</span>, <span class="font-medium text-slate-600">.PPT</span>, atau <span class="font-medium text-slate-600">.PDF</span> (Maksimal 25 MB)
+                                    </p>
+                                </div>
+                                <button type="button" class="px-5 py-2 bg-bps-blue text-white text-xs font-semibold rounded-lg">
+                                    Pilih Berkas Paparan
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="uploadActionArea" class="hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#008FD5]/[0.06] p-4 rounded-xl border border-[#008FD5]/25">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-2 bg-white rounded-lg border border-[#008FD5]/20 text-bps-blue">
+                                    <i data-lucide="file-check" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800" id="selectedFileName">-</p>
+                                    <p class="text-[11px] text-slate-500" id="selectedFileSize">-</p>
+                                </div>
+                            </div>
+                            <button onclick="uploadBrsFileToDrive()" id="uploadSubmitBtn" class="px-4 py-2 bg-bps-green hover:bg-bps-greenDark text-white text-xs font-semibold rounded-lg transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                                <span>Proses Penyusunan Draf</span>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-5 border-t border-slate-100">
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-5 h-5 rounded bg-bps-blue text-white text-[11px] font-bold flex items-center justify-center">1</span>
+                                    <span class="text-xs font-bold text-slate-800">Unggah Materi</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed">Berkas bahan paparan rilis diarsipkan langsung ke repositori kerja Humas.</p>
+                            </div>
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-5 h-5 rounded bg-bps-navy dark:bg-sky-600 text-white text-[11px] font-bold flex items-center justify-center">2</span>
+                                    <span class="text-xs font-bold text-slate-800">Ekstraksi Indikator</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed">Sistem menyusun narasi data storytelling dan kutipan resmi Kepala BPS.</p>
+                            </div>
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-5 h-5 rounded bg-bps-green text-white text-[11px] font-bold flex items-center justify-center">3</span>
+                                    <span class="text-xs font-bold text-slate-800">Format Tata Naskah</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed">Draf otomatis terformat rapi pada dokumen siap sunting di Google Drive.</p>
+                            </div>
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200/70">
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="w-5 h-5 rounded bg-bps-orange text-white text-[11px] font-bold flex items-center justify-center">4</span>
+                                    <span class="text-xs font-bold text-slate-800">Notifikasi Tim Humas</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed">Tautan dokumen final dikirim otomatis ke saluran koordinasi tim.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: API BRIDGE ARCHITECTURE (ADMIN ONLY) -->
+            <div id="section-bridge" class="space-y-6 hidden">
+                <div class="clean-card p-6 rounded-xl space-y-5">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-3 bg-[#68B92E]/15 text-bps-greenDark rounded-xl">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Arsitektur Keamanan: Google Sheets API Bridge</h3>
+                            <p class="text-xs text-slate-500">Dual-route API Gateway yang melayani Dashboard Utama dan Virtual Office secara bersamaan</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-5 border-t border-slate-200">
+                        <div class="space-y-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
+                                <span class="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-800 flex items-center justify-center text-xs">1</span>
+                                <span>Spreadsheet Internal</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">Database monitoring dan status agent disimpan secara tertutup di Google Drive BPS Provinsi Lampung.</p>
+                            <div class="bg-white p-2 rounded border border-slate-200 font-mono text-[11px] text-slate-700">🔒 Tab: Monitoring, Agent_State &amp; Latest_BRS</div>
+                        </div>
+                        <div class="space-y-2 bg-[#008FD5]/[0.04] p-4 rounded-lg border border-[#008FD5]/20">
+                            <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
+                                <span class="w-5 h-5 rounded-full bg-[#008FD5]/20 text-bps-blue flex items-center justify-center text-xs">2</span>
+                                <span>Apps Script Web App</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">Jalur default menyuplai data grafik, jalur <code>?mode=agents</code> menyuplai status agen dengan Secret Payload Token.</p>
+                            <div class="bg-white p-2 rounded border border-[#008FD5]/20 font-mono text-[11px] text-bps-blue">⚡ GET .../exec (Secured Token)</div>
+                        </div>
+                        <div class="space-y-2 bg-[#68B92E]/[0.04] p-4 rounded-lg border border-[#68B92E]/20">
+                            <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
+                                <span class="w-5 h-5 rounded-full bg-[#68B92E]/20 text-bps-greenDark flex items-center justify-center text-xs">3</span>
+                                <span>Visualisasi Real-Time</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed">Dashboard menghitung metrik, sentimen, dan rentang tanggal grafik langsung dari payload JSON terbaru.</p>
+                            <div class="bg-white p-2 rounded border border-[#68B92E]/20 font-mono text-[11px] text-bps-greenDark">🌐 Chart.js + TailwindCSS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer & Virtual Office AI Agents Status -->
+        <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-2.5">
+              <div class="text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
+                    <div>&copy; 2026 <strong>Humas BPS Provinsi Lampung</strong></div>
+                    <div class="flex items-center space-x-3">
+                        <span>Sumber Data: Database Pemantauan Media</span><span>•</span>
+                        <a href="virtual-office.html" class="text-bps-blue font-semibold hover:underline">Virtual Office</a>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-2 pt-2.5 border-t border-slate-100 w-full text-xs">
+                    <span class="font-bold text-slate-700 mr-1">Modul Agen:</span>
+                    <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Media Crawler: Memindai pembaruan berita media daring secara berkala.')">
+                        <span class="w-2 h-2 rounded-full bg-bps-blue"></span>
+                        <span class="font-medium text-slate-600">Crawler</span>
+                        <span class="bg-bps-blue text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-crawler">IDLE</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Drafter BRS: Menyusun draf siaran pers resmi sesuai tata naskah BPS.')">
+                        <span class="w-2 h-2 rounded-full bg-bps-green"></span>
+                        <span class="font-medium text-slate-600">Drafter</span>
+                        <span class="bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-drafter">STANDBY</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 border border-slate-200 rounded-md cursor-pointer hover:bg-slate-100 transition" onclick="alert('Agent Auditor & PR: Memantau sentimen dan mitigasi isu pemberitaan.')">
+                        <span class="w-2 h-2 rounded-full bg-bps-orange"></span>
+                        <span class="font-medium text-slate-600">Auditor</span>
+                        <span class="bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold" id="status-auditor">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div id="analysisModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden">
+            <div class="bg-bps-navy text-white px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-[#67D4FF]"></i>
+                    <span class="font-bold text-sm">Analisis Sentimen &amp; Rekomendasi Humas</span>
+                </div>
+                <button onclick="closeAnalysisModal()" class="text-slate-400 hover:text-white transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+                <div>
+                    <div class="flex items-center gap-2 mb-1 text-xs">
+                        <span id="modalDate" class="text-slate-500 font-medium"></span><span>•</span>
+                        <span id="modalMedia" class="font-bold text-bps-blue"></span>
+                        <span id="modalSentimentBadge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold"></span>
+                    </div>
+                    <h4 id="modalTitle" class="font-bold text-slate-900 text-base leading-snug"></h4>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-xs text-slate-700 whitespace-pre-line leading-relaxed" id="modalBody"></div>
+                <div class="flex justify-end gap-2.5 pt-2">
+                    <button onclick="closeAnalysisModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition">Tutup</button>
+                    <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-lg inline-flex items-center gap-1.5 transition">
+                        <span>Buka Berita Asli</span><i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="successUploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
+            <div class="w-14 h-14 bg-[#68B92E]/15 text-bps-greenDark rounded-full flex items-center justify-center mx-auto">
+                <i data-lucide="file-check-2" class="w-8 h-8"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-slate-900 text-lg">Draf Siaran Pers Telah Jadi!</h3>
+                <p class="text-xs text-slate-500 mt-1 leading-relaxed">Sistem telah selesai memproses bahan paparan dan menyusun draf dokumen siaran pers resmi di Google Drive.</p>
+            </div>
+            <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 text-left space-y-1.5 text-xs">
+                <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-greenDark">SELESAI</strong></div>
+                <div class="flex justify-between"><span class="text-slate-500">Dokumen Hasil:</span> <strong id="modalFileName" class="text-slate-800 truncate max-w-[200px]">Draf Siaran Pers Resmi</strong></div>
+            </div>
+            <div class="flex items-center gap-2.5 pt-2">
+                <button onclick="closeSuccessUploadModal()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition">Tutup</button>
+                <a id="modalDownloadBtn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-green hover:bg-bps-greenDark rounded-lg transition inline-flex items-center justify-center gap-1.5">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Buka Google Doc</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Element -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-bps-navy text-white px-4 py-3 rounded-lg shadow-xl text-xs font-semibold flex items-center space-x-2 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none z-50 border border-slate-700">
+        <i data-lucide="check-circle" class="w-4 h-4 text-bps-green"></i>
+        <span id="toastMessage">Pesan Notifikasi</span>
+    </div>
+
+    <!-- Application Script & Authentication Handler -->
+    <script>
+        lucide.createIcons();
+
+        // =========================================================================
+        // DARK / LIGHT THEME ENGINE (SINKRON DENGAN CHART.JS & LOCALSTORAGE)
+        // =========================================================================
+        function isDarkModeActive() {
+            return document.documentElement.classList.contains('dark');
+        }
+
+        function updateThemeToggleIcons() {
+            const isDark = isDarkModeActive();
+            const moonIcon = document.getElementById('themeIconMoon');
+            const sunIcon = document.getElementById('themeIconSun');
+            if (moonIcon && sunIcon) {
+                if (isDark) {
+                    moonIcon.classList.add('hidden');
+                    sunIcon.classList.remove('hidden');
+                } else {
+                    moonIcon.classList.remove('hidden');
+                    sunIcon.classList.add('hidden');
+                }
+            }
+        }
+
+        function syncChartsTheme() {
+            const isDark = isDarkModeActive();
+            const tickColor = isDark ? '#94A3B8' : '#64748B';
+            const legendColor = isDark ? '#CBD5E1' : '#334155';
+            const gridColor = isDark ? 'rgba(148, 163, 184, 0.12)' : '#F1F5F9';
+            const doughnutBorder = isDark ? '#111827' : '#ffffff';
+
+            if (sentimentChart) {
+                sentimentChart.options.plugins.legend.labels.color = legendColor;
+                sentimentChart.options.scales.y.ticks.color = tickColor;
+                sentimentChart.options.scales.y.grid.color = gridColor;
+                sentimentChart.options.scales.x.ticks.color = tickColor;
+                sentimentChart.update('none');
+            }
+            if (mediaChart) {
+                mediaChart.options.plugins.legend.labels.color = legendColor;
+                if (mediaChart.data?.datasets?.[0]) {
+                    mediaChart.data.datasets[0].borderColor = doughnutBorder;
+                }
+                mediaChart.update('none');
+            }
+            if (topicsChart) {
+                topicsChart.options.scales.y.ticks.color = tickColor;
+                topicsChart.options.scales.y.grid.color = gridColor;
+                topicsChart.options.scales.x.ticks.color = tickColor;
+                topicsChart.update('none');
+            }
+        }
+
+        function toggleTheme() {
+            const willBeDark = !isDarkModeActive();
+            document.documentElement.classList.toggle('dark', willBeDark);
+            localStorage.setItem('RUWAI_theme', willBeDark ? 'dark' : 'light');
+            updateThemeToggleIcons();
+            syncChartsTheme();
+        }
+
+        updateThemeToggleIcons();
+
+        // =========================================================================
+        // INTERAKTIVITAS LIQUID GLASS HEADER (SPOTLIGHT CURSOR TRACKING)
+        // =========================================================================
+        (function initLiquidGlassHeader() {
+            const header = document.getElementById('mainGlassHeader');
+            if (!header) return;
+            header.addEventListener('mousemove', (e) => {
+                const rect = header.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                header.style.setProperty('--mouse-x', `${x}px`);
+                header.style.setProperty('--mouse-y', `${y}px`);
+            });
+        })();
+
+        // =========================================================================
+        // API BRIDGE & KONFIGURASI SESI OTP
+        // =========================================================================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
+        const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
+        const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
+
+        const RUWAI_KEYS = {
+            loginPage: 'index.html',
+            token: 'ruwai_token',
+            email: 'ruwai_email',
+            role: 'ruwai_role',
+            satker: 'ruwai_satker',
+            session: 'ruwai_session'
+        };
+
+        // Batas awal periode monitoring aktif: 1 Januari 2026
+        const START_MONITORING_TS = new Date(2026, 0, 1).getTime();
+
+        let allNewsData = [];
+        let sentimentChart = null;
+        let mediaChart = null;
+        let topicsChart = null;
+        let selectedFileBase64 = null;
+        let selectedFileMeta = null;
+        let intervalsStarted = false;
+
+        function getActiveRuwaiSession() {
+            try {
+                const token = (localStorage.getItem(RUWAI_KEYS.token) || '').trim();
+                const email = (localStorage.getItem(RUWAI_KEYS.email) || '').trim().toLowerCase();
+                if (!token || !email || !email.endsWith('@bps.go.id')) return null;
+
+                const role = (localStorage.getItem(RUWAI_KEYS.role) || 'viewer').trim().toLowerCase();
+                const satker = (localStorage.getItem(RUWAI_KEYS.satker) || '1800').trim();
+                const isAdmin = ['superadmin', 'admin', 'admin_utama'].includes(role);
+                return { token, email, role, satker, isAdmin };
+            } catch (_) {
+                return null;
+            }
+        }
+
+        function unlockPortal(sessionData) {
+            const wrapper = document.getElementById('protectedAppWrapper');
+            if (wrapper) wrapper.classList.remove('hidden');
+
+            const userBadge = document.getElementById('userSessionBadge');
+            if (userBadge) {
+                userBadge.textContent = `${sessionData.email.split('@')[0]} · ${sessionData.role.toUpperCase()} (${sessionData.satker})`;
+                userBadge.classList.remove('hidden');
+            }
+
+            if (sessionData.isAdmin || localStorage.getItem('bps_lampung_admin_mode') === 'true') {
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+            } else {
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+            }
+
+            initDropZoneDragEvents();
+            fetchLiveMonitoringData(false);
+            fetchAgentStates();
+            updateThemeToggleIcons();
+            lucide.createIcons();
+        }
+
+        function logoutSession() {
+            try {
+                localStorage.removeItem(RUWAI_KEYS.token);
+                localStorage.removeItem(RUWAI_KEYS.email);
+                localStorage.removeItem(RUWAI_KEYS.role);
+                localStorage.removeItem(RUWAI_KEYS.satker);
+                localStorage.removeItem(RUWAI_KEYS.session);
+                localStorage.removeItem('bps_lampung_admin_mode');
+            } catch (_) {}
+            window.location.replace(RUWAI_KEYS.loginPage);
+        }
+
+        function initDropZoneDragEvents() {
+            const dropZone = document.getElementById('dropZoneArea');
+            if (!dropZone) return;
+            ['dragenter', 'dragover'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('border-bps-blue', 'bg-[#008FD5]/5');
+                });
+            });
+            ['dragleave', 'drop'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('border-bps-blue', 'bg-[#008FD5]/5');
+                });
+            });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-bps-blue', 'text-white');
+                btn.classList.add('text-slate-600');
+            });
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-bps-blue', 'text-white');
+                activeBtn.classList.remove('text-slate-600');
+            }
+            ['dashboard', 'news', 'brs', 'bridge'].forEach(sec => {
+                const el = document.getElementById(`section-${sec}`);
+                if (el) el.classList.add('hidden');
+            });
+            const targetSec = document.getElementById(`section-${tabName}`);
+            if (targetSec) targetSec.classList.remove('hidden');
+        }
+
+        function filterByCard(cardType) {
+            switchTab('news');
+            const sentimentSelect = document.getElementById('sentimentFilter');
+            const topicSelect = document.getElementById('topicFilter');
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.value = '';
+            if (topicSelect) topicSelect.value = 'ALL';
+
+            if (cardType === 'positif') {
+                if (sentimentSelect) sentimentSelect.value = 'Positif';
+                filterNewsTable();
+            } else if (cardType === 'atensi') {
+                if (sentimentSelect) sentimentSelect.value = 'ALL';
+                const filtered = allNewsData.filter(item => item.sentiment === 'Netral' || item.sentiment === 'Negatif');
+                renderNewsTable(filtered);
+            } else {
+                if (sentimentSelect) sentimentSelect.value = 'ALL';
+                filterNewsTable();
+            }
+            showToast(`Menampilkan rilis data untuk kategori: ${cardType.toUpperCase()}`);
+        }
+
+        function resetNewsFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const sentimentSelect = document.getElementById('sentimentFilter');
+            const topicSelect = document.getElementById('topicFilter');
+            if (searchInput) searchInput.value = '';
+            if (sentimentSelect) sentimentSelect.value = 'ALL';
+            if (topicSelect) topicSelect.value = 'ALL';
+            renderNewsTable(allNewsData);
+            showToast('Filter berita dikembalikan ke semua data.');
+        }
+
+        function handleFileSelected(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const validExtensions = ['pptx', 'ppt', 'pdf'];
+                const fileExt = file.name.split('.').pop().toLowerCase();
+                if (!validExtensions.includes(fileExt)) {
+                    showToast('Format berkas tidak valid! Gunakan .pptx, .ppt, atau .pdf');
+                    input.value = '';
+                    return;
+                }
+                if (file.size > 25 * 1024 * 1024) {
+                    showToast('Ukuran berkas terlalu besar (Maksimal 25 MB).');
+                    input.value = '';
+                    return;
+                }
+
+                selectedFileBase64 = null;
+                selectedFileMeta = { name: file.name, type: file.type, size: file.size };
+
+                document.getElementById('selectedFileName').innerText = file.name + ' (Membaca berkas...)';
+                document.getElementById('selectedFileSize').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+                document.getElementById('uploadActionArea').classList.remove('hidden');
+
+                const submitBtn = document.getElementById('uploadSubmitBtn');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedFileBase64 = e.target.result.split(',')[1];
+                    document.getElementById('selectedFileName').innerText = file.name;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function uploadBrsFileToDrive() {
+            const session = getActiveRuwaiSession();
+            if (!session) {
+                logoutSession();
+                return;
+            }
+            if (!selectedFileBase64 || !selectedFileMeta) {
+                showToast('Pilih berkas terlebih dahulu.');
+                return;
+            }
+
+            const btn = document.getElementById('uploadSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> <span>Mengunggah...</span>`;
+            lucide.createIcons();
+            showUploadInProgressModal();
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'uploadBrs',
+                        token: getClientToken(),
+                        sessionToken: session.token,
+                        email: session.email,
+                        satker: session.satker,
+                        filename: selectedFileMeta.name,
+                        mimeType: selectedFileMeta.type,
+                        fileData: selectedFileBase64
+                    })
+                });
+
+                const result = await response.json();
+                const inProgressModal = document.getElementById('successUploadModal-progress');
+                if (inProgressModal) inProgressModal.remove();
+
+                if (result.status === 'success' || result.fileUrl || result.docUrl) {
+                    document.getElementById('uploadActionArea').classList.add('hidden');
+                    document.getElementById('brsFileInput').value = '';
+                    selectedFileBase64 = null;
+                    showSuccessUploadModal(result.fileTitle || result.title || 'Draf Siaran Pers Resmi', result.fileUrl || result.docUrl);
+                    fetchAgentStates();
+                } else {
+                    throw new Error(result.error || 'Gagal memproses di server.');
+                }
+            } catch (err) {
+                console.error('Upload error:', err);
+                const inProgressModal = document.getElementById('successUploadModal-progress');
+                if (inProgressModal) inProgressModal.remove();
+                showToast(`Gagal mengunggah: ${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> <span>Proses Penyusunan Draf</span>`;
+                lucide.createIcons();
+            }
+        }
+
+        function showUploadInProgressModal() {
+            const existingModal = document.getElementById('successUploadModal-progress');
+            if (existingModal) existingModal.remove();
+
+            const modalHTML = `
+                <div id="successUploadModal-progress" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+                    <div class="bg-white rounded-xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
+                        <div class="w-14 h-14 bg-[#008FD5]/10 text-bps-blue rounded-full flex items-center justify-center mx-auto animate-pulse">
+                            <i data-lucide="loader" class="w-8 h-8 animate-spin"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-lg">Menyusun Draf Siaran Pers...</h3>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Berkas berhasil diunggah. Sistem sedang mengekstrak indikator paparan dan menyusun draf siaran pers resmi BPS.</p>
+                        </div>
+                        <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 text-left space-y-1.5 text-xs">
+                            <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-orange animate-pulse">SEDANG BERJALAN</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-500">Sumber Bahan:</span> <strong class="text-slate-800 truncate max-w-[200px]">${selectedFileMeta ? selectedFileMeta.name : '-'}</strong></div>
+                        </div>
+                        <div class="flex items-center gap-2.5 pt-2">
+                            <button onclick="document.getElementById('successUploadModal-progress').remove()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition">Tetap di Sini</button>
+                            <a href="virtual-office.html" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-lg transition inline-flex items-center justify-center gap-1.5">
+                                <i data-lucide="monitor" class="w-3.5 h-3.5"></i><span>Ruang Kendali</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            lucide.createIcons();
+        }
+
+        function showSuccessUploadModal(docTitle, fileUrl) {
+            document.getElementById('modalFileName').innerText = docTitle;
+            const dlBtn = document.getElementById('modalDownloadBtn');
+            dlBtn.href = fileUrl || '#';
+            if (!fileUrl) {
+                dlBtn.classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                dlBtn.classList.remove('opacity-50', 'pointer-events-none');
+            }
+            const modal = document.getElementById('successUploadModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeSuccessUploadModal() {
+            const modal = document.getElementById('successUploadModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function parseSheetDate(rawVal) {
+            if (!rawVal) return { display: '-', sortKey: 0 };
+            const str = String(rawVal).trim();
+            if (str.includes('T')) {
+                const d = new Date(str);
+                if (!isNaN(d.getTime())) {
+                    const jakartaDate = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+                    const dd = String(jakartaDate.getDate()).padStart(2, '0');
+                    const mm = String(jakartaDate.getMonth() + 1).padStart(2, '0');
+                    const yyyy = jakartaDate.getFullYear();
+                    return {
+                        display: `${dd}/${mm}/${yyyy}`,
+                        sortKey: new Date(yyyy, jakartaDate.getMonth(), jakartaDate.getDate()).getTime()
+                    };
+                }
+            }
+            const parts = str.split('/');
+            if (parts.length === 3) {
+                const dd = parseInt(parts[0], 10);
+                const mm = parseInt(parts[1], 10);
+                const yyyy = parseInt(parts[2], 10);
+                return {
+                    display: `${String(dd).padStart(2, '0')}/${String(mm).padStart(2, '0')}/${yyyy}`,
+                    sortKey: new Date(yyyy, mm - 1, dd).getTime()
+                };
+            }
+            return { display: str, sortKey: 0 };
+        }
+
+        function extractSentiment(analisisText) {
+            const match = (analisisText || '').match(/SENTIMEN:\s*(Positif|Netral|Negatif)/i);
+            if (!match) return 'Netral';
+            const val = match[1].toLowerCase();
+            if (val === 'positif') return 'Positif';
+            if (val === 'negatif') return 'Negatif';
+            return 'Netral';
+        }
+
+        function detectTopic(judul, analisis) {
+            const text = `${judul} ${analisis}`.toLowerCase();
+            if (text.includes('inflasi') || text.includes('ihk') || text.includes('harga') || text.includes('beras')) return 'Inflasi & Harga';
+            if (text.includes('ekonomi') || text.includes('pdrb') || text.includes('tumbuh') || text.includes('ekspor')) return 'Pertumbuhan Ekonomi';
+            if (text.includes('pengangguran') || text.includes('tenaga kerja') || text.includes('kemiskinan') || text.includes('tpt')) return 'Ketenagakerjaan & Kemiskinan';
+            if (text.includes('pertanian') || text.includes('padi') || text.includes('ntp') || text.includes('petani')) return 'Pertanian & NTP';
+            if (text.includes('ipm') || text.includes('pendidikan') || text.includes('sekolah')) return 'IPM & Pendidikan';
+            return 'Isu Daerah & Umum';
+        }
+
+        function setConnectionStatus(state, text) {
+            const pingDot = document.getElementById('apiPingDot');
+            const solidDot = document.getElementById('apiSolidDot');
+            const statusText = document.getElementById('apiStatusText');
+            if (!statusText) return;
+            if (state === 'ok') {
+                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#68B92E] opacity-75';
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-[#68B92E]';
+                statusText.className = 'text-bps-greenDark font-semibold';
+            } else if (state === 'error') {
+                if (pingDot) pingDot.className = 'hidden';
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-rose-500';
+                statusText.className = 'text-rose-600 font-semibold';
+            } else {
+                if (pingDot) pingDot.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EB891B] opacity-75';
+                if (solidDot) solidDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-[#EB891B]';
+                statusText.className = 'text-amber-600 font-semibold';
+            }
+            statusText.innerText = text;
+        }
+
+        let isFetchingMonitoring = false;
+        async function fetchLiveMonitoringData(isManual = false) {
+            const session = getActiveRuwaiSession();
+            if (!session) {
+                logoutSession();
+                return;
+            }
+            if (isFetchingMonitoring) return;
+            isFetchingMonitoring = true;
+
+            const icon = document.getElementById('syncIcon');
+            if (icon) icon.classList.add('animate-spin');
+            setConnectionStatus('loading', 'Menarik data...');
+
+            if (!intervalsStarted) {
+                intervalsStarted = true;
+                setInterval(fetchAgentStates, 6000);
+                setInterval(() => fetchLiveMonitoringData(false), 60000);
+            }
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+            try {
+                const url = `${API_URL}?token=${encodeURIComponent(getClientToken())}&sessionToken=${encodeURIComponent(session.token)}&email=${encodeURIComponent(session.email)}&satker=${encodeURIComponent(session.satker)}`;
+                const response = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
+                clearTimeout(timeoutId);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const rawData = await response.json();
+
+                if (rawData && (rawData.unauthorized || rawData.status === 'unauthorized')) {
+                    logoutSession();
+                    return;
+                }
+
+                if (!Array.isArray(rawData)) {
+                    throw new Error(rawData.error || 'Format JSON bukan array berita');
+                }
+
+                allNewsData = rawData
+                    .map((row, idx) => {
+                        const parsedDate = parseSheetDate(row.tanggal);
+                        const sentiment = extractSentiment(row.analisis);
+                        const topic = detectTopic(row.judul, row.analisis);
+                        return {
+                            id: idx + 1,
+                            date: parsedDate.display,
+                            sortKey: parsedDate.sortKey,
+                            title: row.judul || '(Tanpa Judul)',
+                            media: row.media || 'Media Daring',
+                            link: row.link || '#',
+                            analisis: row.analisis || 'Belum ada analisis AI.',
+                            sentiment: sentiment,
+                            topic: topic
+                        };
+                    })
+                    .filter(item => item.sortKey >= START_MONITORING_TS);
+
+                allNewsData.sort((a, b) => b.sortKey - a.sortKey);
+                updateDashboardMetricsAndCharts(allNewsData);
+                renderNewsTable(allNewsData);
+
+                const now = new Date();
+                document.getElementById('lastUpdateText').innerText = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} WIB`;
+                setConnectionStatus('ok', `Terhubung (${allNewsData.length} Berita)`);
+                if (isManual) showToast(`Sinkronisasi berhasil: ${allNewsData.length} berita aktif dimuat.`);
+            } catch (err) {
+                clearTimeout(timeoutId);
+                console.error('Error fetch sheets:', err);
+                const isAbort = err.name === 'AbortError';
+                const errMsg = isAbort ? 'Koneksi Timeout (15 detik)' : err.message;
+                setConnectionStatus('error', 'Gagal Terhubung');
+                if (isManual) showToast(`Gagal menarik data: ${errMsg}`);
+            } finally {
+                isFetchingMonitoring = false;
+                if (icon) icon.classList.remove('animate-spin');
+            }
+        }
+
+        let isFetchingAgents = false;
+        async function fetchAgentStates() {
+            const session = getActiveRuwaiSession();
+            if (!session) return;
+            if (isFetchingAgents) return;
+            isFetchingAgents = true;
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+            try {
+                const url = `${API_URL}?mode=agents&token=${encodeURIComponent(getClientToken())}&sessionToken=${encodeURIComponent(session.token)}&email=${encodeURIComponent(session.email)}`;
+                const response = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
+                clearTimeout(timeoutId);
+                if (!response.ok) return;
+                const data = await response.json();
+
+                if (data.agents && Array.isArray(data.agents)) {
+                    data.agents.forEach(agent => {
+                        const agentKey = String(agent.id || '').toLowerCase();
+                        const badgeEl = document.getElementById(`status-${agentKey}`);
+                        if (badgeEl) {
+                            const st = String(agent.status || 'IDLE').toUpperCase();
+                            badgeEl.innerText = st;
+                            if (st === 'WORKING') {
+                                badgeEl.className = 'bg-bps-orange text-white px-1.5 py-0.5 rounded text-[10px] font-bold animate-pulse';
+                            } else if (st === 'DONE') {
+                                badgeEl.className = 'bg-bps-green text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                            } else if (st === 'ERROR') {
+                                badgeEl.className = 'bg-rose-600 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                            } else {
+                                badgeEl.className = 'bg-slate-400 text-white px-1.5 py-0.5 rounded text-[10px] font-bold';
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                clearTimeout(timeoutId);
+                console.error('Gagal memuat status agen:', e);
+            } finally {
+                isFetchingAgents = false;
+            }
+        }
+
+        function updateDashboardMetricsAndCharts(data) {
+            const total = data.length;
+            const positif = data.filter(d => d.sentiment === 'Positif').length;
+            const netral = data.filter(d => d.sentiment === 'Netral').length;
+            const negatif = data.filter(d => d.sentiment === 'Negatif').length;
+            const uniqueMedia = new Set(data.map(d => d.media.toLowerCase().trim())).size;
+            const posPct = total > 0 ? ((positif / total) * 100).toFixed(1) : '0.0';
+            const repScore = total > 0 ? (((positif * 10) + (netral * 7.5) + (negatif * 2)) / total).toFixed(1) : '0.0';
+
+            document.getElementById('kpiTotal').innerText = total;
+            document.getElementById('kpiMediaCount').innerHTML = `<i data-lucide="newspaper" class="w-3.5 h-3.5 mr-1.5 text-bps-blue"></i> Dari ${uniqueMedia} media daring`;
+            document.getElementById('kpiPositivePct').innerText = `${posPct}%`;
+            document.getElementById('kpiSentimentBreakdown').innerText = `${positif} Positif • ${netral} Netral • ${negatif} Negatif`;
+            document.getElementById('kpiReputationScore').innerText = repScore;
+
+            const repLabel = document.getElementById('kpiReputationLabel');
+            if (parseFloat(repScore) >= 8.5) repLabel.innerHTML = '<i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Sangat Baik';
+            else if (parseFloat(repScore) >= 7.0) repLabel.innerHTML = '<i data-lucide="check-circle2" class="w-3.5 h-3.5 mr-1"></i> Kondusif';
+            else repLabel.innerHTML = '<i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1 text-bps-orange"></i> Perlu Atensi';
+
+            document.getElementById('kpiAttentionCount').innerText = `${netral + negatif} Berita`;
+            document.getElementById('kpiAttentionDetail').innerText = `${netral} Netral & ${negatif} Negatif`;
+
+            const chronological = [...data].sort((a, b) => a.sortKey - b.sortKey);
+            const validDates = chronological.filter(d => d.sortKey > 0);
+            if (validDates.length > 0) {
+                document.getElementById('dateRangeText').innerText = validDates[0].date === validDates[validDates.length - 1].date
+                    ? validDates[0].date
+                    : `${validDates[0].date} – ${validDates[validDates.length - 1].date}`;
+            } else {
+                document.getElementById('dateRangeText').innerText = '01/01/2026 – Sekarang';
+            }
+
+            const dateGroups = {};
+            chronological.forEach(item => {
+                if (!dateGroups[item.date]) dateGroups[item.date] = { Positif: 0, Netral: 0, Negatif: 0 };
+                dateGroups[item.date][item.sentiment]++;
+            });
+
+            const mediaCounts = {};
+            data.forEach(item => { const m = item.media.trim(); mediaCounts[m] = (mediaCounts[m] || 0) + 1; });
+            const sortedMedia = Object.entries(mediaCounts).sort((a, b) => b[1] - a[1]);
+            const topMedia = sortedMedia.slice(0, 5);
+            const otherMediaCount = sortedMedia.slice(5).reduce((sum, curr) => sum + curr[1], 0);
+            const mediaLabels = topMedia.map(m => m[0]);
+            const mediaValues = topMedia.map(m => m[1]);
+            if (otherMediaCount > 0) { mediaLabels.push('Media Lainnya'); mediaValues.push(otherMediaCount); }
+
+            const topicCounts = {
+                'Pertumbuhan Ekonomi': 0,
+                'Ketenagakerjaan & Kemiskinan': 0,
+                'Pertanian & NTP': 0,
+                'IPM & Pendidikan': 0,
+                'Inflasi & Harga': 0,
+                'Isu Daerah & Umum': 0
+            };
+            data.forEach(item => { if (topicCounts[item.topic] !== undefined) topicCounts[item.topic]++; });
+
+            renderCharts(
+                Object.keys(dateGroups),
+                Object.keys(dateGroups).map(d => dateGroups[d].Positif),
+                Object.keys(dateGroups).map(d => dateGroups[d].Netral),
+                Object.keys(dateGroups).map(d => dateGroups[d].Negatif),
+                mediaLabels,
+                mediaValues,
+                Object.keys(topicCounts),
+                Object.values(topicCounts)
+            );
+            lucide.createIcons();
+        }
+
+        function renderCharts(trendLabels, trendPos, trendNet, trendNeg, mediaLabels, mediaValues, topicLabels, topicValues) {
+            if (sentimentChart) sentimentChart.destroy();
+            if (mediaChart) mediaChart.destroy();
+            if (topicsChart) topicsChart.destroy();
+
+            const isDark = isDarkModeActive();
+            const tickColor = isDark ? '#94A3B8' : '#64748B';
+            const legendColor = isDark ? '#CBD5E1' : '#334155';
+            const gridColor = isDark ? 'rgba(148, 163, 184, 0.12)' : '#F1F5F9';
+            const doughnutBorder = isDark ? '#111827' : '#ffffff';
+
+            const wrapper = document.getElementById('sentimentChartWrapper');
+            const scrollContainer = document.getElementById('sentimentScrollContainer');
+            if (wrapper && scrollContainer) {
+                const minWidth = Math.max(scrollContainer.clientWidth, trendLabels.length * 65);
+                wrapper.style.width = `${minWidth}px`;
+            }
+
+            const peakVal = Math.max(...trendPos, ...trendNet, ...trendNeg, 3);
+
+            sentimentChart = new Chart(document.getElementById('sentimentTrendChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: trendLabels,
+                    datasets: [
+                        {
+                            label: 'Positif',
+                            data: trendPos,
+                            borderColor: '#68B92E',
+                            backgroundColor: 'rgba(104, 185, 46, 0.12)',
+                            fill: true,
+                            tension: 0.35,
+                            borderWidth: 2.5,
+                            pointRadius: 3.5,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Netral',
+                            data: trendNet,
+                            borderColor: '#008FD5',
+                            backgroundColor: 'transparent',
+                            tension: 0.35,
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            pointRadius: 3,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Negatif',
+                            data: trendNeg,
+                            borderColor: '#EB891B',
+                            backgroundColor: 'transparent',
+                            tension: 0.35,
+                            borderWidth: 2,
+                            pointRadius: 3,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: legendColor,
+                                padding: 18,
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                font: { size: 11, weight: '600' }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: peakVal + 2,
+                            ticks: {
+                                color: tickColor,
+                                stepSize: 1,
+                                precision: 0,
+                                padding: 10
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        },
+                        x: {
+                            offset: true,
+                            grid: { display: false },
+                            ticks: {
+                                color: tickColor,
+                                maxRotation: 0,
+                                padding: 10,
+                                font: { size: 11 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            if (scrollContainer) {
+                scrollContainer.scrollLeft = scrollContainer.scrollWidth;
+            }
+
+            mediaChart = new Chart(document.getElementById('mediaShareChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: mediaLabels,
+                    datasets: [{
+                        data: mediaValues,
+                        backgroundColor: ['#06182E', '#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#CBD5E1'],
+                        borderWidth: 2,
+                        borderColor: doughnutBorder
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: legendColor, boxWidth: 10, padding: 12, font: { size: 11, weight: '500' } }
+                        }
+                    },
+                    cutout: '64%'
+                }
+            });
+
+            topicsChart = new Chart(document.getElementById('topicsChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: topicLabels,
+                    datasets: [{
+                        label: 'Jumlah Artikel',
+                        data: topicValues,
+                        backgroundColor: ['#008FD5', '#68B92E', '#EB891B', '#38BDF8', '#84CC16', '#64748B'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { color: tickColor, stepSize: 1 }, grid: { color: gridColor } },
+                        x: { grid: { display: false }, ticks: { color: tickColor } }
+                    }
+                }
+            });
+        }
+
+        function renderNewsTable(data) {
+            const tbody = document.getElementById('newsTableBody');
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate-400">Tidak ada berita yang sesuai dengan filter.</td></tr>`;
+                document.getElementById('showingCount').innerText = `Menampilkan 0 dari ${allNewsData.length} berita`;
+                return;
+            }
+            data.forEach(item => {
+                let badgeColor = item.sentiment === 'Positif'
+                    ? 'bg-[#68B92E]/15 text-bps-greenDark border border-[#68B92E]/30'
+                    : (item.sentiment === 'Negatif'
+                        ? 'bg-[#EB891B]/15 text-bps-orangeDark border border-[#EB891B]/30'
+                        : 'bg-slate-100 text-slate-700 border border-slate-200');
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition';
+                tr.innerHTML = `
+                    <td class="px-4 py-3.5 whitespace-nowrap text-slate-500 font-medium">${item.date}</td>
+                    <td class="px-4 py-3.5 font-semibold text-slate-900 max-w-md"><a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-bps-blue hover:underline transition">${item.title}</a></td>
+                    <td class="px-4 py-3.5 whitespace-nowrap"><span class="font-semibold text-slate-700">${item.media}</span></td>
+                    <td class="px-4 py-3.5 whitespace-nowrap"><span class="bg-[#008FD5]/10 text-bps-blue px-2 py-0.5 rounded text-[11px] font-semibold">${item.topic}</span></td>
+                    <td class="px-4 py-3.5 whitespace-nowrap text-center"><span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeColor}">${item.sentiment}</span></td>
+                    <td class="px-4 py-3.5 whitespace-nowrap text-right">
+                        <div class="inline-flex items-center gap-2">
+                            <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded-md bg-[#008FD5]/10 text-bps-blue hover:bg-[#008FD5]/20 font-semibold text-xs inline-flex items-center gap-1 transition"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Analisis</span></button>
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-bps-blue p-1 rounded hover:bg-slate-100 transition"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('showingCount').innerText = `Menampilkan ${data.length} dari ${allNewsData.length} berita`;
+            lucide.createIcons();
+        }
+
+        function filterNewsTable() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const sentimentVal = document.getElementById('sentimentFilter').value;
+            const topicVal = document.getElementById('topicFilter').value;
+            const filtered = allNewsData.filter(item => {
+                return (item.title.toLowerCase().includes(searchVal) || item.media.toLowerCase().includes(searchVal)) &&
+                       (sentimentVal === 'ALL' || item.sentiment === sentimentVal) &&
+                       (topicVal === 'ALL' || item.topic === topicVal);
+            });
+            renderNewsTable(filtered);
+        }
+
+        function openAnalysisModal(id) {
+            const item = allNewsData.find(d => d.id === id);
+            if (!item) return;
+            document.getElementById('modalDate').innerText = item.date;
+            document.getElementById('modalMedia').innerText = item.media;
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalBody').innerText = item.analisis;
+            document.getElementById('modalExternalLink').href = item.link;
+            const badge = document.getElementById('modalSentimentBadge');
+            badge.innerText = item.sentiment;
+            badge.className = item.sentiment === 'Positif'
+                ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#68B92E]/15 text-bps-greenDark'
+                : (item.sentiment === 'Negatif'
+                    ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#EB891B]/15 text-bps-orangeDark'
+                    : 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-slate-200 text-slate-800');
+            document.getElementById('analysisModal').classList.remove('hidden');
+            document.getElementById('analysisModal').classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeAnalysisModal() {
+            document.getElementById('analysisModal').classList.add('hidden');
+            document.getElementById('analysisModal').classList.remove('flex');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none'); }, 3500);
+        }
+
+        // =========================================================================
+        // GUARD TOKEN AKHIR (POST-LOAD SESSION VERIFICATION & RBAC INIT)
+        // =========================================================================
+        (async function lateRuwaiAuthGuard() {
+            const session = window.__RUWAI_SESSION__ || getActiveRuwaiSession();
+            if (!session) {
+                logoutSession();
+                return;
+            }
+
+            // Buka antarmuka dashboard dan muat data monitoring
+            unlockPortal(session);
+
+            // Verifikasi sesi token ke backend Apps Script (opsional jika endpoint mendukung verify_session)
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'verify_session',
+                        step: 'verify_session',
+                        token: session.token,
+                        email: session.email
+                    })
+                });
+                if (res.ok) {
+                    const check = await res.json();
+                    if (check && (check.status === 'invalid' || check.status === 'expired' || check.valid === false)) {
+                        logoutSession();
+                        return;
+                    }
+                    if (check && check.role) {
+                        const freshRole = String(check.role).trim().toLowerCase();
+                        const freshSatker = String(check.satker || session.satker).trim();
+                        localStorage.setItem(RUWAI_KEYS.role, freshRole);
+                        localStorage.setItem(RUWAI_KEYS.satker, freshSatker);
+                        const isAdmin = ['superadmin', 'admin', 'admin_utama'].includes(freshRole);
+                        document.querySelectorAll('.admin-only').forEach(el => {
+                            el.classList.toggle('hidden', !isAdmin);
+                        });
+                    }
+                }
+            } catch (_) {
+                // Tetap pertahankan sesi lokal jika Apps Script tidak mengekspos action verify_session
+            }
+        })();
+    </script>
 </body>
 </html>
