@@ -218,6 +218,16 @@ body.ready .login{transform:none}
     </div>
     <span class="badge">Autentikasi Email Pegawai</span>
     <h2 id="login-title">Masuk ke RUWAI</h2>
+<div class="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-slate-100 border border-slate-200 mb-4" id="authModeSwitcher">
+  <button type="button" id="btnModeOtp" onclick="switchAuthMode('otp')"
+    class="py-2 px-3 rounded-lg text-xs font-bold bg-[#008FD5] text-white">
+    OTP @bps.go.id
+  </button>
+  <button type="button" id="btnModeDirect" onclick="switchAuthMode('direct')"
+    class="py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-bps-navy transition">
+    Akses Humas / Admin
+  </button>
+</div>
     <p class="sub" id="login-sub">Masukkan email resmi <b>@bps.go.id</b> untuk menerima kode verifikasi sekali pakai (OTP).</p>
     <form id="form" novalidate>
       <!-- TAHAP 1: INPUT EMAIL @bps.go.id -->
