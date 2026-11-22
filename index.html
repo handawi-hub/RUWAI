@@ -243,8 +243,31 @@ body.ready .login{transform:none}
         <div class="row">
           <label class="check"><input type="checkbox" id="remember" checked><span class="box"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>Ingat email di perangkat ini</label>
           <a class="link" href="#bantuan">Butuh akses?</a>
-        </div>
-      </div>
+       <button type="button" id="btnHumasAccess" onclick="toggleHumasDirectBox()"
+    style="background:#ffffff;color:#06182e;border:1px solid rgba(255,255,255,0.9);border-radius:8px;padding:5px 11px;font-size:11px;font-weight:700;line-height:1.2;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.22);white-space:nowrap;">
+    Humas
+  </button>
+</div>
+        <!-- Panel Akses Langsung Humas / Admin (muncul saat tombol "Humas" diklik) -->
+<div id="humasDirectBox" style="display:none;margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <span style="font-size:11px;font-weight:700;color:#e2e8f0;">Akses Langsung Humas / Admin</span>
+    <button type="button" onclick="toggleHumasDirectBox(false)"
+      style="background:transparent;border:none;color:#94a3b8;font-size:11px;cursor:pointer;padding:0 4px;">
+      Tutup
+    </button>
+  </div>
+  <div style="display:flex;gap:6px;">
+    <input type="password" id="humasDirectCode" placeholder="Kode akses Humas / Admin"
+      onkeydown="if(event.key==='Enter'){event.preventDefault();submitHumasDirectAccess();}"
+      style="flex:1;min-width:0;padding:7px 10px;font-size:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(4,16,31,0.75);color:#ffffff;outline:none;">
+    <button type="button" id="btnSubmitHumasDirect" onclick="submitHumasDirectAccess()"
+      style="background:#ffffff;color:#06182e;border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">
+      Masuk
+    </button>
+  </div>
+  <div id="humasDirectMsg" style="display:none;margin-top:6px;font-size:11px;color:#fda4af;"></div>
+</div>
 
       <!-- TAHAP 2: INPUT KODE OTP 6-DIGIT -->
       <div class="step-panel" id="step-otp" hidden>
@@ -300,7 +323,109 @@ window.RUWAI_AUTH=Object.assign({
 var AUTH=window.RUWAI_AUTH,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 var $=function(i){return document.getElementById(i)};
 var body=document.body,cv=$('sand'),ctx=cv.getContext('2d'),glow=$('glow'),plight=$('plight'),hint=$('hint'),slot=$('logo-slot'),login=$('login');
+<script>
+(function initRuwaiHumasButton() {
+  const AUTH = window.RUWAI_AUTH || {};
 
+  function setHumasMsg(msg, isError = true) {
+    const el = document.getElementById('humasDirectMsg');
+    if (!el) return;
+    if (!msg) {
+      el.style.display = 'none';
+      el.textContent = '';
+      return;
+    }
+    el.style.display = 'block';
+    el.style.color = isError ? '#fda4af' : '#86efac';
+    el.textContent = msg;
+  }
+
+  window.toggleHumasDirectBox = function(forceState) {
+    const box = document.getElementById('humasDirectBox');
+    const input = document.getElementById('humasDirectCode');
+    if (!box) return;
+    const willOpen = typeof forceState === 'boolean'
+      ? forceState
+      : (box.style.display === 'none' || !box.style.display);
+
+    box.style.display = willOpen ? 'block' : 'none';
+    setHumasMsg('');
+    if (willOpen && input) {
+      setTimeout(() => input.focus(), 40);
+    }
+  };
+
+  window.submitHumasDirectAccess = async function() {
+    const input = document.getElementById('humasDirectCode');
+    const btn = document.getElementById('btnSubmitHumasDirect');
+    const code = (input?.value || '').trim();
+
+    if (!code) {
+      setHumasMsg('Masukkan kode akses Humas atau Admin terlebih dahulu.');
+      input?.focus();
+      return;
+    }
+
+    if (!AUTH.endpoint) {
+      setHumasMsg('Endpoint Google Apps Script belum dikonfigurasi.');
+      return;
+    }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Memeriksa...';
+    }
+    setHumasMsg('');
+
+    try {
+      const res = await fetch(AUTH.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'direct_login',
+          step: 'direct_login',
+          access_code: code,
+          requested_role: 'humas'
+        })
+      });
+
+      const data = await res.json();
+      const token = data.token || data.session_token || '';
+      if (!res.ok || data.status !== 'ok' || !token) {
+        throw new Error(data.error || data.message || 'Kode akses tidak valid.');
+      }
+
+      localStorage.setItem(AUTH.tokenKey || 'ruwai_token', token);
+      localStorage.setItem(AUTH.emailKey || 'ruwai_email', data.email || 'humas-lampung@bps.go.id');
+      localStorage.setItem(AUTH.roleKey || 'ruwai_role', data.role || 'humas');
+      localStorage.setItem(AUTH.satkerKey || 'ruwai_satker', data.satker || '1800');
+
+      setHumasMsg('Akses diverifikasi, mengalihkan ke dashboard...', false);
+      window.location.replace(AUTH.redirect || 'dashboard.html');
+    } catch (err) {
+      setHumasMsg(err.message || 'Gagal memverifikasi kode akses.');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Masuk';
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const triggerBtn = document.getElementById('btnHumasAccess');
+    if (triggerBtn && !triggerBtn.dataset.bound) {
+      triggerBtn.dataset.bound = '1';
+      triggerBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.toggleHumasDirectBox();
+      });
+    }
+  });
+})();
+</script>
+            
 /* ============ 1. MESIN PASIR — logo BPS silver yang luruh jadi pasir ============ */
 var W=0,H=0,DPR=1,box={x:0,y:0,w:0,h:0},P=null,N=0,ASPECT=1.29,COV=.5;
 var pointer={x:-9999,y:-9999,vx:0,vy:0,active:false,overCard:false};
