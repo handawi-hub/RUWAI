@@ -118,6 +118,15 @@ box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(255,255,255,.
 .control input:focus{border-color:rgba(45,149,202,.75);background:rgba(45,149,202,.08);box-shadow:0 0 0 3px rgba(45,149,202,.16)}
 .control:focus-within>svg.lead{stroke:#9fd4ef}
 .control input[type=password]{padding-right:40px;letter-spacing:.18em}
+.control input.otp-input{letter-spacing:.42em;font-weight:700;font-size:17px;text-align:center;padding-left:36px;padding-right:24px;font-variant-numeric:tabular-nums}
+.step-panel{transition:opacity .28s ease,transform .28s ease}
+.step-panel[hidden]{display:none}
+.otp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;font-size:10.5px;color:var(--dim)}
+.btn-ghost{background:none;border:0;padding:0;color:#9fd4ef;font:500 10.5px var(--ui);cursor:pointer;text-decoration:underline;text-underline-offset:3px;transition:opacity .2s}
+.btn-ghost:hover:not([disabled]){opacity:.8}
+.btn-ghost[disabled]{color:var(--faint);text-decoration:none;cursor:not-allowed}
+.email-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(45,149,202,.12);border:1px solid rgba(45,149,202,.28);color:#cbe8f7;font-size:11px;margin-bottom:12px;max-width:100%}
+.email-pill span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .peek{position:absolute;right:6px;width:30px;height:30px;display:grid;place-items:center;border:0;border-radius:8px;background:transparent;cursor:pointer;color:var(--s4);transition:color .2s,background .2s}
 .peek:hover{color:var(--s1);background:rgba(255,255,255,.06)}
 .peek svg{width:16px;height:16px;stroke:currentColor;fill:none}
@@ -207,36 +216,54 @@ body.ready .login{transform:none}
       <div class="mark" role="img" aria-label="Logo BPS"></div>
       <div class="cid"><b>RUWAI</b>Portal Humas</div>
     </div>
-    <span class="badge">Akses Internal Terbatas</span>
+    <span class="badge">Autentikasi Email Pegawai</span>
     <h2 id="login-title">Masuk ke RUWAI</h2>
-    <p class="sub">Gunakan kredensial Humas BPS Provinsi Lampung untuk membuka dashboard pemantauan.</p>
+    <p class="sub" id="login-sub">Masukkan email resmi <b>@bps.go.id</b> untuk menerima kode verifikasi sekali pakai (OTP).</p>
     <form id="form" novalidate>
-      <div class="field" id="f-user">
-        <label for="user">Username Pengguna</label>
-        <div class="control">
-          <svg class="lead" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/></svg>
-          <input id="user" name="username" type="text" autocomplete="username" placeholder="mis. humas" spellcheck="false" required>
+      <!-- TAHAP 1: INPUT EMAIL @bps.go.id -->
+      <div class="step-panel" id="step-email">
+        <div class="field" id="f-email">
+          <label for="email">Email Resmi Pegawai BPS</label>
+          <div class="control">
+            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="nama.pegawai@bps.go.id" spellcheck="false" required>
+          </div>
+          <div class="err" id="err-email">Wajib menggunakan email resmi @bps.go.id.</div>
         </div>
-        <div class="err">Username wajib diisi.</div>
-      </div>
-      <div class="field" id="f-pass">
-        <label for="pass">Kata Sandi</label>
-        <div class="control">
-          <svg class="lead" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.4"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/></svg>
-          <input id="pass" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
-          <button class="peek" type="button" id="peek" aria-label="Tampilkan kata sandi" aria-pressed="false"><svg id="eye" viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <div class="row">
+          <label class="check"><input type="checkbox" id="remember" checked><span class="box"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>Ingat email di perangkat ini</label>
+          <a class="link" href="#bantuan">Butuh akses?</a>
         </div>
-        <div class="err">Kata sandi wajib diisi.</div>
-        <div class="caps" id="caps">Caps Lock aktif</div>
       </div>
-      <div class="row">
-        <label class="check"><input type="checkbox" id="remember"><span class="box"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg></span>Ingat perangkat</label>
-        <a class="link" href="#bantuan">Lupa sandi?</a>
+
+      <!-- TAHAP 2: INPUT KODE OTP 6-DIGIT -->
+      <div class="step-panel" id="step-otp" hidden>
+        <div class="email-pill">
+          <span id="otp-target-email">pegawai@bps.go.id</span>
+          <button type="button" class="btn-ghost" id="btn-change-email">Ganti</button>
+        </div>
+        <div class="field" id="f-otp">
+          <label for="otp">Kode Verifikasi 6-Digit (OTP)</label>
+          <div class="control">
+            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z"/><path d="M9 12l2 2 4-4"/></svg>
+            <input id="otp" class="otp-input" name="otp" type="text" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" placeholder="••••••">
+          </div>
+          <div class="err" id="err-otp">Masukkan 6 digit angka kode OTP dari email Anda.</div>
+          <div class="otp-meta">
+            <span>Berlaku 10 menit</span>
+            <button type="button" class="btn-ghost" id="btn-resend-otp" disabled>Kirim ulang (60d)</button>
+          </div>
+        </div>
       </div>
-      <button class="submit" type="submit" id="submit"><span class="spin"></span><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l4 4-4 4"/><path d="M14 12H3.5"/></svg><span id="submit-label">Masuk ke Portal RUWAI</span></button>
+
+      <button class="submit" type="submit" id="submit">
+        <span class="spin"></span>
+        <svg id="submit-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        <span id="submit-label">Kirim Kode OTP</span>
+      </button>
       <p class="status" id="status" role="status" aria-live="polite"></p>
     </form>
-    <div class="card-foot"><span>v2.0 · Internal</span><a href="#bantuan">Hubungi admin</a></div>
+    <div class="card-foot"><span>v6.8.0 · RBAC Internal</span><a href="#bantuan">Hubungi admin</a></div>
   </section>
 
   <div class="foot-l rv" style="--i:5">Sistem Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung</div>
@@ -244,10 +271,19 @@ body.ready .login{transform:none}
 </div>
 
 <script>
-/* ===== KONFIGURASI — cukup ubah blok ini (atau timpa dari file lain sebelum skrip utama) =====
-   demo:true  -> pratinjau UI: transisi masuk dijalankan lalu halaman disusun ulang (tanpa server)
-   demo:false -> kirim POST JSON {username,password} ke endpoint, harapkan 200 {token} */
-window.RUWAI_AUTH=Object.assign({demo:false,endpoint:'/api/auth/login',redirect:'dashboard.html',tokenKey:'ruwai_token',maxTry:5,lockSec:30,revealMs:2000},window.RUWAI_AUTH||{});
+/* ===== KONFIGURASI BACKEND GOOGLE APPS SCRIPT RUWAI (v6.7.0 / v6.8.0) =====
+   Ganti endpoint dengan URL Web App deployment aktif Google Apps Script Anda */
+window.RUWAI_AUTH=Object.assign({
+  demo:false,
+  endpoint:'https://script.google.com/macros/s/AKfycbx_GANTI_DENGAN_DEPLOYMENT_ID_RUWAI/exec',
+  redirect:'index.html',
+  tokenKey:'ruwai_token',
+  emailKey:'ruwai_email',
+  roleKey:'ruwai_role',
+  satkerKey:'ruwai_satker',
+  resendCooldownSec:60,
+  revealMs:2000
+},window.RUWAI_AUTH||{});
 </script>
 <script>
 (function(){'use strict';
@@ -463,78 +499,310 @@ var clock=$('clock');
 function tickClock(){try{clock.textContent='Bandar Lampung · '+new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jakarta',hour12:false}).format(new Date())+' WIB'}catch(e){}}
 tickClock();setInterval(tickClock,15000);
 
-/* ============ 3. FORM LOGIN ============ */
-// dukung ?next=halaman.html — hanya path relatif, cegah open redirect
-try{var nx=new URLSearchParams(location.search).get('next');if(nx&&/^[A-Za-z0-9_\-./]+$/.test(nx)&&nx.indexOf('..')===-1)AUTH.redirect=nx}catch(e){}
-var form=$('form'),user=$('user'),pass=$('pass'),fUser=$('f-user'),fPass=$('f-pass'),peek=$('peek'),eye=$('eye'),caps=$('caps'),btn=$('submit'),btnLabel=$('submit-label'),status=$('status'),remember=$('remember');
-var LBL='Masuk ke Portal RUWAI',UKEY='ruwai_user',tries=0,lockT=0;
-var EO='<path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>';
-var EF='<path d="M4 4l16 16"/><path d="M9.6 5.9A9.6 9.6 0 0 1 12 5.8c6 0 9.5 6.2 9.5 6.2a17 17 0 0 1-3.3 4"/><path d="M6.4 7.9A16.6 16.6 0 0 0 2.5 12S6 18.2 12 18.2a9.7 9.7 0 0 0 3.9-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
-try{var su=localStorage.getItem(UKEY);if(su){user.value=su;remember.checked=true}}catch(e){}
+/* ============ 3. FORM LOGIN EMAIL OTP (@bps.go.id) & RBAC ============ */
+// Dukung ?next=halaman.html — hanya path relatif aman, cegah open redirect
+try{
+  var nx=new URLSearchParams(location.search).get('next');
+  if(nx&&/^[A-Za-z0-9_\-./]+$/.test(nx)&&nx.indexOf('..')===-1)AUTH.redirect=nx;
+}catch(e){}
 
-peek.addEventListener('click',function(){
-  var show=pass.type==='password';pass.type=show?'text':'password';pass.style.letterSpacing=show?'.01em':'';
-  eye.innerHTML=show?EF:EO;peek.setAttribute('aria-pressed',String(show));
-  peek.setAttribute('aria-label',show?'Sembunyikan kata sandi':'Tampilkan kata sandi');pass.focus();
-});
-function capsCheck(e){caps.classList.toggle('on',!!(e.getModifierState&&e.getModifierState('CapsLock')))}
-pass.addEventListener('keyup',capsCheck);pass.addEventListener('keydown',capsCheck);
-pass.addEventListener('blur',function(){caps.classList.remove('on')});
-[user,pass].forEach(function(el){el.addEventListener('input',function(){el.closest('.field').classList.remove('invalid');if(!lockT)status.className='status'})});
+var form=$('form'),
+    stepEmailPanel=$('step-email'),
+    stepOtpPanel=$('step-otp'),
+    emailInput=$('email'),
+    otpInput=$('otp'),
+    fEmail=$('f-email'),
+    fOtp=$('f-otp'),
+    errEmail=$('err-email'),
+    errOtp=$('err-otp'),
+    targetEmailBadge=$('otp-target-email'),
+    btnChangeEmail=$('btn-change-email'),
+    btnResendOtp=$('btn-resend-otp'),
+    btn=$('submit'),
+    btnIcon=$('submit-icon'),
+    btnLabel=$('submit-label'),
+    loginSub=$('login-sub'),
+    status=$('status'),
+    remember=$('remember');
+
+var UKEY='ruwai_saved_email';
+var currentStep='email'; // 'email' | 'otp'
+var activeEmail='';
+var resendTimer=null;
+
+var ICON_SEND='<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>';
+var ICON_VERIFY='<path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10 8l4 4-4 4"/><path d="M14 12H3.5"/>';
+
+try{
+  var savedEmail=localStorage.getItem(UKEY);
+  if(savedEmail){emailInput.value=savedEmail;remember.checked=true;}
+}catch(e){}
+
+function isValidBpsEmail(val){
+  return /^[a-z0-9._%+-]+@bps\.go\.id$/i.test(String(val||'').trim());
+}
+
+function inferSatkerFromEmail(email){
+  // Opsional: jika backend belum mengembalikan satker, default ke BPS Provinsi Lampung (1800)
+  return '1800';
+}
 
 function say(m,k){status.textContent=m;status.className='status show '+(k||'')}
-function done(m,k){btn.classList.remove('loading');btn.disabled=false;btnLabel.textContent=LBL;if(m)say(m,k)}
-function lock(){
-  var until=Date.now()+AUTH.lockSec*1000;btn.disabled=true;btn.classList.remove('loading');
-  (function t(){
-    var s=Math.ceil((until-Date.now())/1000);
-    if(s<=0){lockT=0;tries=0;done('Silakan coba lagi.');return}
-    btnLabel.textContent='Terkunci · '+s+' dtk';say('Terlalu banyak percobaan gagal. Tunggu '+s+' detik.','bad');
-    lockT=setTimeout(t,400);
-  })();
+function clearStatus(){status.className='status';status.textContent=''}
+
+function setLoading(isLoading,labelText){
+  btn.disabled=isLoading;
+  btn.classList.toggle('loading',isLoading);
+  if(labelText)btnLabel.textContent=labelText;
 }
-function gagal(m){
-  tries++;done();form.classList.remove('shake');void form.offsetWidth;form.classList.add('shake');
-  if(tries>=AUTH.maxTry){lock();return}
-  say(m+' (sisa percobaan: '+(AUTH.maxTry-tries)+')','bad');pass.focus();pass.select();
+
+function shakeForm(){
+  form.classList.remove('shake');
+  void form.offsetWidth;
+  form.classList.add('shake');
 }
-function sukses(token){
-  tries=0;
+
+function startResendCooldown(sec){
+  clearInterval(resendTimer);
+  var left=sec||AUTH.resendCooldownSec||60;
+  btnResendOtp.disabled=true;
+  btnResendOtp.textContent='Kirim ulang ('+left+'d)';
+  resendTimer=setInterval(function(){
+    left--;
+    if(left<=0){
+      clearInterval(resendTimer);
+      btnResendOtp.disabled=false;
+      btnResendOtp.textContent='Kirim ulang kode OTP';
+    }else{
+      btnResendOtp.textContent='Kirim ulang ('+left+'d)';
+    }
+  },1000);
+}
+
+function goToStepEmail(){
+  currentStep='email';
+  clearInterval(resendTimer);
+  stepOtpPanel.hidden=true;
+  stepEmailPanel.hidden=false;
+  otpInput.value='';
+  fOtp.classList.remove('invalid');
+  loginSub.innerHTML='Masukkan email resmi <b>@bps.go.id</b> untuk menerima kode verifikasi sekali pakai (OTP).';
+  btnIcon.innerHTML=ICON_SEND;
+  setLoading(false,'Kirim Kode OTP');
+  clearStatus();
+  emailInput.focus();
+}
+
+function goToStepOtp(emailVal){
+  currentStep='otp';
+  activeEmail=emailVal;
+  targetEmailBadge.textContent=emailVal;
+  stepEmailPanel.hidden=true;
+  stepOtpPanel.hidden=false;
+  otpInput.value='';
+  fOtp.classList.remove('invalid');
+  loginSub.innerHTML='Masukkan 6 digit kode OTP yang telah dikirimkan ke kotak masuk email BPS Anda.';
+  btnIcon.innerHTML=ICON_VERIFY;
+  setLoading(false,'Verifikasi & Masuk');
+  startResendCooldown(AUTH.resendCooldownSec||60);
+  setTimeout(function(){otpInput.focus();},50);
+}
+
+emailInput.addEventListener('input',function(){
+  fEmail.classList.remove('invalid');
+  clearStatus();
+});
+
+otpInput.addEventListener('input',function(){
+  // Hanya izinkan karakter numerik 0-9
+  this.value=this.value.replace(/[^0-9]/g,'').slice(0,6);
+  fOtp.classList.remove('invalid');
+  clearStatus();
+});
+
+btnChangeEmail.addEventListener('click',function(){
+  if(btn.disabled)return;
+  goToStepEmail();
+});
+
+// Fungsi helper komunikasi dengan Google Apps Script Web App (text/plain menghindari CORS preflight OPTIONS)
+function callRuwaiGas(payloadObj){
+  return fetch(AUTH.endpoint,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(payloadObj)
+  }).then(function(r){
+    if(!r.ok)throw new Error('Server Apps Script merespons kode HTTP '+r.status+'.');
+    return r.json();
+  });
+}
+
+function requestOtp(emailVal,isResend){
+  setLoading(true,isResend?'Mengirim ulang…':'Mengirim OTP…');
+  say('Mengirim kode verifikasi ke '+emailVal+'…');
+
+  if(AUTH.demo){
+    setTimeout(function(){
+      if(!isResend)goToStepOtp(emailVal);
+      else{setLoading(false,'Verifikasi & Masuk');startResendCooldown(60);}
+      say('Mode Pratinjau: Kode OTP simulasi dikirim (gunakan 123456).','ok');
+    },800);
+    return;
+  }
+
+  // Mengirim action: "request_otp" dan step: "request_otp" agar kompatibel penuh dengan kontrak API & Kode.gs v6.8.0
+  callRuwaiGas({
+    action:'request_otp',
+    step:'request_otp',
+    email:emailVal
+  })
+  .then(function(d){
+    if(d&&(d.status==='otp_sent'||d.status==='success'||d.status==='ok')){
+      try{
+        if(remember.checked)localStorage.setItem(UKEY,emailVal);
+        else localStorage.removeItem(UKEY);
+      }catch(e){}
+      if(currentStep!=='otp')goToStepOtp(emailVal);
+      else{setLoading(false,'Verifikasi & Masuk');startResendCooldown(AUTH.resendCooldownSec||60);}
+      say(d.message||('Kode OTP 6-digit terkirim ke '+emailVal+'.'),'ok');
+    }else{
+      var msg=(d&&(d.message||d.error))||'Gagal mengirim kode OTP. Pastikan email terdaftar.';
+      setLoading(false,currentStep==='otp'?'Verifikasi & Masuk':'Kirim Kode OTP');
+      shakeForm();
+      say(msg,'bad');
+      if(currentStep==='email')emailInput.focus();
+    }
+  })
+  .catch(function(er){
+    setLoading(false,currentStep==='otp'?'Verifikasi & Masuk':'Kirim Kode OTP');
+    var m=(er&&er.message&&er.message!=='Failed to fetch')
+      ?er.message
+      :'Gagal terhubung ke endpoint Apps Script RUWAI. Pastikan URL deployment /exec aktif dan diakses via HTTPS.';
+    say(m,'bad');
+  });
+}
+
+btnResendOtp.addEventListener('click',function(){
+  if(btnResendOtp.disabled||btn.disabled||!activeEmail)return;
+  requestOtp(activeEmail,true);
+});
+
+function suksesLogin(respData,emailVal){
+  clearInterval(resendTimer);
+  var token=(respData&&respData.token)||'';
+  var role=String((respData&&respData.role)||'viewer').trim().toLowerCase();
+  var satker=String((respData&&respData.satker)||inferSatkerFromEmail(emailVal)).trim();
+  var verifiedEmail=String((respData&&respData.email)||emailVal).trim().toLowerCase();
+
   try{
-    var st=remember.checked?localStorage:sessionStorage;st.setItem(AUTH.tokenKey,token||'1');
-    if(remember.checked)localStorage.setItem(UKEY,user.value.trim());else localStorage.removeItem(UKEY);
+    localStorage.setItem(AUTH.tokenKey,token);
+    localStorage.setItem(AUTH.emailKey,verifiedEmail);
+    localStorage.setItem(AUTH.roleKey,role);
+    localStorage.setItem(AUTH.satkerKey,satker);
+    // Objek sesi terstruktur opsional untuk kemudahan pembacaan di index.html & virtual-office.html
+    localStorage.setItem('ruwai_session',JSON.stringify({
+      token:token,
+      email:verifiedEmail,
+      role:role,
+      satker:satker,
+      loginAt:new Date().toISOString()
+    }));
   }catch(e){}
-  btn.classList.remove('loading');btnLabel.textContent='Berhasil';
-  say(AUTH.demo?'Pratinjau UI: transisi masuk dijalankan. Setel RUWAI_AUTH.demo = false untuk login sungguhan.':'Berhasil masuk. Membuka dashboard…','ok');
-  body.classList.add('leaving');burst();
+
+  btn.classList.remove('loading');
+  btnLabel.textContent='Terverifikasi';
+  say('Autentikasi berhasil ('+role.toUpperCase()+'). Membuka dashboard RUWAI…','ok');
+  body.classList.add('leaving');
+  burst();
+
   setTimeout(function(){
-    if(AUTH.demo){body.classList.remove('leaving');restart();done();pass.value=''}
-    else location.assign(AUTH.redirect);
+    if(AUTH.demo){
+      body.classList.remove('leaving');
+      restart();
+      goToStepEmail();
+    }else{
+      location.assign(AUTH.redirect);
+    }
   },reduce?250:1500);
 }
-form.addEventListener('submit',function(e){
-  e.preventDefault();if(btn.disabled)return;
-  var ok=true;
-  if(!user.value.trim()){fUser.classList.add('invalid');ok=false}
-  if(!pass.value){fPass.classList.add('invalid');ok=false}
-  if(!ok){say('Lengkapi kredensial terlebih dahulu.','bad');(user.value.trim()?pass:user).focus();return}
-  btn.classList.add('loading');btn.disabled=true;btnLabel.textContent='Memverifikasi…';say('Menghubungkan ke layanan autentikasi…');
-  if(AUTH.demo){setTimeout(function(){sukses()},1100);return}
-  /* === TITIK INTEGRASI: sesuaikan bila API Humas memakai bentuk lain === */
-  fetch(AUTH.endpoint,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},credentials:'include',
-    body:JSON.stringify({username:user.value.trim(),password:pass.value})})
-  .then(function(r){
-    var er;
-    if(r.status===401||r.status===403){er=new Error('Username atau kata sandi salah.');er.bad=1;throw er}
-    if(r.status===429)throw new Error('Terlalu banyak percobaan. Coba lagi beberapa saat.');
-    if(!r.ok)throw new Error('Layanan menolak permintaan (kode '+r.status+').');
-    return r.json().catch(function(){return{}});
+
+function verifyOtp(emailVal,otpVal){
+  setLoading(true,'Memverifikasi OTP…');
+  say('Memvalidasi kode OTP dengan server RUWAI…');
+
+  if(AUTH.demo){
+    setTimeout(function(){
+      if(otpVal==='123456'){
+        suksesLogin({status:'success',token:'demo-token-bps-1800',email:emailVal,role:'admin',satker:'1800'},emailVal);
+      }else{
+        setLoading(false,'Verifikasi & Masuk');
+        shakeForm();
+        say('Mode Pratinjau: Masukkan 123456 untuk simulasi berhasil.','bad');
+        otpInput.focus();otpInput.select();
+      }
+    },900);
+    return;
+  }
+
+  // Mengirim action: "verify_otp" dan step: "verify_otp" agar kompatibel penuh dengan kontrak API & Kode.gs v6.8.0
+  callRuwaiGas({
+    action:'verify_otp',
+    step:'verify_otp',
+    email:emailVal,
+    otp:otpVal
   })
-  .then(function(d){sukses(d.token)})
+  .then(function(d){
+    if(d&&(d.status==='success'||d.status==='ok')&&d.token){
+      suksesLogin(d,emailVal);
+    }else{
+      var msg=(d&&(d.message||d.error))||'Kode OTP tidak valid atau sudah kedaluwarsa.';
+      setLoading(false,'Verifikasi & Masuk');
+      fOtp.classList.add('invalid');
+      errOtp.textContent=msg;
+      shakeForm();
+      say(msg,'bad');
+      otpInput.focus();
+      otpInput.select();
+    }
+  })
   .catch(function(er){
-    var m=(er&&er.message&&er.message!=='Failed to fetch')?er.message:'Layanan autentikasi tidak terjangkau. Periksa koneksi atau hubungi admin.';
-    if(er&&er.bad)gagal(m);else{done(m,'bad');pass.focus()}
+    setLoading(false,'Verifikasi & Masuk');
+    var m=(er&&er.message&&er.message!=='Failed to fetch')
+      ?er.message
+      :'Gagal memverifikasi OTP ke server Apps Script. Periksa koneksi internet Anda.';
+    say(m,'bad');
   });
+}
+
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  if(btn.disabled)return;
+
+  if(currentStep==='email'){
+    var emailVal=emailInput.value.trim().toLowerCase();
+    if(!isValidBpsEmail(emailVal)){
+      fEmail.classList.add('invalid');
+      errEmail.textContent=emailVal
+        ?'Akses ditolak. Wajib menggunakan email resmi @bps.go.id.'
+        :'Alamat email @bps.go.id wajib diisi.';
+      shakeForm();
+      say('Gunakan alamat email resmi pegawai @bps.go.id.','bad');
+      emailInput.focus();
+      return;
+    }
+    requestOtp(emailVal,false);
+  }else{
+    var otpVal=otpInput.value.replace(/[^0-9]/g,'').trim();
+    if(otpVal.length!==6){
+      fOtp.classList.add('invalid');
+      errOtp.textContent='Kode OTP harus terdiri dari 6 digit angka.';
+      shakeForm();
+      say('Masukkan 6 digit kode OTP yang dikirim ke email Anda.','bad');
+      otpInput.focus();
+      return;
+    }
+    verifyOtp(activeEmail,otpVal);
+  }
 });
 })();
 </script>
