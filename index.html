@@ -310,10 +310,7 @@ window.RUWAI_AUTH=Object.assign({
   roleKey:'ruwai_role',
   satkerKey:'ruwai_satker',
   resendCooldownSec:60,
-  revealMs:2000,
-  adminUser:'Admin',
-  adminPass:'bps1800',
-  adminEmail:'admin@bps.go.id'
+   revealMs:2000
 },window.RUWAI_AUTH||{});
 </script>
 <script>
@@ -859,18 +856,24 @@ function loginAdmin(){
   if(bad){shakeForm();say('Lengkapi username dan password admin.','bad');(u?adminPass:adminUser).focus();return}
   setLoading(true,'Memeriksa…');
   say('Memeriksa kredensial administrator…');
-  setTimeout(function(){
-    if(u.toLowerCase()===String(AUTH.adminUser).toLowerCase()&&p===String(AUTH.adminPass)){
-      suksesLogin({status:'success',token:adminToken(),email:AUTH.adminEmail,role:'admin',satker:'1800'},AUTH.adminEmail);
+  callRuwaiGas({action:'admin_login',step:'admin_login',username:u,password:p})
+  .then(function(d){
+    if(d&&(d.status==='success'||d.status==='ok')&&d.token){
+      suksesLogin(d,d.email||u);
     }else{
+      var msg=(d&&(d.message||d.error))||'Username atau password salah.';
       setLoading(false,'Masuk sebagai Admin');
       fAdminPass.classList.add('invalid');
-      errAdminPass.textContent='Username atau password salah.';
+      errAdminPass.textContent=msg;
       shakeForm();
-      say('Username atau password admin salah.','bad');
+      say(msg,'bad');
       adminPass.focus();adminPass.select();
     }
-  },450);
+  })
+  .catch(function(er){
+    setLoading(false,'Masuk sebagai Admin');
+    say((er&&er.message&&er.message!=='Failed to fetch')?er.message:'Gagal terhubung ke server RUWAI. Periksa koneksi internet Anda.','bad');
+  });
 }
 btnAdmin.addEventListener('click',function(){
   if(btn.disabled)return;
