@@ -158,8 +158,12 @@ box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(255,255,255,.
 .status.ok{border-left-color:var(--green)}.status.bad{border-left-color:#e26950}
 #form.shake{animation:shk .45s}
 @keyframes shk{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
-.card-foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--hair2);display:flex;justify-content:space-between;gap:10px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(214,231,242,.32)}
+.card-foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--hair2);display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(214,231,242,.32)}
+.card-foot a,.foot-btn{display:inline-flex;align-items:center;justify-content:center;height:30px;line-height:1}
 .card-foot a{color:rgba(214,231,242,.5);text-decoration:none;transition:color .2s}.card-foot a:hover{color:#9fd4ef}
+.foot-btn{padding:0 16px;border:0;border-radius:9px;cursor:pointer;background:#fff;color:#06202f;font-family:var(--ui);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 6px 16px rgba(0,0,0,.35);transition:transform .18s,box-shadow .25s,background .2s}
+.foot-btn:hover{background:#eaf2f8;transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.45)}
+.foot-btn:active{transform:none}
 :focus-visible{outline:2px solid rgba(159,212,239,.75);outline-offset:3px;border-radius:6px}
 @media(min-width:961px){.login{max-height:calc(100vh - 128px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(190,214,232,.22) transparent}}
 @media(min-width:961px) and (max-height:800px){.login{padding:16px 20px 16px}.login h2{font-size:21px;margin:10px 0 4px}.sub{margin-bottom:14px}.field{margin-bottom:11px}.row{margin:2px 0 13px}.card-foot{margin-top:12px;padding-top:11px}}
@@ -216,7 +220,7 @@ body.ready .login{transform:none}
       <div class="mark" role="img" aria-label="Logo BPS"></div>
       <div class="cid"><b>RUWAI</b>Portal Humas</div>
     </div>
-    <span class="badge">Autentikasi Email Pegawai</span>
+   <span class="badge" id="badge">Autentikasi Email Pegawai</span>
     <h2 id="login-title">Masuk ke RUWAI</h2>
     <p class="sub" id="login-sub">Masukkan email resmi <b>@bps.go.id</b> untuk menerima kode verifikasi sekali pakai (OTP).</p>
     <form id="form" novalidate>
@@ -256,6 +260,30 @@ body.ready .login{transform:none}
         </div>
       </div>
 
+            <!-- TAHAP ADMIN: USERNAME & PASSWORD -->
+      <div class="step-panel" id="step-admin" hidden>
+        <div class="field" id="f-admin-user">
+          <label for="admin-user">Username Admin</label>
+          <div class="control">
+            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+            <input id="admin-user" name="username" type="text" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="Username">
+          </div>
+          <div class="err" id="err-admin-user">Username wajib diisi.</div>
+        </div>
+        <div class="field" id="f-admin-pass">
+          <label for="admin-pass">Password</label>
+          <div class="control">
+            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            <input id="admin-pass" name="password" type="password" autocomplete="current-password" placeholder="••••••••">
+            <button type="button" class="peek" id="peek" aria-label="Tampilkan password">
+              <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="caps" id="caps">Caps Lock aktif</div>
+          <div class="err" id="err-admin-pass">Password wajib diisi.</div>
+        </div>
+        <div class="row"><button type="button" class="btn-ghost" id="btn-back-email">← Kembali ke login email</button></div>
+      </div>
       <button class="submit" type="submit" id="submit">
         <span class="spin"></span>
         <svg id="submit-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
@@ -263,7 +291,7 @@ body.ready .login{transform:none}
       </button>
       <p class="status" id="status" role="status" aria-live="polite"></p>
     </form>
-    <div class="card-foot"><span>v6.8.0 · RBAC Internal</span><a href="#bantuan">Hubungi admin</a></div>
+   <div class="card-foot"><button type="button" class="foot-btn" id="btn-admin">Akses Admin</button><a href="#bantuan">Hubungi admin</a></div>
   </section>
 
   <div class="foot-l rv" style="--i:5">Sistem Pemantauan Media &amp; Analisis Berita BPS Provinsi Lampung</div>
@@ -282,7 +310,10 @@ window.RUWAI_AUTH=Object.assign({
   roleKey:'ruwai_role',
   satkerKey:'ruwai_satker',
   resendCooldownSec:60,
-  revealMs:2000
+  revealMs:2000,
+  adminUser:'Admin',
+  adminPass:'bps1800',
+  adminEmail:'admin@bps.go.id'
 },window.RUWAI_AUTH||{});
 </script>
 <script>
@@ -583,9 +614,15 @@ function goToStepEmail(){
   currentStep='email';
   clearInterval(resendTimer);
   stepOtpPanel.hidden=true;
+  stepAdminPanel.hidden=true;
   stepEmailPanel.hidden=false;
   otpInput.value='';
   fOtp.classList.remove('invalid');
+  adminUser.value='';adminPass.value='';
+  setPeek(false);
+  fAdminUser.classList.remove('invalid');fAdminPass.classList.remove('invalid');
+  capsHint.classList.remove('on');
+  badgeEl.textContent=BADGE_EMAIL;
   loginSub.innerHTML='Masukkan email resmi <b>@bps.go.id</b> untuk menerima kode verifikasi sekali pakai (OTP).';
   btnIcon.innerHTML=ICON_SEND;
   setLoading(false,'Kirim Kode OTP');
@@ -774,9 +811,87 @@ function verifyOtp(emailVal,otpVal){
   });
 }
 
+/* ===== LOGIN ADMIN (username + password) ===== */
+var stepAdminPanel=$('step-admin'),
+    adminUser=$('admin-user'),
+    adminPass=$('admin-pass'),
+    fAdminUser=$('f-admin-user'),
+    fAdminPass=$('f-admin-pass'),
+    errAdminUser=$('err-admin-user'),
+    errAdminPass=$('err-admin-pass'),
+    btnAdmin=$('btn-admin'),
+    btnBackEmail=$('btn-back-email'),
+    peek=$('peek'),
+    capsHint=$('caps'),
+    badgeEl=$('badge'),
+    BADGE_EMAIL='Autentikasi Email Pegawai',
+    BADGE_ADMIN='Akses Administrator',
+    ICON_EYE='<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    ICON_EYE_OFF='<path d="M3 3l18 18"/><path d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-3.2 3.9"/><path d="M6.6 7.6C3.9 9.3 2 12 2 12s3.5 6 10 6c1.6 0 3-.4 4.2-.9"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
+
+function setPeek(show){
+  adminPass.type=show?'text':'password';
+  peek.setAttribute('aria-label',show?'Sembunyikan password':'Tampilkan password');
+  peek.firstElementChild.innerHTML=show?ICON_EYE_OFF:ICON_EYE;
+}
+function adminToken(){
+  var a=new Uint8Array(16);
+  try{crypto.getRandomValues(a)}catch(e){for(var i=0;i<16;i++)a[i]=Math.floor(Math.random()*256)}
+  return 'admin-'+Array.prototype.map.call(a,function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+}
+function goToStepAdmin(){
+  currentStep='admin';
+  clearInterval(resendTimer);
+  stepEmailPanel.hidden=true;
+  stepOtpPanel.hidden=true;
+  stepAdminPanel.hidden=false;
+  badgeEl.textContent=BADGE_ADMIN;
+  loginSub.innerHTML='Masuk dengan akun <b>administrator</b> RUWAI.';
+  btnIcon.innerHTML=ICON_VERIFY;
+  setLoading(false,'Masuk sebagai Admin');
+  clearStatus();
+  setTimeout(function(){adminUser.focus();},50);
+}
+function loginAdmin(){
+  var u=adminUser.value.trim(),p=adminPass.value,bad=false;
+  if(!u){fAdminUser.classList.add('invalid');errAdminUser.textContent='Username wajib diisi.';bad=true}
+  if(!p){fAdminPass.classList.add('invalid');errAdminPass.textContent='Password wajib diisi.';bad=true}
+  if(bad){shakeForm();say('Lengkapi username dan password admin.','bad');(u?adminPass:adminUser).focus();return}
+  setLoading(true,'Memeriksa…');
+  say('Memeriksa kredensial administrator…');
+  setTimeout(function(){
+    if(u.toLowerCase()===String(AUTH.adminUser).toLowerCase()&&p===String(AUTH.adminPass)){
+      suksesLogin({status:'success',token:adminToken(),email:AUTH.adminEmail,role:'admin',satker:'1800'},AUTH.adminEmail);
+    }else{
+      setLoading(false,'Masuk sebagai Admin');
+      fAdminPass.classList.add('invalid');
+      errAdminPass.textContent='Username atau password salah.';
+      shakeForm();
+      say('Username atau password admin salah.','bad');
+      adminPass.focus();adminPass.select();
+    }
+  },450);
+}
+btnAdmin.addEventListener('click',function(){
+  if(btn.disabled)return;
+  if(currentStep==='admin'){adminUser.focus();return}
+  goToStepAdmin();
+});
+btnBackEmail.addEventListener('click',function(){if(!btn.disabled)goToStepEmail()});
+peek.addEventListener('click',function(){setPeek(adminPass.type==='password');adminPass.focus()});
+adminUser.addEventListener('input',function(){fAdminUser.classList.remove('invalid');clearStatus()});
+adminPass.addEventListener('input',function(){fAdminPass.classList.remove('invalid');clearStatus()});
+['keydown','keyup'].forEach(function(ev){
+  adminPass.addEventListener(ev,function(e){
+    capsHint.classList.toggle('on',!!(e.getModifierState&&e.getModifierState('CapsLock')));
+  });
+});
+adminPass.addEventListener('blur',function(){capsHint.classList.remove('on')});
+
 form.addEventListener('submit',function(e){
   e.preventDefault();
   if(btn.disabled)return;
+  if(currentStep==='admin'){loginAdmin();return}
 
   if(currentStep==='email'){
     var emailVal=emailInput.value.trim().toLowerCase();
