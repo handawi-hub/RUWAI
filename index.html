@@ -442,7 +442,7 @@ function draw(time,ts){ts=ts||1;
           }
         }
       }
-     if(!leaving){var k=P.k[i]*ts;*ts;vx+=(tx-x)*k;vy+=(ty-y)*k}
+   if(!leaving){var k=P.k[i]*ts;vx+=(tx-x)*k;vy+=(ty-y)*k}
 vx*=dampT;vy*=dampT;x+=vx*ts;y+=vy*ts;
       var ex=x-tx,ey=y-ty;f2=Math.sqrt(ex*ex+ey*ey)/FADE;if(f2>1)f2=1;
       P.x[i]=x;P.y[i]=y;P.vx[i]=vx;P.vy[i]=vy;
