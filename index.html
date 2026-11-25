@@ -45,6 +45,37 @@ body{margin:0;background:var(--ink);color:var(--tx);font:15px/1.5 var(--ui);-web
 .scrim{position:fixed;inset:0;z-index:3;pointer-events:none;background:linear-gradient(90deg,rgba(3,15,25,.9),rgba(3,15,25,.52) 20%,transparent 44%),linear-gradient(0deg,rgba(3,15,25,.86),transparent 26%),linear-gradient(180deg,rgba(3,15,25,.66),transparent 22%);opacity:0;transition:opacity 1.4s ease}
 #plight{position:fixed;z-index:4;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;opacity:0;transition:opacity .6s;mix-blend-mode:screen;background:radial-gradient(circle,rgba(150,200,235,.1),rgba(45,149,202,.05) 42%,transparent 68%)}
 
+.ruwai-login-quote {
+  margin: 18px 0 0;
+  padding-left: 12px;
+  border-left: 1px solid rgba(148, 163, 184, 0.28);
+  max-width: 340px;
+}
+
+.ruwai-login-quote p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.55;
+  font-style: italic;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.ruwai-login-quote cite {
+  display: block;
+  margin-top: 6px;
+  font-size: 10px;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: rgba(148, 163, 184, 0.75);
+}
+
+@media (max-width: 900px) {
+  .ruwai-login-quote {
+    max-width: 100%;
+    margin-top: 14px;
+  }
+}
+
 /* urutan tampil: logo sendiri dulu, lalu semua elemen UI */
 .rv{opacity:0;transform:translateY(16px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease);transition-delay:calc(var(--i,0)*110ms)}
 .fd{opacity:0;transition:opacity 1.3s ease calc(var(--i,0)*110ms)}
@@ -221,6 +252,14 @@ body.ready .login{transform:none}
     <p class="rv" style="--i:3">Cara baru membaca pemberitaan. Tempat arsip bertemu analitik, dan angka bertemu narasi.</p>
     <div class="rule rv" style="--i:4"><i></i><span>Ruang Pemantauan Media</span></div>
   </section>
+
+  <blockquote class="ruwai-login-quote">
+  <p>
+    Tak ada pikiran atau karya yang benar-benar otonom di ruang hampa. Makna
+    tumbuh dari cara kita menata dan memberi napas baru pada sekitar.
+  </p>
+  <cite>— Julia Kristeva, <em>Sèméiôtikè</em> (1969)</cite>
+</blockquote>
 
   <div class="note n1 fd" style="--i:5"><span class="sq"></span><span><b>01 / Pemantauan</b>Media harian<br>terindeks</span></div>
   <div class="note n2 fd" style="--i:6"><span class="sq"></span><span><b>02 / Analitik</b>Sentimen &amp;<br>tren isu</span></div>
