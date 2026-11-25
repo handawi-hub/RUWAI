@@ -183,6 +183,22 @@ body.ready .login{transform:none}
 .foot-l{margin:34px 0 0;max-width:none}.foot-r{margin:12px 0 0;text-align:left}.clock{display:none}
 .scrim{background:linear-gradient(180deg,rgba(3,15,25,.84),rgba(3,15,25,.22) 38%,rgba(3,15,25,.46) 62%,rgba(3,15,25,.86))}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* ===== MODE RINGAN HP ===== */
+@media (max-width:960px),(hover:none) and (pointer:coarse) and (max-height:520px){
+  .noise,#plight{display:none}
+  #glow{filter:none}
+  .chip{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(8,28,44,.66)}
+  .login{-webkit-backdrop-filter:none;backdrop-filter:none;filter:none;
+    background:linear-gradient(180deg,rgba(9,29,45,.86),rgba(4,17,27,.92));
+    box-shadow:0 18px 44px rgba(0,0,0,.5),0 2px 0 rgba(255,255,255,.04) inset;
+    transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+  .card-head{-webkit-backdrop-filter:none;backdrop-filter:none}
+  .card-head::after{left:-60%;animation:glt 6.5s ease-in-out 3s infinite;will-change:transform}
+  @keyframes glt{0%{transform:translateX(0) skewX(-18deg)}35%,100%{transform:translateX(500%) skewX(-18deg)}}
+  .pulse{animation:none;position:relative}
+  .pulse::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--green);animation:plt 2.6s infinite}
+  @keyframes plt{0%{transform:scale(1);opacity:.6}70%,100%{transform:scale(3.3);opacity:0}}
+}
 </style>
 </head>
 <body>
@@ -316,6 +332,8 @@ window.RUWAI_AUTH=Object.assign({
 <script>
 (function(){'use strict';
 var AUTH=window.RUWAI_AUTH,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function isLite(){try{return matchMedia('(max-width:960px),(hover:none) and (pointer:coarse) and (max-height:520px)').matches}catch(e){return innerWidth<=960}}
+var LITE=isLite();
 var $=function(i){return document.getElementById(i)};
 var body=document.body,cv=$('sand'),ctx=cv.getContext('2d'),glow=$('glow'),plight=$('plight'),hint=$('hint'),slot=$('logo-slot'),login=$('login');
 
@@ -341,7 +359,8 @@ function build(img){
   var idx=[],i;for(i=0;i<mw*mh;i++)if(d[i*4+3]>60)idx.push(i);
   COV=idx.length/(mw*mh);
   var small=innerWidth<900,low=(navigator.hardwareConcurrency||8)<=4;
-  var target=small?15000:(low?24000:38000),pi=target/idx.length,cap=target+Math.ceil(Math.sqrt(target)*8)+32;
+ var weak=low||(navigator.deviceMemory||8)<=3;
+  var target=LITE?(weak?7000:11000):(small?15000:(low?24000:38000)),pi=target/idx.length,cap=target+Math.ceil(Math.sqrt(target)*8)+32;
   var F=function(){return new Float32Array(cap)};
   P={hx:F(),hy:F(),x:F(),y:F(),vx:F(),vy:F(),sx:F(),sy:F(),sw:F(),a0:F(),sz:F(),ph:F(),fq:F(),k:F(),u:F(),base:F(),cls:new Uint8Array(cap)};
   var n=0,j,m,p,px,py,r,g,b,c;
@@ -368,7 +387,7 @@ function build(img){
 
 function layout(scatter){
   var vw=innerWidth,vh=innerHeight;
-  DPR=Math.min(devicePixelRatio||1,2);W=vw;H=vh;
+  DPR=Math.min(devicePixelRatio||1,LITE?1.5:2);W=vw;H=vh;
   cv.width=Math.round(vw*DPR);cv.height=Math.round(vh*DPR);cv.style.width=vw+'px';cv.style.height=vh+'px';
   var lh,lw,cx,cy;
   if(vw<960&&slot){var r=slot.getBoundingClientRect();lh=Math.min(r.height*.98,vw*.86/ASPECT);lw=lh*ASPECT;cx=vw*.5;cy=r.top+r.height/2}
@@ -394,14 +413,14 @@ function placeNotes(){
   n2.style.left=(box.x+box.w*.4)+'px';n2.style.top=Math.max(78,box.y-58)+'px';
 }
 
-function draw(time){
+function draw(time,ts){ts=ts||1;
   ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,W,H);
   var lx=box.x,ly=box.y,lw=box.w,lh=box.h,mx=pointer.x,my=pointer.y;
   var near=pointer.active&&!pointer.overCard&&!reduce&&intro>=1,live=near&&!leaving;
   var R2=R*R,LR=R*2.3,LR2=LR*LR,px=parallax.x,py=parallax.y;
   var wvx=Math.max(-60,Math.min(60,pointer.vx)),wvy=Math.max(-60,Math.min(60,pointer.vy));
   var assembling=intro<1,arc=assembling?Math.sin(intro*Math.PI):0,fadeIn=assembling?Math.min(1,intro*2.6):1;
-  var sheen=.5+.62*Math.sin(time*.00032),alive=1-leave,damp=leaving?.978:DAMP,b,i;
+  var sheen=.5+.62*Math.sin(time*.00032),alive=1-leave,damp=leaving?.978:DAMP,b,i,dampT=ts===1?damp:Math.pow(damp,ts);
   for(b=0;b<BUCKETS;b++)bCount[b]=0;
   for(i=0;i<N;i+=stride){
     var wob=Math.sin(time*P.fq[i]+P.ph[i]);
@@ -418,13 +437,13 @@ function draw(time){
           var dd=Math.sqrt(d2)+.0001;light=1-dd/LR;light*=light;
           if(live&&d2<R2){ // angin: dorongan radial + searah gerak kursor + turbulensi
             var f=1-dd/R,push=f*f*FORCE/dd;
-            vx+=dx*push+wvx*f*.09+(Math.random()-.5)*f*1.6;
-            vy+=dy*push+wvy*f*.09+(Math.random()-.5)*f*1.6-f*.4;
+          vx+=(dx*push+wvx*f*.09+(Math.random()-.5)*f*1.6)*ts;
+            vy+=(dy*push+wvy*f*.09+(Math.random()-.5)*f*1.6-f*.4)*ts;
           }
         }
       }
-      if(!leaving){var k=P.k[i];vx+=(tx-x)*k;vy+=(ty-y)*k}
-      vx*=damp;vy*=damp;x+=vx;y+=vy;
+     if(!leaving){var k=P.k[i]*ts;*ts;vx+=(tx-x)*k;vy+=(ty-y)*k}
+vx*=dampT;vy*=dampT;x+=vx*ts;y+=vy*ts;
       var ex=x-tx,ey=y-ty;f2=Math.sqrt(ex*ex+ey*ey)/FADE;if(f2>1)f2=1;
       P.x[i]=x;P.y[i]=y;P.vx[i]=vx;P.vy[i]=vy;
       a=P.a0[i]*(1-f2*.94)*(.93+.07*wob)*alive;
@@ -450,14 +469,27 @@ function draw(time){
     for(var q=st;q<en;q+=3)ctx.fillRect(packBuf[q],packBuf[q+1],packBuf[q+2],packBuf[q+2]);
   }
 }
+var lastFrame=0,minDt=16,offCleared=false;
 function tick(now){
   raf=requestAnimationFrame(tick);
+  var ts=1;
+  if(LITE){
+    var dt=now-lastFrame;
+    if(dt<minDt-2)return;
+    ts=lastFrame?Math.min(3,Math.max(1,dt/16.67)):1;lastFrame=now;
+    if(intro>=1&&!leaving&&(box.y>H+R*2||box.y+box.h<-R*2)){
+      if(!offCleared){ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,W,H);offCleared=true}
+      return;
+    }
+    offCleared=false;
+  }
   if(intro<1){var lin=Math.min(1,(now-bornAt)/INTRO_MS);intro=lin>=1?1:1-Math.pow(1-lin,3)}
   if(leaving)leave=Math.min(1,(now-leaveAt)/1100);
-  parallax.x+=(parallax.tx-parallax.x)*.045;parallax.y+=(parallax.ty-parallax.y)*.045;
-  pointer.vx*=.88;pointer.vy*=.88;
-  var s=performance.now();draw(now-t0);fa+=performance.now()-s;fc++;
-  if(fc===90){if(fa/90>12&&stride===1)stride=2;fa=0;fc=0}
+  parallax.x+=(parallax.tx-parallax.x)*.045*ts;parallax.y+=(parallax.ty-parallax.y)*.045*ts;
+  var vd=ts===1?.88:Math.pow(.88,ts);pointer.vx*=vd;pointer.vy*=vd;
+  var s=performance.now();draw(now-t0,ts);fa+=performance.now()-s;fc++;
+  var win=LITE?45:90;
+  if(fc===win){var av=fa/win;if(LITE){if(minDt<30&&av>7)minDt=33.3;else if(av>16&&stride===1)stride=2}else if(av>12&&stride===1)stride=2;fa=0;fc=0}
 }
 /* transisi masuk: pasir meledak keluar lalu halaman memudar */
 function burst(){
@@ -492,8 +524,8 @@ function move(x,y,target){
   pointer.x=x;pointer.y=y;pointer.active=true;
   pointer.overCard=!!(target&&target.closest&&target.closest('.login'));
   parallax.tx=(x-W/2)*.016;parallax.ty=(y-H/2)*.012;
-  plight.style.transform='translate3d('+x+'px,'+y+'px,0)';plight.style.opacity=pointer.overCard?0:1;
-  if(pointer.overCard){var r=login.getBoundingClientRect();login.style.setProperty('--mx',(x-r.left)+'px');login.style.setProperty('--my',(y-r.top)+'px')}
+if(!LITE){plight.style.transform='translate3d('+x+'px,'+y+'px,0)';plight.style.opacity=pointer.overCard?0:1}
+if(!LITE&&pointer.overCard){var r=login.getBoundingClientRect();login.style.setProperty('--mx',(x-r.left)+'px');login.style.setProperty('--my',(y-r.top)+'px')}
   if(!hintGone&&!pointer.overCard&&x>box.x-R&&x<box.x+box.w+R&&y>box.y-R&&y<box.y+box.h+R){hintGone=true;setTimeout(function(){hint.classList.add('gone')},1400)}
 }
 addEventListener('pointermove',function(e){move(e.clientX,e.clientY,e.target)},{passive:true});
@@ -520,7 +552,13 @@ addEventListener('scroll',function(){
     glow.style.top=(box.y-box.h*.18)+'px';if(reduce)draw(0);
   });
 },{passive:true});
-var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){layout(false);if(reduce)draw(0)},160)});
+var rt,rw=innerWidth,rh=innerHeight;
+addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){
+  var w=innerWidth,h=innerHeight,nl=isLite();
+  if(nl!==LITE){LITE=nl;stride=1;minDt=16;lastFrame=0;if(img.naturalWidth)build(img)}
+  else if(LITE&&w===rw&&Math.abs(h-rh)<=160)return;
+  rw=w;rh=h;layout(false);if(reduce)draw(0)
+},LITE?260:160)});
 
 /* ============ 2. JAM WIB ============ */
 var clock=$('clock');
