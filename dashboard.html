@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'self'; form-action 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>RUWAI - Ruang Pemantauan Media & Analisis Berita BPS Provinsi Lampung</title>
 
     <!-- ===================================================================== -->
@@ -27,7 +29,7 @@
                 const token = (localStorage.getItem(TOKEN_KEY) || '').trim();
                 const email = (localStorage.getItem(EMAIL_KEY) || '').trim().toLowerCase();
 
-                if (!token || !email || !email.endsWith('@bps.go.id')) {
+                if (!token || !email || !/^[a-z0-9._%+-]+@bps\.go\.id$/.test(email)) {
                     redirectToLogin();
                     return;
                 }
@@ -713,8 +715,8 @@
                                 <span class="w-5 h-5 rounded-full bg-[#008FD5]/20 text-bps-blue flex items-center justify-center text-xs">2</span>
                                 <span>Apps Script Web App</span>
                             </div>
-                            <p class="text-xs text-slate-500 leading-relaxed">Jalur default menyuplai data grafik, jalur <code>?mode=agents</code> menyuplai status agen dengan Secret Payload Token.</p>
-                            <div class="bg-white p-2 rounded border border-[#008FD5]/20 font-mono text-[11px] text-bps-blue">⚡ GET .../exec (Secured Token)</div>
+                            <p class="text-xs text-slate-500 leading-relaxed">Jalur default menyuplai data grafik, jalur <code>?mode=agents</code> menyuplai status agen dengan Session Token.</p>
+                            <div class="bg-white p-2 rounded border border-[#008FD5]/20 font-mono text-[11px] text-bps-blue">⚡ GET .../exec (OTP Session Token)</div>
                         </div>
                         <div class="space-y-2 bg-[#68B92E]/[0.04] p-4 rounded-lg border border-[#68B92E]/20">
                             <div class="flex items-center space-x-2 text-slate-900 font-bold text-xs sm:text-sm">
@@ -825,6 +827,18 @@
         lucide.createIcons();
 
         // =========================================================================
+        // KEAMANAN HELPER (SANITASI URL & DOM)
+        // =========================================================================
+        function getSafeUrl(rawUrl) {
+            try {
+                const parsed = new URL(String(rawUrl || '').trim());
+                return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.href : '#';
+            } catch (_) {
+                return '#';
+            }
+        }
+
+        // =========================================================================
         // DARK / LIGHT THEME ENGINE (SINKRON DENGAN CHART.JS & LOCALSTORAGE)
         // =========================================================================
         function isDarkModeActive() {
@@ -901,11 +915,9 @@
         })();
 
         // =========================================================================
-        // API BRIDGE & KONFIGURASI SESI OTP
+        // API BRIDGE & KONFIGURASI SESI OTP (TANPA HARDCODED SECRET TOKEN)
         // =========================================================================
         const API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
-        const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
-        const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
 
         const RUWAI_KEYS = {
             loginPage: 'index.html',
@@ -926,12 +938,13 @@
         let selectedFileBase64 = null;
         let selectedFileMeta = null;
         let intervalsStarted = false;
+        let isPortalUnlocked = false;
 
         function getActiveRuwaiSession() {
             try {
                 const token = (localStorage.getItem(RUWAI_KEYS.token) || '').trim();
                 const email = (localStorage.getItem(RUWAI_KEYS.email) || '').trim().toLowerCase();
-                if (!token || !email || !email.endsWith('@bps.go.id')) return null;
+                if (!token || !email || !/^[a-z0-9._%+-]+@bps\.go\.id$/.test(email)) return null;
 
                 const role = (localStorage.getItem(RUWAI_KEYS.role) || 'viewer').trim().toLowerCase();
                 const satker = (localStorage.getItem(RUWAI_KEYS.satker) || '1800').trim();
@@ -942,7 +955,22 @@
             }
         }
 
+        function applyAdminVisibility(isAdmin) {
+            document.querySelectorAll('.admin-only').forEach(el => {
+                el.classList.toggle('hidden', !isAdmin);
+            });
+            if (!isAdmin) {
+                const bridgeSec = document.getElementById('section-bridge');
+                if (bridgeSec && !bridgeSec.classList.contains('hidden')) {
+                    switchTab('dashboard');
+                }
+            }
+        }
+
         function unlockPortal(sessionData) {
+            if (isPortalUnlocked) return;
+            isPortalUnlocked = true;
+
             const wrapper = document.getElementById('protectedAppWrapper');
             if (wrapper) wrapper.classList.remove('hidden');
 
@@ -952,11 +980,7 @@
                 userBadge.classList.remove('hidden');
             }
 
-            if (sessionData.isAdmin || localStorage.getItem('bps_lampung_admin_mode') === 'true') {
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-            } else {
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-            }
+            applyAdminVisibility(sessionData.isAdmin);
 
             initDropZoneDragEvents();
             fetchLiveMonitoringData(false);
@@ -995,6 +1019,10 @@
         }
 
         function switchTab(tabName) {
+            if (tabName === 'bridge') {
+                const session = getActiveRuwaiSession();
+                if (!session || !session.isAdmin) return;
+            }
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-bps-blue', 'text-white');
                 btn.classList.add('text-slate-600');
@@ -1049,8 +1077,13 @@
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 const validExtensions = ['pptx', 'ppt', 'pdf'];
+                const validMimeTypes = [
+                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    'application/vnd.ms-powerpoint',
+                    'application/pdf'
+                ];
                 const fileExt = file.name.split('.').pop().toLowerCase();
-                if (!validExtensions.includes(fileExt)) {
+                if (!validExtensions.includes(fileExt) || (file.type && !validMimeTypes.includes(file.type))) {
                     showToast('Format berkas tidak valid! Gunakan .pptx, .ppt, atau .pdf');
                     input.value = '';
                     return;
@@ -1106,7 +1139,7 @@
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'uploadBrs',
-                        token: getClientToken(),
+                        token: session.token,
                         sessionToken: session.token,
                         email: session.email,
                         satker: session.satker,
@@ -1119,6 +1152,11 @@
                 const result = await response.json();
                 const inProgressModal = document.getElementById('successUploadModal-progress');
                 if (inProgressModal) inProgressModal.remove();
+
+                if (result && (result.unauthorized || result.status === 'unauthorized')) {
+                    logoutSession();
+                    return;
+                }
 
                 if (result.status === 'success' || result.fileUrl || result.docUrl) {
                     document.getElementById('uploadActionArea').classList.add('hidden');
@@ -1145,38 +1183,44 @@
             const existingModal = document.getElementById('successUploadModal-progress');
             if (existingModal) existingModal.remove();
 
-            const modalHTML = `
-                <div id="successUploadModal-progress" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-                    <div class="bg-white rounded-xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
-                        <div class="w-14 h-14 bg-[#008FD5]/10 text-bps-blue rounded-full flex items-center justify-center mx-auto animate-pulse">
-                            <i data-lucide="loader" class="w-8 h-8 animate-spin"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-900 text-lg">Menyusun Draf Siaran Pers...</h3>
-                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Berkas berhasil diunggah. Sistem sedang mengekstrak indikator paparan dan menyusun draf siaran pers resmi BPS.</p>
-                        </div>
-                        <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 text-left space-y-1.5 text-xs">
-                            <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-orange animate-pulse">SEDANG BERJALAN</strong></div>
-                            <div class="flex justify-between"><span class="text-slate-500">Sumber Bahan:</span> <strong class="text-slate-800 truncate max-w-[200px]">${selectedFileMeta ? selectedFileMeta.name : '-'}</strong></div>
-                        </div>
-                        <div class="flex items-center gap-2.5 pt-2">
-                            <button onclick="document.getElementById('successUploadModal-progress').remove()" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition">Tetap di Sini</button>
-                            <a href="virtual-office.html" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-lg transition inline-flex items-center justify-center gap-1.5">
-                                <i data-lucide="monitor" class="w-3.5 h-3.5"></i><span>Ruang Kendali</span>
-                            </a>
-                        </div>
+            const wrapper = document.createElement('div');
+            wrapper.id = 'successUploadModal-progress';
+            wrapper.className = 'fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4';
+            wrapper.innerHTML = `
+                <div class="bg-white rounded-xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden p-6 text-center space-y-4">
+                    <div class="w-14 h-14 bg-[#008FD5]/10 text-bps-blue rounded-full flex items-center justify-center mx-auto animate-pulse">
+                        <i data-lucide="loader" class="w-8 h-8 animate-spin"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-lg">Menyusun Draf Siaran Pers...</h3>
+                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Berkas berhasil diunggah. Sistem sedang mengekstrak indikator paparan dan menyusun draf siaran pers resmi BPS.</p>
+                    </div>
+                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 text-left space-y-1.5 text-xs">
+                        <div class="flex justify-between"><span class="text-slate-500">Status Proses:</span> <strong class="text-bps-orange animate-pulse">SEDANG BERJALAN</strong></div>
+                        <div class="flex justify-between"><span class="text-slate-500">Sumber Bahan:</span> <strong id="progressSourceFilename" class="text-slate-800 truncate max-w-[200px]">-</strong></div>
+                    </div>
+                    <div class="flex items-center gap-2.5 pt-2">
+                        <button type="button" id="closeProgressModalBtn" class="flex-1 px-4 py-2.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition">Tetap di Sini</button>
+                        <a href="virtual-office.html" class="flex-1 px-4 py-2.5 text-xs font-semibold text-white bg-bps-blue hover:bg-bps-blueDark rounded-lg transition inline-flex items-center justify-center gap-1.5">
+                            <i data-lucide="monitor" class="w-3.5 h-3.5"></i><span>Ruang Kendali</span>
+                        </a>
                     </div>
                 </div>
             `;
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.body.appendChild(wrapper);
+            const filenameEl = document.getElementById('progressSourceFilename');
+            if (filenameEl) filenameEl.textContent = selectedFileMeta ? selectedFileMeta.name : '-';
+            const closeBtn = document.getElementById('closeProgressModalBtn');
+            if (closeBtn) closeBtn.addEventListener('click', () => wrapper.remove());
             lucide.createIcons();
         }
 
         function showSuccessUploadModal(docTitle, fileUrl) {
-            document.getElementById('modalFileName').innerText = docTitle;
+            document.getElementById('modalFileName').textContent = docTitle;
             const dlBtn = document.getElementById('modalDownloadBtn');
-            dlBtn.href = fileUrl || '#';
-            if (!fileUrl) {
+            const safeDocUrl = getSafeUrl(fileUrl);
+            dlBtn.href = safeDocUrl;
+            if (safeDocUrl === '#') {
                 dlBtn.classList.add('opacity-50', 'pointer-events-none');
             } else {
                 dlBtn.classList.remove('opacity-50', 'pointer-events-none');
@@ -1286,7 +1330,7 @@
             const timeoutId = setTimeout(() => controller.abort(), 15000);
 
             try {
-                const url = `${API_URL}?token=${encodeURIComponent(getClientToken())}&sessionToken=${encodeURIComponent(session.token)}&email=${encodeURIComponent(session.email)}&satker=${encodeURIComponent(session.satker)}`;
+                const url = `${API_URL}?token=${encodeURIComponent(session.token)}&sessionToken=${encodeURIComponent(session.token)}&email=${encodeURIComponent(session.email)}&satker=${encodeURIComponent(session.satker)}`;
                 const response = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
                 clearTimeout(timeoutId);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -1312,7 +1356,7 @@
                             sortKey: parsedDate.sortKey,
                             title: row.judul || '(Tanpa Judul)',
                             media: row.media || 'Media Daring',
-                            link: row.link || '#',
+                            link: getSafeUrl(row.link),
                             analisis: row.analisis || 'Belum ada analisis AI.',
                             sentiment: sentiment,
                             topic: topic
@@ -1352,11 +1396,16 @@
             const timeoutId = setTimeout(() => controller.abort(), 12000);
 
             try {
-                const url = `${API_URL}?mode=agents&token=${encodeURIComponent(getClientToken())}&sessionToken=${encodeURIComponent(session.token)}&email=${encodeURIComponent(session.email)}`;
+                const url = `${API_URL}?mode=agents&token=${encodeURIComponent(session.token)}&sessionToken=${encodeURIComponent(session.token)}&email=${encodeURIComponent(session.email)}`;
                 const response = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
                 clearTimeout(timeoutId);
                 if (!response.ok) return;
                 const data = await response.json();
+
+                if (data && (data.unauthorized || data.status === 'unauthorized')) {
+                    logoutSession();
+                    return;
+                }
 
                 if (data.agents && Array.isArray(data.agents)) {
                     data.agents.forEach(agent => {
@@ -1622,26 +1671,73 @@
                 return;
             }
             data.forEach(item => {
-                let badgeColor = item.sentiment === 'Positif'
+                const badgeColor = item.sentiment === 'Positif'
                     ? 'bg-[#68B92E]/15 text-bps-greenDark border border-[#68B92E]/30'
                     : (item.sentiment === 'Negatif'
                         ? 'bg-[#EB891B]/15 text-bps-orangeDark border border-[#EB891B]/30'
                         : 'bg-slate-100 text-slate-700 border border-slate-200');
+                const safeHref = getSafeUrl(item.link);
+
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50 transition';
-                tr.innerHTML = `
-                    <td class="px-4 py-3.5 whitespace-nowrap text-slate-500 font-medium">${item.date}</td>
-                    <td class="px-4 py-3.5 font-semibold text-slate-900 max-w-md"><a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-bps-blue hover:underline transition">${item.title}</a></td>
-                    <td class="px-4 py-3.5 whitespace-nowrap"><span class="font-semibold text-slate-700">${item.media}</span></td>
-                    <td class="px-4 py-3.5 whitespace-nowrap"><span class="bg-[#008FD5]/10 text-bps-blue px-2 py-0.5 rounded text-[11px] font-semibold">${item.topic}</span></td>
-                    <td class="px-4 py-3.5 whitespace-nowrap text-center"><span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeColor}">${item.sentiment}</span></td>
-                    <td class="px-4 py-3.5 whitespace-nowrap text-right">
-                        <div class="inline-flex items-center gap-2">
-                            <button onclick="openAnalysisModal(${item.id})" class="px-2.5 py-1 rounded-md bg-[#008FD5]/10 text-bps-blue hover:bg-[#008FD5]/20 font-semibold text-xs inline-flex items-center gap-1 transition"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Analisis</span></button>
-                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-bps-blue p-1 rounded hover:bg-slate-100 transition"><i data-lucide="external-link" class="w-3.5 h-3.5"></i></a>
-                        </div>
-                    </td>
-                `;
+
+                const tdDate = document.createElement('td');
+                tdDate.className = 'px-4 py-3.5 whitespace-nowrap text-slate-500 font-medium';
+                tdDate.textContent = item.date;
+
+                const tdTitle = document.createElement('td');
+                tdTitle.className = 'px-4 py-3.5 font-semibold text-slate-900 max-w-md';
+                const titleLink = document.createElement('a');
+                titleLink.href = safeHref;
+                titleLink.target = '_blank';
+                titleLink.rel = 'noopener noreferrer';
+                titleLink.className = 'hover:text-bps-blue hover:underline transition';
+                titleLink.textContent = item.title;
+                tdTitle.appendChild(titleLink);
+
+                const tdMedia = document.createElement('td');
+                tdMedia.className = 'px-4 py-3.5 whitespace-nowrap';
+                const mediaSpan = document.createElement('span');
+                mediaSpan.className = 'font-semibold text-slate-700';
+                mediaSpan.textContent = item.media;
+                tdMedia.appendChild(mediaSpan);
+
+                const tdTopic = document.createElement('td');
+                tdTopic.className = 'px-4 py-3.5 whitespace-nowrap';
+                const topicSpan = document.createElement('span');
+                topicSpan.className = 'bg-[#008FD5]/10 text-bps-blue px-2 py-0.5 rounded text-[11px] font-semibold';
+                topicSpan.textContent = item.topic;
+                tdTopic.appendChild(topicSpan);
+
+                const tdSentiment = document.createElement('td');
+                tdSentiment.className = 'px-4 py-3.5 whitespace-nowrap text-center';
+                const sentimentSpan = document.createElement('span');
+                sentimentSpan.className = `px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeColor}`;
+                sentimentSpan.textContent = item.sentiment;
+                tdSentiment.appendChild(sentimentSpan);
+
+                const tdAction = document.createElement('td');
+                tdAction.className = 'px-4 py-3.5 whitespace-nowrap text-right';
+                const actionWrap = document.createElement('div');
+                actionWrap.className = 'inline-flex items-center gap-2';
+
+                const analysisBtn = document.createElement('button');
+                analysisBtn.type = 'button';
+                analysisBtn.className = 'px-2.5 py-1 rounded-md bg-[#008FD5]/10 text-bps-blue hover:bg-[#008FD5]/20 font-semibold text-xs inline-flex items-center gap-1 transition';
+                analysisBtn.innerHTML = '<i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Analisis</span>';
+                analysisBtn.addEventListener('click', () => openAnalysisModal(item.id));
+
+                const extLink = document.createElement('a');
+                extLink.href = safeHref;
+                extLink.target = '_blank';
+                extLink.rel = 'noopener noreferrer';
+                extLink.className = 'text-slate-400 hover:text-bps-blue p-1 rounded hover:bg-slate-100 transition';
+                extLink.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i>';
+
+                actionWrap.append(analysisBtn, extLink);
+                tdAction.appendChild(actionWrap);
+
+                tr.append(tdDate, tdTitle, tdMedia, tdTopic, tdSentiment, tdAction);
                 tbody.appendChild(tr);
             });
             document.getElementById('showingCount').innerText = `Menampilkan ${data.length} dari ${allNewsData.length} berita`;
@@ -1663,13 +1759,13 @@
         function openAnalysisModal(id) {
             const item = allNewsData.find(d => d.id === id);
             if (!item) return;
-            document.getElementById('modalDate').innerText = item.date;
-            document.getElementById('modalMedia').innerText = item.media;
-            document.getElementById('modalTitle').innerText = item.title;
-            document.getElementById('modalBody').innerText = item.analisis;
-            document.getElementById('modalExternalLink').href = item.link;
+            document.getElementById('modalDate').textContent = item.date;
+            document.getElementById('modalMedia').textContent = item.media;
+            document.getElementById('modalTitle').textContent = item.title;
+            document.getElementById('modalBody').textContent = item.analisis;
+            document.getElementById('modalExternalLink').href = getSafeUrl(item.link);
             const badge = document.getElementById('modalSentimentBadge');
-            badge.innerText = item.sentiment;
+            badge.textContent = item.sentiment;
             badge.className = item.sentiment === 'Positif'
                 ? 'text-[11px] px-2 py-0.5 rounded-full font-semibold bg-[#68B92E]/15 text-bps-greenDark'
                 : (item.sentiment === 'Negatif'
@@ -1687,7 +1783,7 @@
 
         function showToast(message) {
             const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').innerText = message;
+            document.getElementById('toastMessage').textContent = message;
             toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
             setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none'); }, 3500);
         }
@@ -1702,10 +1798,7 @@
                 return;
             }
 
-            // Buka antarmuka dashboard dan muat data monitoring
-            unlockPortal(session);
-
-            // Verifikasi sesi token ke backend Apps Script (opsional jika endpoint mendukung verify_session)
+            // Verifikasi sesi token ke backend Apps Script sebelum membuka antarmuka
             try {
                 const res = await fetch(API_URL, {
                     method: 'POST',
@@ -1719,7 +1812,7 @@
                 });
                 if (res.ok) {
                     const check = await res.json();
-                    if (check && (check.status === 'invalid' || check.status === 'expired' || check.valid === false)) {
+                    if (check && (check.unauthorized || check.status === 'unauthorized' || check.status === 'invalid' || check.status === 'expired' || check.valid === false)) {
                         logoutSession();
                         return;
                     }
@@ -1728,15 +1821,16 @@
                         const freshSatker = String(check.satker || session.satker).trim();
                         localStorage.setItem(RUWAI_KEYS.role, freshRole);
                         localStorage.setItem(RUWAI_KEYS.satker, freshSatker);
-                        const isAdmin = ['superadmin', 'admin', 'admin_utama'].includes(freshRole);
-                        document.querySelectorAll('.admin-only').forEach(el => {
-                            el.classList.toggle('hidden', !isAdmin);
-                        });
+                        session.role = freshRole;
+                        session.satker = freshSatker;
+                        session.isAdmin = ['superadmin', 'admin', 'admin_utama'].includes(freshRole);
                     }
                 }
             } catch (_) {
-                // Tetap pertahankan sesi lokal jika Apps Script tidak mengekspos action verify_session
+                // Jika Apps Script belum mengekspos verify_session, validasi berlanjut saat fetchLiveMonitoringData
             }
+
+            unlockPortal(session);
         })();
     </script>
 </body>
