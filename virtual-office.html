@@ -1555,24 +1555,21 @@
         scene.add(pillar);
       });
 
-      for (let sx = -9.8; sx <= 0.6; sx += 0.65) {
-        const slat = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.14, 8.45), slatMat);
-        slat.position.set(sx, 4.05, -2.45);
-        slat.castShadow = true;
-        scene.add(slat);
-      }
-
       const glassRoof1 = new THREE.Mesh(
-        new THREE.BoxGeometry(mainW - 0.15, 0.05, 8.55),
+        new THREE.PlaneGeometry(mainW - 0.1, 8.55),
         new THREE.MeshPhysicalMaterial({
-          color: 0xe0f2fe,
+          color: 0xe8f7ff,
           transparent: true,
-          opacity: 0.18,
-          roughness: 0.08,
+          opacity: 0.24,
+          roughness: 0.04,
+          metalness: 0.08,
+          reflectivity: 0.9,
+          side: THREE.DoubleSide,
           depthWrite: false
         })
       );
-      glassRoof1.position.set(mainCenterX, 4.14, -2.45);
+      glassRoof1.rotation.x = -Math.PI / 2;
+      glassRoof1.position.set(mainCenterX, 4.12, -2.45);
       scene.add(glassRoof1);
 
       const addCustomPoster = (candidateFiles, xPos, fallbackTex) => {
@@ -1689,19 +1686,25 @@
       frontRightPane.position.set(ghCenterX + 2.02, 0.12 + ghH / 2, ghCenterZ + ghD / 2 - 0.05);
       scene.add(frontLeftPane, frontRightPane);
 
-      // Atap kaca penuh (Full Glass Roof) + balok penopang tipis
-      const ghRoofGlass = new THREE.Mesh(new THREE.BoxGeometry(ghW + 0.12, 0.06, ghD + 0.12), fullGlassMat);
+      // Atap kaca polos penuh tanpa rangka/balok melintang (Frameless Glass Roof)
+      const ghRoofGlass = new THREE.Mesh(
+        new THREE.PlaneGeometry(ghW - 0.08, ghD - 0.08),
+        new THREE.MeshPhysicalMaterial({
+          color: 0xe8f7ff,
+          transparent: true,
+          opacity: 0.24,
+          roughness: 0.04,
+          metalness: 0.08,
+          reflectivity: 0.9,
+          side: THREE.DoubleSide,
+          depthWrite: false
+        })
+      );
+      ghRoofGlass.rotation.x = -Math.PI / 2;
       ghRoofGlass.position.set(ghCenterX, 0.12 + ghH, ghCenterZ);
       scene.add(ghRoofGlass);
 
-      for (let rx = -1; rx <= 1; rx++) {
-        const rafter = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.09, ghD), glassFrameMat);
-        rafter.position.set(ghCenterX + rx * 1.9, 0.12 + ghH - 0.04, ghCenterZ);
-        rafter.castShadow = true;
-        scene.add(rafter);
-      }
-
-      // Tiang-tiang sudut & rangka atas/bawah rumah kaca
+      // Tiang-tiang sudut penyangga kaca
       const corners = [
         [ghCenterX - ghW / 2 + 0.06, ghCenterZ - ghD / 2 + 0.06],
         [ghCenterX + ghW / 2 - 0.06, ghCenterZ - ghD / 2 + 0.06],
@@ -1714,21 +1717,6 @@
         post.castShadow = true;
         scene.add(post);
       });
-
-      const topPerimeter = new THREE.Mesh(new THREE.BoxGeometry(ghW, 0.09, ghD), glassFrameMat);
-      topPerimeter.position.set(ghCenterX, 0.12 + ghH - 0.03, ghCenterZ);
-      // Buat bagian tengah atap transparan dengan rangka tipis saja
-      scene.remove(topPerimeter);
-
-      const frameBarX1 = new THREE.Mesh(new THREE.BoxGeometry(ghW, 0.09, 0.09), glassFrameMat);
-      frameBarX1.position.set(ghCenterX, 0.12 + ghH - 0.03, ghCenterZ - ghD / 2 + 0.05);
-      const frameBarX2 = new THREE.Mesh(new THREE.BoxGeometry(ghW, 0.09, 0.09), glassFrameMat);
-      frameBarX2.position.set(ghCenterX, 0.12 + ghH - 0.03, ghCenterZ + ghD / 2 - 0.05);
-      const frameBarZ1 = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, ghD), glassFrameMat);
-      frameBarZ1.position.set(ghCenterX - ghW / 2 + 0.05, 0.12 + ghH - 0.03, ghCenterZ);
-      const frameBarZ2 = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, ghD), glassFrameMat);
-      frameBarZ2.position.set(ghCenterX + ghW / 2 - 0.05, 0.12 + ghH - 0.03, ghCenterZ);
-      scene.add(frameBarX1, frameBarX2, frameBarZ1, frameBarZ2);
 
       // Tanaman & akar rambat di dinding kaca (tanpa poster/tulisan apapun)
       buildClimbingVinesOnGlassHouse(ghCenterX, ghW, ghD, ghH);
