@@ -47,47 +47,26 @@
 <body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-slate-900">
 
   <!-- ===================================================================== -->
-  <!-- LOGIN GATE OVERLAY (JIKA LANGSUNG AKSES VIRTUAL-OFFICE.HTML)          -->
+  <!-- SESSION VERIFICATION OVERLAY (TERINTEGRASI DENGAN LOGIN RUWAI OTP)    -->
   <!-- ===================================================================== -->
-  <div id="voLoginGate" class="fixed inset-0 z-50 bg-[#06182E] flex items-center justify-center p-4 overflow-y-auto">
-    <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+  <div id="voLoginGate" class="fixed inset-0 z-50 bg-[#06182E] flex items-center justify-center p-4">
+    <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
       <div class="h-1.5 w-full bg-gradient-to-r from-[#008FD5] via-[#68B92E] to-[#EB891B]"></div>
-      <div class="p-6 sm:p-8 space-y-5">
-        <div class="text-center space-y-2">
-          <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 p-2.5 flex items-center justify-center mx-auto">
-            <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
-          </div>
-          <div>
-            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 mb-1">
-              Virtual Office • Terkunci
-            </span>
-            <h1 class="text-xl font-extrabold text-[#06182E] tracking-tight">SIGER Humas Hub</h1>
-            <p class="text-xs text-slate-500 mt-0.5">Masuk untuk mengakses AI Agent Virtual Office</p>
-          </div>
+      <div class="p-6 text-center space-y-3">
+        <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 p-2 flex items-center justify-center mx-auto">
+          <img src="BPS.webp" alt="Logo BPS" class="w-full h-full object-contain">
         </div>
-
-        <div id="voLoginError" class="hidden bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-medium">
-          Username atau kata sandi salah.
+        <div>
+          <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-200 mb-1">
+            RUWAI • Verifikasi Sesi
+          </span>
+          <h1 class="text-lg font-extrabold text-[#06182E] tracking-tight">AI Agent Virtual Office</h1>
+          <p id="voGateStatusText" class="text-xs text-slate-500 mt-1">Memeriksa token sesi resmi RUWAI...</p>
         </div>
-
-        <form onsubmit="handleVoLogin(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Username</label>
-            <input type="text" id="voUsername" required autocomplete="username" placeholder="Masukkan username (misal: humas)"
-              class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:bg-white focus:border-[#008FD5]">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Kata Sandi</label>
-            <input type="password" id="voPassword" required autocomplete="current-password" placeholder="Masukkan kata sandi"
-              class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:bg-white focus:border-[#008FD5]">
-          </div>
-          <button type="submit" class="w-full py-2.5 px-4 bg-[#06182E] hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition">
-            Masuk ke Virtual Office
-          </button>
-        </form>
-
-        <div class="pt-2 border-t border-slate-100 text-center">
-          <a href="index.html" class="text-xs font-semibold text-[#008FD5] hover:underline">← Kembali ke Halaman Login Utama</a>
+        <div class="pt-2">
+          <a href="index.html?next=virtual-office.html" class="inline-flex items-center justify-center w-full py-2.5 px-4 bg-[#06182E] hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition">
+            Masuk via Gerbang Login RUWAI →
+          </a>
         </div>
       </div>
     </div>
@@ -102,16 +81,17 @@
     <header class="border-b border-stone-200 bg-white/90 backdrop-blur sticky top-0 z-30 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <a href="index.html" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition flex items-center gap-1.5 border border-stone-200">
+          <a href="dashboard.html" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition flex items-center gap-1.5 border border-stone-200">
             <span>←</span> Dashboard Utama
           </a>
           <div>
-            <div class="flex items-center gap-2">
-              <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">PUSAT AUTOMASI HUMAS</h1>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h1 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">RUWAI • VIRTUAL OFFICE</h1>
               <span id="connectionBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                 Menghubungkan...
               </span>
+              <span id="voUserBadge" class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200"></span>
             </div>
             <p class="text-[11px] text-slate-500 font-medium">BPS Provinsi Lampung • Autonomous PR & Media Workspace</p>
           </div>
@@ -340,32 +320,35 @@
 
   <script>
     // =========================================================================
-    // 1. GATE AUTENTIKASI SINKRON DENGAN INDEX.HTML
+    // 1. GATE AUTENTIKASI TERINTEGRASI DENGAN RUWAI (INDEX.HTML & DASHBOARD.HTML)
     // =========================================================================
-    const SESSION_AUTH_KEY = 'sigerhub_bps_lampung_session';
+    const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
+    const STORAGE_KEY = 'bps_lampung_virtual_office_api';
     let isVoBooted = false;
 
-    function handleVoLogin(e) {
-      e.preventDefault();
-      const u = document.getElementById('voUsername').value.trim().toLowerCase();
-      const p = document.getElementById('voPassword').value;
-      const errBox = document.getElementById('voLoginError');
+    function getSessionToken() {
+      return (
+        localStorage.getItem('ruwai_token') ||
+        sessionStorage.getItem('ruwai_token') ||
+        ''
+      ).trim();
+    }
 
-      if ((u === 'humas' && p === 'bps1800') || (u === 'bima' && p === 'sigerhub2026')) {
-        const isAdmin = u === 'bima';
-        const sessionPayload = { username: u, role: isAdmin ? 'Admin Utama' : 'Tim Humas BPS', isAdmin, loginAt: Date.now() };
-        sessionStorage.setItem(SESSION_AUTH_KEY, JSON.stringify(sessionPayload));
-        if (isAdmin) localStorage.setItem('bps_lampung_admin_mode', 'true');
-        else localStorage.removeItem('bps_lampung_admin_mode');
-        unlockVirtualOffice(sessionPayload);
-      } else {
-        errBox.classList.remove('hidden');
-      }
+    function clearRuwaiSession() {
+      ['ruwai_token', 'ruwai_email', 'ruwai_role', 'ruwai_name', 'bps_lampung_admin_mode'].forEach((k) => {
+        localStorage.removeItem(k);
+        sessionStorage.removeItem(k);
+      });
     }
 
     function unlockVirtualOffice(sessionData) {
       document.getElementById('voLoginGate').classList.add('hidden');
       document.getElementById('voProtectedContent').classList.remove('hidden');
+
+      const userBadge = document.getElementById('voUserBadge');
+      if (userBadge && sessionData.email) {
+        userBadge.textContent = `${sessionData.email} (${sessionData.roleLabel})`;
+      }
 
       if (sessionData.isAdmin || localStorage.getItem('bps_lampung_admin_mode') === 'true') {
         document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
@@ -375,27 +358,24 @@
         isVoBooted = true;
         init3DOffice();
         const rawSaved = localStorage.getItem(STORAGE_KEY) || DEFAULT_API_URL;
-        const savedUrl = normalizeApiUrl(rawSaved);
+        const cleanBase = rawSaved.split('?')[0];
+        const savedUrl = normalizeApiUrl(cleanBase);
         if (savedUrl && savedUrl.startsWith('http')) {
-          document.getElementById('apiUrlInput').value = rawSaved;
+          document.getElementById('apiUrlInput').value = cleanBase;
           startLivePolling(savedUrl);
         }
       }
     }
 
     function logoutVoSession() {
-      sessionStorage.removeItem(SESSION_AUTH_KEY);
-      localStorage.removeItem('bps_lampung_admin_mode');
-      window.location.href = 'index.html';
+      if (pollingInterval) clearInterval(pollingInterval);
+      clearRuwaiSession();
+      window.location.replace('index.html');
     }
 
     // =========================================================================
-    // 2. KONFIGURASI API BRIDGE, SECURITY TOKEN, AUDIO PLAYER & STATE AGENT
+    // 2. KONFIGURASI API BRIDGE, AUDIO PLAYER & STATE AGENT
     // =========================================================================
-    const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbz6rjK1i0nCWf9i2ZgH6yblzCdeiz4Cq9hMeKbrEbEZImr5vRUEel8KIP4H2c0UWYMnAA/exec';
-    const STORAGE_KEY = 'bps_lampung_virtual_office_api';
-    const _encT = ['QlA', 'Uy', 'X0xhbXB1bmc', 'X0h1bWFz', 'XzIwMjZf', 'U2VjdXJlS2V5'];
-    const getClientToken = () => atob(_encT[0]) + atob(_encT[1]) + atob(_encT[2]) + atob(_encT[3]) + atob(_encT[4]) + atob(_encT[5]);
 
     let pollingInterval = null;
     let activePollingUrl = '';
@@ -3120,20 +3100,28 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      const rawSession = sessionStorage.getItem(SESSION_AUTH_KEY);
-      if (rawSession) {
-        try {
-          const parsed = JSON.parse(rawSession);
-          if (parsed && parsed.username) {
-            unlockVirtualOffice(parsed);
-            return;
-          }
-        } catch (e) {
-          sessionStorage.removeItem(SESSION_AUTH_KEY);
-        }
+      const ruwaiToken = getSessionToken();
+      const ruwaiEmail = (localStorage.getItem('ruwai_email') || sessionStorage.getItem('ruwai_email') || '').trim();
+      const ruwaiRole = (localStorage.getItem('ruwai_role') || sessionStorage.getItem('ruwai_role') || 'viewer').toLowerCase();
+
+      if (ruwaiToken && ruwaiToken.length >= 16) {
+        const isAdmin = ruwaiRole === 'admin' || ruwaiRole === 'superadmin';
+        unlockVirtualOffice({
+          email: ruwaiEmail || 'humas@bps.go.id',
+          role: ruwaiRole,
+          roleLabel: isAdmin ? 'Admin' : (ruwaiRole === 'editor' ? 'Editor Humas' : 'Viewer'),
+          isAdmin
+        });
+        return;
       }
-      const userField = document.getElementById('voUsername');
-      if (userField) userField.focus();
+
+      const statusText = document.getElementById('voGateStatusText');
+      if (statusText) {
+        statusText.textContent = 'Sesi login tidak ditemukan atau telah berakhir. Mengalihkan ke halaman login RUWAI...';
+      }
+      setTimeout(() => {
+        window.location.replace('index.html?next=virtual-office.html');
+      }, 650);
     });
 
     function addLog(message, type = 'info') {
@@ -3262,13 +3250,17 @@
         const [base, query] = url.split('?');
         url = base.replace(/\/+$/, '') + '/exec' + (query ? '?' + query : '');
       }
-      if (!url.includes('mode=agents')) {
-        url += (url.includes('?') ? '&' : '?') + 'mode=agents';
+      const [baseUrl, queryString] = url.split('?');
+      const params = new URLSearchParams(queryString || '');
+      params.set('mode', 'agents');
+
+      const sessionToken = getSessionToken();
+      if (sessionToken) {
+        params.set('token', sessionToken);
+      } else {
+        params.delete('token');
       }
-      if (!url.includes('token=')) {
-        url += (url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(getClientToken());
-      }
-      return url;
+      return `${baseUrl}?${params.toString()}`;
     }
 
     function openApiModal() { document.getElementById('apiModal').classList.remove('hidden'); }
@@ -3276,9 +3268,10 @@
 
     function saveApiUrl() {
       const rawInput = document.getElementById('apiUrlInput').value.trim();
-      const finalUrl = normalizeApiUrl(rawInput);
+      const cleanBase = rawInput.split('?')[0];
+      const finalUrl = normalizeApiUrl(cleanBase);
       if (!finalUrl) return;
-      localStorage.setItem(STORAGE_KEY, rawInput);
+      localStorage.setItem(STORAGE_KEY, cleanBase);
       closeApiModal();
       startLivePolling(finalUrl);
     }
@@ -3299,15 +3292,19 @@
     let consecutiveSyncErrors = 0;
 
     async function fetchAgentStateOnce(url) {
-      if (!url || !sessionStorage.getItem(SESSION_AUTH_KEY)) return;
+      const currentToken = getSessionToken();
+      if (!url || !currentToken) return;
       if (isFetchingAgentState) return;
       isFetchingAgentState = true;
+
+      // Selalu sinkronkan query token terbaru dari localStorage/sessionStorage
+      const requestUrl = normalizeApiUrl(url.split('?')[0]);
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 12000);
 
       try {
-        const res = await fetch(url, { signal: controller.signal, cache: 'no-cache' });
+        const res = await fetch(requestUrl, { signal: controller.signal, cache: 'no-cache' });
         clearTimeout(timeoutId);
 
         if (!res.ok) {
@@ -3315,6 +3312,16 @@
         }
 
         const data = await res.json();
+        if (data.status === 'unauthorized') {
+          addLog('Sesi RUWAI kedaluwarsa atau tidak valid. Mengarahkan ke halaman login...', 'error');
+          if (pollingInterval) clearInterval(pollingInterval);
+          clearRuwaiSession();
+          setTimeout(() => {
+            window.location.replace('index.html?next=virtual-office.html');
+          }, 900);
+          return;
+        }
+
         if (data.status === 'ok' && Array.isArray(data.agents)) {
           consecutiveSyncErrors = 0;
           data.agents.forEach(ag => {
